@@ -1,0 +1,54 @@
+body {
+  background: #333;
+  color: #fff;
+}
+
+.navbar {
+  border-bottom: #088ed6 3px solid;
+  opacity: 0.8; /* transparency */
+}
+/* Apply an img to the home-section's background */
+#home-section {
+  background: url(../img/home.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 700px;
+}
+/* Overlay the entire home-section background 
+   with rgba(0,0,0,0.7) to make the background img darker 
+   so texts over the img are more readable. */
+#home-section .dark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 700px;
+  background: rgba(0, 0, 0, 0.7);
+}
+/* Move the home section down. */
+#home-section .home-inner {
+  padding-top: 150px;
+}
+/* Make the login form little transparent. */
+#home-section .card-form {
+  opacity: 0.8;
+}
+/* Change the color of check icons and 
+   make a white box around it in the home/create sections. */
+#home-section .fas,
+#create-section .fas {
+  color: #008ed6;
+  background: #fff;
+  padding: 5px;
+  border-radius: 5px;
+}
+/* Change the color of check icons and 
+   make a white box around it in the explore and share sections. */
+#explore-section .fas,
+#share-section .fas {
+  background: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+}

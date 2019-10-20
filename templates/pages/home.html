@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_block %}
+    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <title>Acagia - Sign Up</title>
+{% endblock %}
+{% block body_block %}
+    <body data-spy="scroll" data-target="#main-nav" id="home">
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top" id="main-nav">
+      <div class="container">
+        <a href="{% url 'home' %}" class="navbar-brand">Acagia</a>
+        <button
+          class="navbar-toggler"
+          data-toggle="collapse"
+          data-target="#navbarCollapse"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a href="#home" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+              <a href="#explore-head-section" class="nav-link">Attendance</a>
+            </li>
+            <li class="nav-item">
+              <a href="#create-head-section" class="nav-link">Manage</a>
+            </li>
+            <li class="nav-item">
+              <a href="#share-head-section" class="nav-link">Analyze</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- HOME SECTION -->
+    <header id="home-section">
+      <div class="dark-overlay">
+        <div class="home-inner container">
+          <div class="row">
+            <div class="col-lg-8 d-none d-lg-block">
+              <h1 class="display-4">
+                Use easy <strong>check-in system</strong> and manage your
+                <strong>members</strong>
+              </h1>
+              <div class="d-flex">
+                <div class="p-4 align-self-start">
+                  <i class="fas fa-check fa-2x"></i>
+                </div>
+                <div class="p-4 align-self-ed">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Commodi, accusantium.
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="p-4 align-self-start">
+                  <i class="fas fa-check fa-2x"></i>
+                </div>
+                <div class="p-4 align-self-ed">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Commodi, accusantium.
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="p-4 align-self-start">
+                  <i class="fas fa-check fa-2x"></i>
+                </div>
+                <div class="p-4 align-self-ed">
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                  Commodi, accusantium.
+                </div>
+              </div>
+            </div>
+            <!-- SignUp/Login Link form -->
+            <div class="col-lg-4">
+              <div class="card bg-primary text-center card-form">
+                <div class="card-body">
+                  {%  if user.is_authenticated %}
+                  <p>Hi {{ user.email }}</p>
+                  <a href="{% url 'logout' %}" class="btn
+                  btn-outline-light btn-lg">Log Logout</a>
+                  {% else %}
+                  <h3>Sign Up for Free Today</h3>
+                  <a href="{% url 'signup' %}" class="btn
+                  btn-outline-light btn-lg">Sign Up</a>
+                  <h3 class="mt-3">Already Registered?</h3>
+                  <a href="{% url 'login' %}" class="btn
+                  btn-outline-light btn-lg">Log In</a>
+                  {%  endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CHECK-IN HEAD -->
+    <section id="explore-head-section">
+      <div class="container">
+        <div class="row">
+          <div class="col text-center py-5">
+            <h1 class="display-4">Attendance</h1>
+            <p class="lead">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Laboriosam dolorum quo voluptatibus adipisci earum facere ducimus
+              laborum voluptatem! Eaque, labore!
+            </p>
+            <a href="#" class="btn btn-outline-secondary">Find Out More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPLORE SECTION-->
+    <section id="explore-section" class="bg-light text-muted py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <img
+              src="{%  static "img/explore-section1.jpg" %}"
+              alt=""
+              class="img-fluid mb-3 rounded-circle"
+            />
+          </div>
+          <div class="col-md-6">
+            <h3>Easy Attendance System</h3>
+            <p>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut
+              tempore voluptas ea error inventore. Laudantium rem ducimus
+              recusandae repudiandae nisi?
+            </p>
+            <div class="d-flex">
+              <div class="p-4 align-self-start">
+                <i class="fas fa-check fa-2x"></i>
+              </div>
+              <div class="p-4 align-self-end">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Laudantium quasi eaque magnam sunt atque maiores facilis quam
+                deleniti doloremque impedit.
+              </div>
+            </div>
+            <div class="d-flex">
+              <div class="p-4 align-self-start">
+                <i class="fas fa-check fa-2x"></i>
+              </div>
+              <div class="p-4 align-self-end">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Laudantium quasi eaque magnam sunt atque maiores facilis quam
+                deleniti doloremque impedit.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATE HEAD -->
+    <section id="create-head-section" class="bg-primary">
+      <div class="container">
+        <div class="row">
+          <div class="col text-center py-5">
+            <h1 class="display-4">Manage</h1>
+            <p class="lead">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Laboriosam dolorum quo voluptatibus adipisci earum facere ducimus
+              laborum voluptatem! Eaque, labore!
+            </p>
+            <a href="#" class="btn btn-outline-light">Find Out More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATE SECTION -->
+    <section id="create-section" class="py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 order-2">
+            <img
+              src="{%  static "img/create-section1.jpg" %}"
+              alt=""
+              class="img-fluid mb-3 rounded-circle"
+            />
+          </div>
+          <div class="col-md-6 order-1">
+            <h3>Manage Members</h3>
+            <p>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut
+              tempore voluptas ea error inventore. Laudantium rem ducimus
+              recusandae repudiandae nisi?
+            </p>
+            <div class="d-flex">
+              <div class="p-4 align-self-start">
+                <i class="fas fa-check fa-2x"></i>
+              </div>
+              <div class="p-4 align-self-end">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Laudantium quasi eaque magnam sunt atque maiores facilis quam
+                deleniti doloremque impedit.
+              </div>
+            </div>
+            <div class="d-flex">
+              <div class="p-4 align-self-start">
+                <i class="fas fa-check fa-2x"></i>
+              </div>
+              <div class="p-4 align-self-end">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Laudantium quasi eaque magnam sunt atque maiores facilis quam
+                deleniti doloremque impedit.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+     <!-- SHARE HEAD -->
+     <section id="share-head-section" class="bg-primary">
+        <div class="container">
+          <div class="row">
+            <div class="col text-center py-5">
+              <h1 class="display-4">Analyze</h1>
+              <p class="lead">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Laboriosam dolorum quo voluptatibus adipisci earum facere ducimus
+                laborum voluptatem! Eaque, labore!
+              </p>
+              <a href="#" class="btn btn-outline-light">Find Out More</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SHARE SECTION-->
+      <section id="share-section" class="bg-light text-muted py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <img
+                src="{%  static "img/share-section1.jpg" %}"
+                alt=""
+                class="img-fluid mb-3 rounded-circle"
+              />
+            </div>
+            <div class="col-md-6">
+              <h3>Analyze Attendance</h3>
+              <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut
+                tempore voluptas ea error inventore. Laudantium rem ducimus
+                recusandae repudiandae nisi?
+              </p>
+              <div class="d-flex">
+                <div class="p-4 align-self-start">
+                  <i class="fas fa-check fa-2x"></i>
+                </div>
+                <div class="p-4 align-self-end">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Laudantium quasi eaque magnam sunt atque maiores facilis quam
+                  deleniti doloremque impedit.
+                </div>
+              </div>
+              <div class="d-flex">
+                <div class="p-4 align-self-start">
+                  <i class="fas fa-check fa-2x"></i>
+                </div>
+                <div class="p-4 align-self-end">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Laudantium quasi eaque magnam sunt atque maiores facilis quam
+                  deleniti doloremque impedit.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer id="main-footer" class="bg-dark">
+        <div class="container">
+          <div class="row">
+            <div class="col text-center py-4">
+              <h3>Acagia</h3>
+              <p>Copyright &copy; <span id="year"></span></p>
+            </div>
+          </div>
+        </div>
+      </footer>
+{% endblock %}
+{% block script_block %}
+      <script>
+      // Get the current year for the copyright
+      $('#year').text(new Date().getFullYear());
+      // Init Scrollspy
+      $('body').scrollspy({target: '#main-nav'});
+
+      // Add smooth scrolling
+      $('#main-nav a').on('click', function(e) { // target any link in main-nav
+        // Check for a hash value
+        if (this.hash !== '') { // link clicked has empty string as hash value?
+            // Prevent default behavior
+            e.preventDefault(); // event object
+
+            // Store hash
+            const hash = this.hash;
+
+            // Animate smooth scroll; won't work if using slim version of jquery
+            $('html, body').animate({
+              scrollTop: $(hash).offset().top // push it down to the page
+            }, 800, function() { // scrolling in 900ms
+              // Add hash to URL after scroll
+              window.location.hash = hash;
+            })
+        }
+      })
+     </script>
+{% endblock %}

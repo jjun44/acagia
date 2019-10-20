@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_block %}
+    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <title>Acagia - Sign Up</title>
+{% endblock %}
+{% block body_block %}
+    <!-- SIGN-UP FORM -->
+    <div class="pt-5 container">
+    <div class="pt-5 row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card bg-primary text-center card-form">
+        <div class="card-body">
+          <h3>Acagia</h3>
+          <form method="post">
+            {% csrf_token %}
+            <p>{{ form.errors.username|striptags }}</p>
+            <div class="form-group">
+                  {{ form.username }}
+            </div>
+            <p>{{ form.errors.email|striptags }}</p>
+            <div class="form-group">
+                  {{ form.email }}
+            </div>
+            <p>{{ form.errors.password1|striptags }}</p>
+            <div class="form-group">
+                  {{ form.password1 }}
+            </div>
+            <p>{{ form.errors.password2|striptags }}</p>
+            <div class="form-group">
+                  {{ form.password2 }}
+            </div>
+            <button
+              type="submit"
+              class="btn btn-outline-light btn-block">
+                Sign Up
+            </button>
+            <p class="mt-3">Already registered? <a href="{% url 'login' %}"
+                                                   class="text-info ">Log
+                In</a></p>
+            <a href="{% url 'home' %}" class="text-info mt-2">Go back to
+                home?</a>
+          </form>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+{% endblock %}
+
+
+
