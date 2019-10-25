@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_block %}
+    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <title>Acagia - Login Required</title>
+{% endblock %}
+{% block body_block %}
+    <!-- Jumbtron error message -->
+    <div class="jumbotron jumbotron-fluid bg-dark">
+        <div class="container">
+            <h1 class="display-4">Please log-in to view this page.</h1>
+            <hr/>
+            <a href="{% url 'login' %}" class="btn btn-outline-light
+            btn-lg">Log In</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_block %}
+    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <title>Acagia - Academy List</title>
+{% endblock %}
+{% block body_block %}
+    <!-- Jumbtron welcome message -->
+    <div class="jumbotron jumbotron-fluid bg-dark">
+        <div class="container">
+            <h1 class="display-4">Hi {{ user.username }}!</h1>
+            <p>Manage your academies here! It's easy and
+                quick!</p>
+            <hr/>
+            <a href="{% url 'logout' %}" class="btn btn-outline-light">Logout</a>
+        </div>
+    </div>
+    <!-- User's academy list -->
+    <div class="container">
+      <div class="card-columns">
+        {% if academy_list %}
+        {% for academy in academy_list %}
+        <div class="card bg-primary text-center">
+          <div class="card-body">
+              <h4 class="card-title">{{ academy.aca_name }}</h4>
+              <p class="card-text">
+                  Type: {{ academy.aca_type }}<br/>
+                  Office Phone: {{ academy.office_phone }}<br/>
+                  Location: {{ academy.addr.city }}, {{ academy.addr.state }}
+              </p>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <a href="{% url 'add_academy' %}" class="text-light">
+          <div class="card bg-primary text-center">
+            <div class="card-body">
+              <h4 class="py-4 card-title">+ Add New Academy</h4>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+{% endblock %}
+
+
+
+
