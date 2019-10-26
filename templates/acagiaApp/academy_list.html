@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block head_block %}
-    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
     <title>Acagia - Academy List</title>
 {% endblock %}
 {% block body_block %}
@@ -21,6 +21,7 @@
       <div class="card-columns">
         {% if academy_list %}
         {% for academy in academy_list %}
+        <a href="{% url 'dashboard' pk=academy.pk %}" class="text-light">
         <div class="card bg-primary text-center">
           <div class="card-body">
               <h4 class="card-title">{{ academy.aca_name }}</h4>
@@ -31,6 +32,7 @@
               </p>
           </div>
         </div>
+        </a>
         {% endfor %}
         {% endif %}
         <a href="{% url 'add_academy' %}" class="text-light">

@@ -9,14 +9,25 @@ class Address(models.Model):
     street = models.CharField(max_length=50, null=True, blank=True)
     city = models.CharField(max_length=20)
     state = models.CharField(max_length=2, choices=STATES)
-    zip = models.IntegerField(null=True, blank=True)
+    zip = models.CharField(max_length=5, null=True, blank=True)
+
+    def __str__(self):
+        location = ''
+        if self.street and self.zip:
+            location = self.street + ', ' + self.city + ', ' + self.state +\
+                        ', ' + self.zip
+        elif self.street and not self.zip:
+            location = self.street + ', ' + self.city + ', ' + self.state
+        else:
+            location = self.city + ', ' + self.state
+        return location
 
 class Academy(models.Model):
     MMA = 'MMA'
     GENERAL = 'General'
     ACA_TYPE = [
-        (MMA, 'MMA'),
-        (GENERAL, 'General')
+        (GENERAL, 'General'),
+        (MMA, 'MMA')
     ]
     aca_name = models.CharField(max_length=30)
     aca_type = models.CharField(
@@ -154,16 +165,19 @@ class Rank(models.Model):
     )
 
 class Attendance(models.Model):
-    date_attended = models.DateTimeField(auto_now_add=True)
-    stu = models.ForeignKey(
-        Student, related_name='attend_stu',
+    date_attended = models.DateField(auto_now_add=True)
+    time_attended = models.TimeField(auto_now_add=True)
+    aca = models.ForeignKey(
+        Academy, related_name='atten_aca', on_delete=models.CASCADE
+    )
+    member = models.ForeignKey(
+        Member, related_name='mem_attended',
         null=True, on_delete=models.SET_NULL
     )
     course = models.ForeignKey(
         Course, null=True,
         related_name='course', on_delete=models.SET_NULL
     )
-
 
 
 

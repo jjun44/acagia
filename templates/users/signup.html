@@ -15,21 +15,29 @@
           <h3>Acagia</h3>
           <form method="post">
             {% csrf_token %}
-            <p>{{ form.errors.username|striptags }}</p>
             <div class="form-group">
-                  {{ form.username }}
+              {{ form.username }}
+              <p class="text-warning">
+                  {{ form.errors.username|striptags }}
+              </p>
             </div>
-            <p>{{ form.errors.email|striptags }}</p>
             <div class="form-group">
-                  {{ form.email }}
+              {{ form.email }}
+              <p class="text-warning">
+                  {{ form.errors.email|striptags }}
+              </p>
             </div>
-            <p>{{ form.errors.password1|striptags }}</p>
             <div class="form-group">
-                  {{ form.password1 }}
+              {{ form.password1 }}
+              <p class="text-warning">
+                  {{ form.errors.password1|striptags }}
+              </p>
             </div>
-            <p>{{ form.errors.password2|striptags }}</p>
             <div class="form-group">
-                  {{ form.password2 }}
+              {{ form.password2 }}
+              <p class="text-warning">
+                  {{ form.errors.password2|striptags }}
+              </p>
             </div>
             <button
               type="submit"

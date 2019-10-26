@@ -3,6 +3,7 @@ body {
   color: #fff;
 }
 
+/* NAVBAR IN HOME */
 .navbar {
   border-bottom: #088ed6 3px solid;
   opacity: 0.8; /* transparency */
@@ -51,4 +52,122 @@ body {
   color: #fff;
   padding: 5px;
   border-radius: 5px;
+}
+
+/* DASHBOARD SIDEBAR */
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+
+#sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 999;
+  background: #3D3D3D;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
+
+#sidebar ul li.active {
+  background: #252525;
+  color: cadetblue;
+}
+
+#sidebar .sidebar-header {
+  padding: 20px;
+  background: #252525;
+  color: cadetblue;
+}
+
+#sidebar ul.components {
+  padding: 20px 0;
+  border-bottom: 2px solid #252525;
+}
+
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+}
+
+#sidebar ul li a:hover {
+  color: cadetblue;
+  background: #fff;
+}
+
+ul ul a {
+  font-size: 0.9em !important;
+  padding-left: 30px !important;
+  background: cadetblue;
+}
+
+a, a:hover, a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+ul.sidebar-button {
+  padding: 30px 50px;
+}
+
+ul.sidebar-button a {
+  text-align: center;
+  font-size: 0.9em !important;
+  display: block;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background: cadetblue;
+}
+
+/* DASHBOARD CONTENT */
+#content {
+  width: calc(100% - 250px);
+  padding: 20px 30px;
+  min-height: 100vh;
+  transition: all 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#content.active {
+  width: 100%;
+}
+
+/* DASHBOARD NAVBAR */
+#dashboard-navbar {
+  padding: 10px 10px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 40px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* MEDIA QUERIES */
+@media (max-width: 768px) {
+  #sidebar {
+    margin-left: -250px;
+  }
+  #sidebar.active {
+    margin-left: 0;
+  }
+  #content {
+      width: 100%;
+  }
+  #content.active {
+      width: calc(100% - 250px);
+  }
+  #sidebarCollapse span {
+      display: none;
+  }
 }

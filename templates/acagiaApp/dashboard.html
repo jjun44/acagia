@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+{% block content_block %}
+<!-- Jumbtron academy information -->
+<div class="jumbotron jumbotron-fluid bg-dark">
+    <div class="container">
+        <h1 class="display-3">{{ academy.aca_name }}</h1><br/>
+        <h5>Type: {{ academy.aca_type }}</h5>
+        <h5>Office Phone: {{ academy.office_phone }}</h5>
+        <h5>Location: {{ academy.addr }}</h5>
+    </div>
+</div>
+<!-- Numbers -->
+<div class="card-columns">
+    <div class="card bg-info text-center">
+      <div class="card-body">
+          <h4 class="card-title display-3">{{ num_stu }}</h4>
+          <h3 class="card-text">
+            Students
+          </h3>
+      </div>
+    </div>
+    <div class="card bg-info text-center">
+      <div class="card-body">
+          <h4 class="card-title display-3">{{ num_att }}</h4>
+          <h3 class="card-text">
+            Attended Today
+          </h3>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

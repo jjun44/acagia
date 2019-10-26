@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block head_block %}
-    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
     <title>Acagia - Add Academy</title>
 {% endblock %}
 {% block body_block %}
@@ -10,31 +10,65 @@
     <div class="pt-5 container">
     <div class="pt-5 row">
     <div class="col-md-6 offset-md-3">
-      <div class="card bg-primary text-center card-form">
+      <div class="card bg-primary text-left card-form">
         <div class="card-body">
-          <h3>Hi, {{ user.username }}</h3>
-
-          <p>{{ form.errors }}</p>
           <form method="post">
             {% csrf_token %}
+            <h3 class="mb-3" >Enter Your Academy Information</h3>
             <div class="form-group">
-                <label for="name">Academy Name</label>
-                {{ form.aca_name }}
+                <label for="name">Academy Name <span
+                        class="text-danger">*</span></label>
+                {{ aca_form.aca_name }}
+                <p class="text-warning">
+                    {{ aca_form.errors.aca_name|striptags }}</p>
             </div>
             <div class="form-group">
-                <label for="type">Academy Type</label>
-                {{ form.aca_type }}
+                <label for="type">Academy Type <span
+                        class="text-danger">*</span></label>
+                {{ aca_form.aca_type }}
+                <p class="text-warning">
+                    {{ aca_form.errors.aca_type|striptags }}</p>
             </div>
             <div class="form-group">
-                <label for="name">Office Number</label>
-                {{ form.office_phone }}
+                <label for="number">Office Number <span
+                        class="text-danger">*</span></label>
+                {{ aca_form.office_phone }}
+                <p class="text-warning">
+                    {{ aca_form.errors.office_phone|striptags }}</p>
+            </div>
+            <div class="form-group">
+                <label for="street">Street</label>
+                {{ addr_form.street }}
+                <p class="text-warning">
+                    {{ addr_form.errors.street|striptags }}</p>
+            </div>
+            <div class="form-group">
+                <label for="city">City <span
+                        class="text-danger">*</span></label>
+                {{ addr_form.city }}
+                <p class="text-warning">
+                    {{ addr_form.errors.city|striptags }}</p>
+            </div>
+            <div class="form-group">
+                <label for="state">State <span
+                        class="text-danger">*</span></label>
+                {{ addr_form.state }}
+                <p class="text-warning">
+                    {{ addr_form.errors.state|striptags }}</p>
+            </div>
+            <div class="form-group">
+                <label for="zip">Zip</label>
+                {{ addr_form.zip }}
+                <p class="text-warning">
+                    {{ addr_form.errors.zip|striptags }}</p>
             </div>
             <button
               type="submit"
-              class="btn btn-outline-light btn-block">
+              class="btn btn-outline-light btn-block mb-3">
                 Add Academy
             </button>
-            <a href="{% url 'home' %}" class="text-info mt-2">Go back</a>
+            <a href="{% url 'aca_list' %}" class="text-info
+            col-6 offset-3">Go back to the academy list</a>
           </form>
         </div>
       </div>
