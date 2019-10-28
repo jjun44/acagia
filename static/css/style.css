@@ -116,7 +116,7 @@ a, a:hover, a:focus {
 }
 
 ul.sidebar-button {
-  padding: 30px 50px;
+  padding: 0px 50px;
 }
 
 ul.sidebar-button a {
@@ -170,4 +170,9 @@ ul.sidebar-button a {
   #sidebarCollapse span {
       display: none;
   }
+}
+
+.form-wrapper {
+  width: 500px;
+  margin-left: 50px;
 }

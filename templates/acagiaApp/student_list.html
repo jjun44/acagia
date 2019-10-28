@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+
+{% block sidebar_block %}
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h2>Acagia</h2>
+  </div>
+  <ul class="list-unstyled components">
+    <li>
+      <a href="{% url 'dashboard' pk=aca_id %}">Home</a>
+    </li>
+    <li class="active">
+      <a href="#">Students</a>
+    </li>
+    <li>
+      <a href="#">Courses</a>
+    </li>
+    <li>
+      <a href="#">Attendance</a>
+    </li>
+    <li>
+      <a href="#">Check-In</a>
+    </li>
+    <li>
+      <a href="#">Staff</a>
+    </li>
+  </ul>
+  <ul class="list-unstyled sidebar-button">
+    <li>
+      <a href="{% url 'aca_list' %}">Academy List</a>
+    </li>
+    <li>
+      <a href="{% url 'logout' %}">Log Out</a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content_block %}
+<a href="{% url 'add_student' pk=aca_id %}"><button class="btn btn-info mb-2">Add
+    New
+    Student</button></a>
+<!-- Jumbtron academy information -->
+<table class="table table-hover table-dark">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Rank</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+    <tr>
+      <td>{{ student.first_name }}</td>
+      <td>{{ student.last_name }}</td>
+      <td>{{ student.calc_age }}</td>
+      <td>{{ student.gender }}</td>
+      <td>{{ student.stu_info.rank_stu.rank }}</td>
+      <td>{{ student.stu_info.status }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+
+
+

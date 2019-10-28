@@ -1,5 +1,6 @@
 from django import forms
-from .models import Academy, Address
+from .models import Academy, Address, Member
+from django.forms.widgets import *
 
 class AcademyForm(forms.ModelForm):
     aca_name = forms.CharField(
@@ -39,3 +40,30 @@ class AddressForm(forms.ModelForm):
         model = Address
         fields = ('street', 'city', 'state', 'zip')
 
+class MemberForm(forms.ModelForm):
+    class Meta:
+        model = Member
+        fields = ('first_name', 'last_name', 'mem_type', 'date_of_birth',
+                  'gender', 'cell_phone', 'email', 'img')
+        labels = {
+            'mem_type': 'Member Type',
+            'img': 'Member Photo'
+        }
+        widgets = {
+            'first_name': TextInput(attrs={'class':'form-control mb-2'}),
+            'last_name': TextInput(attrs={'class':'form-control mb-2'}),
+            'mem_type': Select(attrs={'class':'form-control mb-2'}),
+            'date_of_birth': DateInput(attrs={'class':'form-control mb-2',
+                                              'type':'date'}),
+            'gender': Select(attrs={'class':'form-control mb-2'}),
+            'cell_phone': TextInput(attrs={'class':'form-control mb-2'}),
+            'email': EmailInput(attrs={'class':'form-control mb-2'}),
+            'img': FileInput(attrs={'class':'form-control-file mb-2'})
+        }
+        required = {
+            'img': False,
+        }
+        choices = {
+            'mem_type': Member.MEM_TYPE,
+            'gender': Member.GENDER
+        }

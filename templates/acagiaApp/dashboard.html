@@ -1,6 +1,43 @@
 <!DOCTYPE html>
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
+{% block sidebar_block %}
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h2>Acagia</h2>
+  </div>
+  <ul class="list-unstyled components">
+    <li class="active">
+      <a href="#">Home</a>
+    </li>
+    <li>
+      <a href="{% url 'stu_list' pk=academy.pk %}">Students</a>
+    </li>
+
+    <li>
+      <a href="#">Courses</a>
+    </li>
+    <li>
+      <a href="#">Attendance</a>
+    </li>
+    <li>
+      <a href="#">Check-In</a>
+    </li>
+    <li>
+      <a href="#">Staff</a>
+    </li>
+  </ul>
+  <ul class="list-unstyled sidebar-button">
+    <li>
+      <a href="{% url 'aca_list' %}">Academy List</a>
+    </li>
+    <li>
+      <a href="{% url 'logout' %}">Log Out</a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
 {% block content_block %}
 <!-- Jumbtron academy information -->
 <div class="jumbotron jumbotron-fluid bg-dark">

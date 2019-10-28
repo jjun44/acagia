@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import CustomUser as User
+from datetime import date
 
 class Address(models.Model):
     STATES = [
@@ -67,7 +68,7 @@ class Member(models.Model):
     img = models.ImageField(
         height_field='300',
         width_field='200',
-        upload_to='mem_photos',
+        upload_to='mem_photos/',
         null=True, blank=True
     )
     pay_day = models.DateField(auto_now_add=True, editable=True)
@@ -79,10 +80,20 @@ class Member(models.Model):
         blank=True, null=True, on_delete=models.SET_NULL
     )
 
+    @property
+    def calc_age(self):
+        """
+        Calculate age based on the date of birth.
+        :return: calculated age
+        """
+        today = date.today()
+        age = str((today - self.date_of_birth) / 365).split(' ')[0]
+        return age
+
 class Instructor(models.Model):
     date_of_hire = models.DateField(auto_now_add=True, editable=True)
     mem = models.OneToOneField(
-        Member, related_name='inst_detail', on_delete=models.CASCADE
+        Member, related_name='inst_info', on_delete=models.CASCADE
     )
 
 class Student(models.Model):
@@ -92,10 +103,15 @@ class Student(models.Model):
         ('Hold', 'Hold')
     ]
     date_of_start = models.DateField(auto_now_add=True, editable=True)
-    status = models.CharField(max_length=7, choices=STATUS)
+    status = models.CharField(max_length=7, choices=STATUS, default='Active')
     mem = models.OneToOneField(
-        Member, related_name='stu_detail', on_delete=models.CASCADE
+        Member, related_name='stu_info', on_delete=models.CASCADE
     )
+
+    @classmethod
+    def create(cls, member_id):
+        student = cls(mem_id=member_id)
+        return student
 
 class Course(models.Model):
     course_name = models.CharField(max_length=40)
@@ -158,7 +174,7 @@ class Rank(models.Model):
         ]
     }
     rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
-    rank = models.CharField(max_length=10, choices=RANK[TKD])
+    rank = models.CharField(max_length=10, choices=RANK[TKD], default='None')
     days_attended = models.IntegerField(default=0)
     stu = models.ForeignKey(
         Student, related_name='rank_stu', on_delete=models.CASCADE

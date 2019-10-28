@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+
+{% block sidebar_block %}
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h2>Acagia</h2>
+  </div>
+  <ul class="list-unstyled components">
+    <li>
+      <a href="{% url 'dashboard' pk=aca_id %}">Home</a>
+    </li>
+    <li class="active">
+      <a href="{% url 'stu_list' pk=aca_id %}">Students</a>
+    </li>
+    <li>
+      <a href="#">Staff</a>
+    </li>
+    <li>
+      <a href="#">Courses</a>
+    </li>
+    <li>
+      <a href="#">Attendance</a>
+    </li>
+    <li>
+      <a href="#">Check-In</a>
+    </li>
+  </ul>
+  <ul class="list-unstyled sidebar-button">
+    <li>
+      <a href="{% url 'aca_list' %}">Academy List</a>
+    </li>
+    <li>
+      <a href="{% url 'logout' %}">Log Out</a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content_block %}
+<div class="form-wrapper">
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_table }}
+  <button
+    type="submit"
+    class="btn btn-info my-3">Add Student</button>
+</form>
+<a href="{% url 'stu_list' pk=aca_id %}"><button class="btn btn-info
+mb-2">Cancel</button></a>
+</div>
+{% endblock %}
+
+
+
+
