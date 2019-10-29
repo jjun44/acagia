@@ -43,7 +43,10 @@ class Academy(models.Model):
     addr = models.ForeignKey(
         Address, related_name='aca_addr',
         null=True, blank=True, on_delete=models.SET_NULL
-)
+    )
+    
+    def __str__(self):
+        return self.aca_name
 
 class Member(models.Model):
     STU = 'Stu'
@@ -80,8 +83,11 @@ class Member(models.Model):
         blank=True, null=True, on_delete=models.SET_NULL
     )
 
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
+
     @property
-    def calc_age(self):
+    def age(self):
         """
         Calculate age based on the date of birth.
         :return: calculated age
@@ -126,6 +132,10 @@ class Course(models.Model):
         Member, null=True,
         related_name='course_inst', on_delete=models.SET_NULL
     )
+
+    def __str__(self):
+        return self.course_name + ' ' + self.course_days + ' ' + \
+               self.start_time + ' - ' + self.end_time
 
 class Event(models.Model):
     event_date = models.DateField()
@@ -189,6 +199,9 @@ class Rank(models.Model):
     }
     rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
     rank = models.CharField(max_length=10, choices=RANK[TKD], default='None')
+
+    def __str__(self):
+        return self.rank_type + ' - ' + self.rank
 
 class StudentRank(models.Model):
     student = models.ForeignKey(
