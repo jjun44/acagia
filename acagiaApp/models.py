@@ -7,7 +7,7 @@ class Address(models.Model):
         ('CA', 'California'),
         ('NY', 'New York')
     ]
-    street = models.CharField(max_length=50, null=True, blank=True)
+    street = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=20)
     state = models.CharField(max_length=2, choices=STATES)
     zip = models.CharField(max_length=5, null=True, blank=True)
@@ -30,6 +30,8 @@ class Academy(models.Model):
         (GENERAL, 'General'),
         (MMA, 'MMA')
     ]
+    # when User account deleted, Academy will be deleted as well
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     aca_name = models.CharField(max_length=30)
     aca_type = models.CharField(
         max_length=10,
@@ -37,8 +39,6 @@ class Academy(models.Model):
         default=GENERAL
     )
     office_phone = models.CharField(max_length=12)
-    # when User account deleted, Academy will be deleted as well
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # when Address deleted, Academy won't be deleted
     addr = models.ForeignKey(
         Address, related_name='aca_addr',
@@ -58,6 +58,9 @@ class Member(models.Model):
         ('M', 'Male'),
         ('F', 'Female')
     ]
+    aca = models.ForeignKey(
+        Academy, related_name='mem_aca', on_delete=models.CASCADE
+    )
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     mem_type = models.CharField(max_length=4, choices=MEM_TYPE, default=STU)
@@ -71,10 +74,7 @@ class Member(models.Model):
         upload_to='mem_photos/',
         null=True, blank=True
     )
-    pay_day = models.DateField(auto_now_add=True, editable=True)
-    aca = models.ForeignKey(
-        Academy, related_name='aca', on_delete=models.CASCADE
-    )
+    member_since = models.DateField(auto_now_add=True)
     addr = models.ForeignKey(
         Address, related_name='mem_addr',
         blank=True, null=True, on_delete=models.SET_NULL
@@ -90,11 +90,13 @@ class Member(models.Model):
         age = str((today - self.date_of_birth) / 365).split(' ')[0]
         return age
 
+'''
 class Instructor(models.Model):
     date_of_hire = models.DateField(auto_now_add=True, editable=True)
     mem = models.OneToOneField(
-        Member, related_name='inst_info', on_delete=models.CASCADE
+        Member, related_name='inst_mem', on_delete=models.CASCADE
     )
+'''
 
 class Student(models.Model):
     STATUS = [
@@ -102,10 +104,9 @@ class Student(models.Model):
         ('Inactive', 'Inactive'),
         ('Hold', 'Hold')
     ]
-    date_of_start = models.DateField(auto_now_add=True, editable=True)
     status = models.CharField(max_length=7, choices=STATUS, default='Active')
     mem = models.OneToOneField(
-        Member, related_name='stu_info', on_delete=models.CASCADE
+        Member, related_name='stu_mem', on_delete=models.CASCADE
     )
 
     @classmethod
@@ -114,24 +115,37 @@ class Student(models.Model):
         return student
 
 class Course(models.Model):
+    aca = models.ForeignKey(
+        Academy, related_name='course_aca', on_delete=models.CASCADE
+    )
     course_name = models.CharField(max_length=40)
     course_days = models.CharField(max_length=7)
     start_time = models.TimeField()
     end_time = models.TimeField()
-    inst = models.ForeignKey(
-        Instructor, null=True,
-        related_name='inst', on_delete=models.SET_NULL
+    instructor = models.ForeignKey(
+        Member, null=True,
+        related_name='course_inst', on_delete=models.SET_NULL
     )
 
-class Competition(models.Model):
-    comp_date = models.DateField()
-    comp_name = models.CharField(max_length=30)
-    division = models.CharField(max_length=20)
+class Event(models.Model):
+    event_date = models.DateField()
+    event_start_time = models.TimeField(blank=True, null=True)
+    event_end_time = models.TimeField(blank=True, null=True)
+    event_name = models.CharField(max_length=30)
+
+class StudentEvent(models.Model):
+    aca = models.ForeignKey(
+        Academy, related_name='se_aca', on_delete=models.CASCADE
+    )
+    student = models.ForeignKey(
+        Student, related_name='se_stu', on_delete=models.CASCADE
+    )
+    event = models.ForeignKey(
+        Event, related_name='se_event', on_delete=models.SET('Deleted')
+    )
+    division = models.CharField(max_length=30)
     weight = models.FloatField(blank=True, null=True)
     reward = models.CharField(max_length=20, blank=True, null=True)
-    stu = models.ForeignKey(
-        Student, related_name='comp_stu', on_delete=models.CASCADE
-    )
 
 class Rank(models.Model):
     GENERAL = 'General'
@@ -175,24 +189,29 @@ class Rank(models.Model):
     }
     rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
     rank = models.CharField(max_length=10, choices=RANK[TKD], default='None')
-    days_attended = models.IntegerField(default=0)
-    stu = models.ForeignKey(
-        Student, related_name='rank_stu', on_delete=models.CASCADE
+
+class StudentRank(models.Model):
+    student = models.ForeignKey(
+        Student, related_name='sr_stu', on_delete=models.CASCADE
     )
+    rank = models.ForeignKey(
+        Rank, null=True, related_name='sr_rank', on_delete=models.SET_NULL
+    )
+    days_at_this_rank = models.IntegerField(default=0)
 
 class Attendance(models.Model):
+    aca = models.ForeignKey(
+        Academy, related_name='att_aca', on_delete=models.CASCADE
+    )
     date_attended = models.DateField(auto_now_add=True)
     time_attended = models.TimeField(auto_now_add=True)
-    aca = models.ForeignKey(
-        Academy, related_name='atten_aca', on_delete=models.CASCADE
-    )
     member = models.ForeignKey(
-        Member, related_name='mem_attended',
+        Member, related_name='att_mem',
         null=True, on_delete=models.SET_NULL
     )
     course = models.ForeignKey(
         Course, null=True,
-        related_name='course', on_delete=models.SET_NULL
+        related_name='att_course', on_delete=models.SET_NULL
     )
 
 
