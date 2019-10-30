@@ -1,5 +1,5 @@
 from django import forms
-from .models import Academy, Address, Member
+from .models import Academy, Address, Member, Course
 from django.forms.widgets import *
 
 class AcademyForm(forms.ModelForm):
@@ -53,8 +53,8 @@ class MemberForm(forms.ModelForm):
             'first_name': TextInput(attrs={'class':'form-control mb-2'}),
             'last_name': TextInput(attrs={'class':'form-control mb-2'}),
             'mem_type': Select(attrs={'class':'form-control mb-2'}),
-            'date_of_birth': DateInput(attrs={'class':'form-control mb-2',
-                                              'type':'date'}),
+            'date_of_birth': DateInput(attrs={
+                'class':'form-control mb-2', 'type':'date'}),
             'gender': Select(attrs={'class':'form-control mb-2'}),
             'cell_phone': TextInput(attrs={'class':'form-control mb-2'}),
             'email': EmailInput(attrs={'class':'form-control mb-2'}),
@@ -67,3 +67,33 @@ class MemberForm(forms.ModelForm):
             'mem_type': Member.MEM_TYPE,
             'gender': Member.GENDER
         }
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ('course_name', 'course_days', 'start_time',
+                  'end_time', 'instructor')
+        labels = {
+            'course_name': 'Class Name',
+            'course_days': 'Class Days'
+        }
+        widgets = {
+            'course_name': TextInput(attrs={'class':'form-control mb-2'}),
+            'course_days': Select(attrs={
+                'class':'form-control mb-2'}),
+            'start_time': TimeInput(attrs={
+                'class':'form-control mb-2', 'type':'time'}),
+            'end_time': TimeInput(attrs={
+                'class':'form-control mb-2', 'type':'time'}),
+            'instructor': Select(attrs={'class':'form-control mb-2'})
+        }
+        choices = {
+            'course_days': Course.DAYS,
+        }
+
+    def __init__(self, *args, **kwargs):
+        academy = kwargs.pop('aca_id')
+        super().__init__(*args, **kwargs)
+        # Show only current academy's instructors as an option
+        self.fields['instructor'].queryset = Member.objects.filter(
+            mem_type=Member.INST, aca_id=academy)

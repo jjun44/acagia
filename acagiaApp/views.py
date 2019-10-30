@@ -4,12 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from users.models import CustomUser as User
-from .forms import AcademyForm, AddressForm, MemberForm
-from .models import Academy, Member, Attendance, Student, Rank
+from .forms import AcademyForm, AddressForm, MemberForm, CourseForm
+from .models import Academy, Member, Attendance, Student, Course
 from datetime import date
 
-@method_decorator(login_required(login_url='login_error'),
-                  name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class AcademyListView(ListView):
     """
     Shows the list of academies owned by the user.
@@ -24,7 +23,7 @@ class AcademyListView(ListView):
         )
         return context
 
-@login_required(login_url='login_error')
+@login_required
 def add_academy(request):
     """
     Add new academy information and its address information
@@ -55,7 +54,7 @@ def add_academy(request):
         'addr_form': addr_form
     })
 
-@login_required(login_url='login_error')
+@login_required
 def dashboard(request, **kwargs):
     """
     Display a chosen user's academy's dashboard with
@@ -70,32 +69,29 @@ def dashboard(request, **kwargs):
     num_of_attended = Attendance.objects.filter(
         aca_id=kwargs['pk'], date_attended=date.today()).count()
     return render(request, 'acagiaApp/dashboard.html',
-                  {'academy':academy, 'num_stu':num_of_students,
-                   'num_att':num_of_attended})
+                  {'academy': academy, 'num_stu': num_of_students,
+                   'num_att': num_of_attended})
 
-@login_required(login_url='login_error')
-def student_list(request, **kwargs):
+@login_required
+def member_list(request, **kwargs):
     """
-    Shows the list of students in an academy with basic information.
+    Shows the list of members in the academy with basic information.
     """
-    student_list = Member.objects.filter(
-        aca_id=kwargs['pk'], mem_type='Stu'
+    member_list = Member.objects.filter(
+        aca_id=kwargs['pk']
     )
-    ranks = Rank.objects.all()
-    student_ranks = {
-        rank.stu_id:rank.rank for rank in ranks if ranks.stu_id in student_list}
-    return render(request, 'acagiaApp/student_list.html',
-                  {'students':student_list, 'ranks':student_ranks,
-                   'aca_id':kwargs['pk']})
+    return render(request, 'acagiaApp/member_list.html',
+                  {'members': member_list,
+                   'aca_id': kwargs['pk']})
 
-@login_required(login_url='login_error')
-def add_student(request, **kwargs):
+@login_required
+def add_member(request, **kwargs):
     '''
-    Adds a new student to Member/Student tables.
+    Adds a new member to Member/Student tables.
     :param request: HTTP request
     :param kwargs:
-    :return: student list page if student is added successfully,
-             otherwise, form page to prompt the user student information
+    :return: member list page if member is added successfully,
+             otherwise, form page to prompt the user member information
     '''
     mem_form = MemberForm()
     if request.method == 'POST':
@@ -104,10 +100,78 @@ def add_student(request, **kwargs):
             member = mem_form.save(commit=False)
             member.aca_id = kwargs['pk'] # Save aca_id
             member.save()
-            # Create student object with mem_id
-            student = Student.create(member.id)
-            student.save()
-            return redirect('/academy/students/' + str(kwargs['pk']))
-    return render(request, 'acagiaApp/member_form.html', {'form':mem_form, \
-                                                                'aca_id':kwargs['pk']})
+            # if it's a student, add to the Student table too
+            if member.mem_type == Member.STU:
+                # Create student object with mem_id
+                student = Student.create(member.id)
+                student.save()
+            return redirect('/academy/members/' + str(kwargs['pk']))
+    return render(request, 'acagiaApp/member_form.html', {
+        'form': mem_form, 'aca_id': kwargs['pk']
+    })
 
+@method_decorator(login_required, name='dispatch')
+class CourseListView(ListView):
+    """
+    Shows the list of courses in the academy.
+    """
+    model = Course
+    template_name = 'acagiaApp/course_list.html'
+
+    def get_context_data(self, **kwargs):
+        print(self.kwargs)
+        context = super().get_context_data(**kwargs)
+        context['courses'] = Course.objects.filter(
+            aca_id=self.kwargs['pk']
+        )
+        context['aca_id'] = self.kwargs['pk']
+        return context
+
+'''
+@method_decorator(login_required, name='dispatch')
+class CourseCreateView(CreateView):
+    model = Course
+    form_class = CourseForm
+    success_url = reverse_lazy('course_list')
+    template_name = 'acagiaApp/course_form.html'
+
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        
+        form = self.form_class(aca_id=pk)
+        return render(request, self.template_name, {'form': form, 'aca_id':pk})
+
+    def post(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
+        form = self.form_class(request.POST, aca_id=pk)
+        if form.is_valid():
+            form.save()
+            return render(request, 'acagiaApp/course_list.html',
+                          {'aca_id': pk})
+        return render(request, self.template_name,
+                      {'form': form, 'aca_id': pk})
+'''
+
+@login_required
+def add_course(request, **kwargs):
+    '''
+    Adds a new course to the course table.
+    :param request: HTTP request
+    :param kwargs:
+    :return:
+    '''
+    # Pass aca_id to the form.
+    # https://stackoverflow.com/questions/28653699/passing-request-object-from-view-to-form-in-django
+    pk = kwargs['pk']
+    form = CourseForm(aca_id=pk)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, aca_id=pk)
+        if form.is_valid():
+            course = form.save(commit=False)
+            # Save instructor's id
+            course.aca_id = pk
+            course.instructor_id = form.cleaned_data['instructor'].id
+            form.save()
+            return redirect('/academy/courses/' + str(pk))
+    return render(request, 'acagiaApp/course_form.html',
+                      {'form': form, 'aca_id': pk})

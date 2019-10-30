@@ -4,6 +4,7 @@ from datetime import date
 
 class Address(models.Model):
     STATES = [
+        # left: shown in the db, right: shown in the form
         ('CA', 'California'),
         ('NY', 'New York')
     ]
@@ -44,13 +45,13 @@ class Academy(models.Model):
         Address, related_name='aca_addr',
         null=True, blank=True, on_delete=models.SET_NULL
     )
-    
+
     def __str__(self):
         return self.aca_name
 
 class Member(models.Model):
-    STU = 'Stu'
-    INST = 'Inst'
+    STU = 'Student'
+    INST = 'Instructor'
     OTHER = 'Other'
     MEM_TYPE = [
         (STU, 'Student'),
@@ -66,7 +67,7 @@ class Member(models.Model):
     )
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
-    mem_type = models.CharField(max_length=4, choices=MEM_TYPE, default=STU)
+    mem_type = models.CharField(max_length=10, choices=MEM_TYPE, default=STU)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=1, choices=GENDER)
     cell_phone = models.CharField(max_length=12)
@@ -74,7 +75,7 @@ class Member(models.Model):
     img = models.ImageField(
         height_field='300',
         width_field='200',
-        upload_to='mem_photos/',
+        upload_to='profiles/',
         null=True, blank=True
     )
     member_since = models.DateField(auto_now_add=True)
@@ -96,21 +97,16 @@ class Member(models.Model):
         age = str((today - self.date_of_birth) / 365).split(' ')[0]
         return age
 
-'''
-class Instructor(models.Model):
-    date_of_hire = models.DateField(auto_now_add=True, editable=True)
-    mem = models.OneToOneField(
-        Member, related_name='inst_mem', on_delete=models.CASCADE
-    )
-'''
-
 class Student(models.Model):
+    ACTIVE = 'Active'
+    INACTIVE = 'Inactive'
+    HOLD = 'Hold'
     STATUS = [
-        ('Active', 'Active'),
-        ('Inactive', 'Inactive'),
-        ('Hold', 'Hold')
+        (ACTIVE, 'Active'),
+        (INACTIVE, 'Inactive'),
+        (HOLD, 'Hold')
     ]
-    status = models.CharField(max_length=7, choices=STATUS, default='Active')
+    status = models.CharField(max_length=7, choices=STATUS, default=ACTIVE)
     mem = models.OneToOneField(
         Member, related_name='stu_mem', on_delete=models.CASCADE
     )
@@ -121,11 +117,27 @@ class Student(models.Model):
         return student
 
 class Course(models.Model):
+    M = 'M'
+    T = 'T'
+    W = 'W'
+    TH = 'Th'
+    F = 'F'
+    SAT = 'Sa'
+    SUN = 'S'
+    DAYS = [
+        (M, 'Mon'),
+        (T, 'Tu'),
+        (W, 'Wed'),
+        (TH, 'Th'),
+        (F, 'Fri'),
+        (SAT, 'Sat'),
+        (SUN, 'Sun')
+    ]
     aca = models.ForeignKey(
         Academy, related_name='course_aca', on_delete=models.CASCADE
     )
     course_name = models.CharField(max_length=40)
-    course_days = models.CharField(max_length=7)
+    course_days = models.CharField(max_length=10, choices=DAYS)
     start_time = models.TimeField()
     end_time = models.TimeField()
     instructor = models.ForeignKey(
@@ -135,7 +147,11 @@ class Course(models.Model):
 
     def __str__(self):
         return self.course_name + ' ' + self.course_days + ' ' + \
-               self.start_time + ' - ' + self.end_time
+               self.time_range
+
+    @property
+    def time_range(self):
+        return str(self.start_time) + ' - ' + str(self.end_time)
 
 class Event(models.Model):
     event_date = models.DateField()
@@ -226,7 +242,3 @@ class Attendance(models.Model):
         Course, null=True,
         related_name='att_course', on_delete=models.SET_NULL
     )
-
-
-
-

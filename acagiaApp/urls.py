@@ -5,6 +5,9 @@ urlpatterns = [
     path('', AcademyListView.as_view(), name='aca_list'),
     path('add_academy/', add_academy, name='add_academy'),
     path('dashboard/<int:pk>/', dashboard, name='dashboard'),
-    path('students/<int:pk>/', student_list, name='stu_list'),
-    path('students/add_student/<int:pk>', add_student, name='add_student')
+    path('members/<int:pk>/', member_list, name='mem_list'),
+    path('members/add_member/<int:pk>/', add_member, name='add_member'),
+    path('courses/<int:pk>/', CourseListView.as_view(), name='course_list'),
+    path('courses/add_course/<int:pk>/', add_course,
+         name='add_course')
 ]
