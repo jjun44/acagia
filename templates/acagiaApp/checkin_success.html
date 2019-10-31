@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_block %}
+    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <title>Acagia - Student Check-In</title>
+{% endblock %}
+{% block body_block %}
+<!-- STUDENT CHECK-IN FORM -->
+<div class="pt-5 container">
+<div class="pt-5 row">
+<div class="col-md-6 offset-md-3">
+  <div class="card bg-info text-center card-form">
+    <div class="card-body">
+        <h2 class="mt-4">Thank you,</h2><br>
+        <h3 class="mb-5">You are successfully checked in!</h3>
+        <a href="{% url 'check_in' pk=aca_id %}"><button
+          type="submit"
+          class="btn btn-lg btn-outline-light btn-block">
+            Click to Check In
+        </button></a>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+
+

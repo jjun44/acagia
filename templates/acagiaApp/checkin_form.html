@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_block %}
+    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <title>Acagia - Student Check-In</title>
+{% endblock %}
+{% block body_block %}
+<!-- STUDENT CHECK-IN FORM -->
+<div class="pt-5 container">
+<div class="pt-5 row">
+  <div class="col-md-6 offset-md-8">
+    <a href="{% url 'logout' %}">
+      <i class="fas fa-sign-out-alt fa-2x" aria-hidden="true"></i>
+    </a>
+  </div>
+</div>
+<div class="pt-5 row">
+<div class="col-md-6 offset-md-3">
+  <div class="card bg-info text-center card-form">
+    <div class="card-body">
+      <h3>Acagia</h3>
+      <p>{{ error }}</p>
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible"
+          role="alert">
+          <button type="button" class="close" data-dismiss="alert"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+              {{ form.first_name }}
+        </div>
+        <div class="form-group">
+              {{ form.last_name }}
+        </div>
+        <div class="form-group">
+              {{ form.course }}
+        </div>
+        <button
+          type="submit"
+          class="btn btn-lg btn-outline-light btn-block mt-4 mb-3">
+            Click to Check In
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+
+

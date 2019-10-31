@@ -142,7 +142,7 @@ class Course(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     instructor = models.ForeignKey(
-        Member, null=True,
+        Member, null=True, blank=True,
         related_name='course_inst', on_delete=models.SET_NULL
     )
 

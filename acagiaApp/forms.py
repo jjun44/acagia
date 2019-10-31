@@ -1,5 +1,5 @@
 from django import forms
-from .models import Academy, Address, Member, Course
+from .models import Academy, Address, Member, Course, Attendance
 from django.forms.widgets import *
 
 class AcademyForm(forms.ModelForm):
@@ -71,6 +71,7 @@ class MemberForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     course_days = forms.MultipleChoiceField(
         choices=Course.DAYS,
+        label='Class Days',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'mb-2 list-unstyled'})
     )
 
@@ -80,15 +81,17 @@ class CourseForm(forms.ModelForm):
                   'end_time', 'instructor')
         labels = {
             'course_name': 'Class Name',
-            'course_days': 'Class Days'
         }
         widgets = {
             'course_name': TextInput(attrs={'class':'form-control mb-2'}),
-            'start_time': TimeInput(attrs={
+            'start_time': TimeInput(format='%H:%M', attrs={
                 'class':'form-control mb-2', 'type':'time'}),
-            'end_time': TimeInput(attrs={
+            'end_time': TimeInput(format='%H:%M', attrs={
                 'class':'form-control mb-2', 'type':'time'}),
             'instructor': Select(attrs={'class':'form-control mb-2'})
+        }
+        required = {
+            'instructor': False,
         }
 
     def __init__(self, *args, **kwargs):
@@ -97,3 +100,28 @@ class CourseForm(forms.ModelForm):
         # Show only current academy's instructors as an option
         self.fields['instructor'].queryset = Member.objects.filter(
             mem_type=Member.INST, aca_id=academy)
+
+class AttendanceForm(forms.ModelForm):
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder':'First Name',
+                                      'class':'form-control form-control-lg'})
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder':'Last Name',
+                                      'class':'form-control form-control-lg'})
+    )
+
+    class Meta:
+        model = Attendance
+        fields = ('course',)
+        widgets = {
+            'time_attended': TimeInput(format='%H:%M:%S'),
+            'course': Select(attrs={'class':'form-control mb-2'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        aca_id = kwargs.pop('aca_id')
+        super().__init__(*args, **kwargs)
+        # Show only current academy's courses as an option
+        self.fields['course'].queryset = Course.objects.filter(aca_id=aca_id)
+

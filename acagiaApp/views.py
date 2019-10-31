@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from users.models import CustomUser as User
-from .forms import AcademyForm, AddressForm, MemberForm, CourseForm
+from .forms import AcademyForm, AddressForm, MemberForm, CourseForm, AttendanceForm
 from .models import Academy, Member, Attendance, Student, Course
 from datetime import date
+from django.contrib import messages
 
 @method_decorator(login_required, name='dispatch')
 class AcademyListView(ListView):
@@ -40,14 +41,10 @@ def add_academy(request):
         if aca_form.is_valid() and addr_form.is_valid():
             address = addr_form.save()
             academy = aca_form.save(commit=False)
-            academy.user_id = request.user.id
-            academy.addr_id = address.id
+            academy.user_id = request.user.id # Save user id as a f.k.
+            academy.addr_id = address.id # Save address id as a f.k.
             academy.save()
-            #print("New Academy added")
             return redirect('/academy')
-        #else:
-            #print("Academy couldn't be added")
-            #print(aca_form.errors, '\n', addr_form.errors)
 
     return render(request, 'acagiaApp/academy_form.html', {
         'aca_form': aca_form,
@@ -57,17 +54,18 @@ def add_academy(request):
 @login_required
 def dashboard(request, **kwargs):
     """
-    Display a chosen user's academy's dashboard with
+    Display a chosen user's academy dashboard with
     the academy information on the page including # of students
     and # of students attended today.
     :param request: HTTP request
-    :param kwargs: keyword arguments
+    :param kwargs: keyword arguments including academy id
     :return: dashboard page with academy information
     """
-    academy = Academy.objects.get(id=kwargs['pk'])
-    num_of_students = Member.objects.filter(aca_id=kwargs['pk']).count()
+    academy = kwargs['pk']
+    academy = Academy.objects.get(id=academy)
+    num_of_students = Member.objects.filter(aca_id=academy).count()
     num_of_attended = Attendance.objects.filter(
-        aca_id=kwargs['pk'], date_attended=date.today()).count()
+        aca_id=academy, date_attended=date.today()).count()
     return render(request, 'acagiaApp/dashboard.html',
                   {'academy': academy, 'num_stu': num_of_students,
                    'num_att': num_of_attended})
@@ -76,38 +74,44 @@ def dashboard(request, **kwargs):
 def member_list(request, **kwargs):
     """
     Shows the list of members in the academy with basic information.
+    :param request: HTTP request
+    :param kwargs: keyword arguments including academy id
+    :return: member list page
     """
+    # Get current academy's members
+    academy = kwargs['pk']
     member_list = Member.objects.filter(
-        aca_id=kwargs['pk']
+        aca_id=academy
     )
     return render(request, 'acagiaApp/member_list.html',
                   {'members': member_list,
-                   'aca_id': kwargs['pk']})
+                   'aca_id': academy})
 
 @login_required
 def add_member(request, **kwargs):
     """
-    Adds a new member to Member/Student tables.
+    Adds a new member to Member/Student table(s).
     :param request: HTTP request
-    :param kwargs:
+    :param kwargs: keyword arguments including academy id
     :return: member list page if member is added successfully,
              otherwise, form page to prompt the user member information
     """
+    academy = kwargs['pk']
     mem_form = MemberForm()
     if request.method == 'POST':
         mem_form = MemberForm(request.POST)
         if mem_form.is_valid():
             member = mem_form.save(commit=False)
-            member.aca_id = kwargs['pk'] # Save aca_id
+            member.aca_id = academy # Save aca_id
             member.save()
             # if it's a student, add to the Student table too
             if member.mem_type == Member.STU:
                 # Create student object with mem_id
                 student = Student.create(member.id)
                 student.save()
-            return redirect('/academy/members/' + str(kwargs['pk']))
+            return redirect('/academy/members/' + str(academy))
     return render(request, 'acagiaApp/member_form.html', {
-        'form': mem_form, 'aca_id': kwargs['pk']
+        'form': mem_form, 'aca_id': academy
     })
 
 @method_decorator(login_required, name='dispatch')
@@ -119,11 +123,12 @@ class CourseListView(ListView):
     template_name = 'acagiaApp/course_list.html'
 
     def get_context_data(self, **kwargs):
+        academy = self.kwargs['pk']
         context = super().get_context_data(**kwargs)
         context['courses'] = Course.objects.filter(
-            aca_id=self.kwargs['pk']
+            aca_id=academy
         )
-        context['aca_id'] = self.kwargs['pk']
+        context['aca_id'] = academy
         return context
 
 '''
@@ -154,17 +159,18 @@ class CourseCreateView(CreateView):
 @login_required
 def add_course(request, **kwargs):
     """
-    Adds a new course to the course table.
+    Adds a new course to Course table.
     :param request: HTTP request
-    :param kwargs:
-    :return:
+    :param kwargs: keyword arguments including academy id
+    :return: course list page if course is added successfully,
+             otherwise, form page to prompt the course information
     """
     # Pass aca_id to the form.
     # https://stackoverflow.com/questions/28653699/passing-request-object-from-view-to-form-in-django
-    pk = kwargs['pk']
-    form = CourseForm(aca_id=pk)
+    academy = kwargs['pk']
+    form = CourseForm(aca_id=academy)
     if request.method == 'POST':
-        form = CourseForm(request.POST, aca_id=pk)
+        form = CourseForm(request.POST, aca_id=academy)
         if form.is_valid():
             course = form.save(commit=False)
             # Format and save course days
@@ -172,13 +178,66 @@ def add_course(request, **kwargs):
             formatted_days = ''
             for day in course_days:
                 formatted_days += day + '/'
-            # Remove the last / ch and save
+            # Remove the last '/' ch and save to the db
             course.course_days = formatted_days[0:len(formatted_days)-1]
+            course.aca_id = academy
             # Save instructor's id
-            course.aca_id = pk
-            course.instructor_id = form.cleaned_data['instructor'].id
+            if form.cleaned_data['instructor']:
+                course.instructor_id = form.cleaned_data['instructor'].id
             form.save()
-            return redirect('/academy/courses/' + str(pk))
+            return redirect('/academy/courses/' + str(academy))
     return render(request, 'acagiaApp/course_form.html',
-                      {'form': form, 'aca_id': pk})
+                      {'form': form, 'aca_id': academy})
 
+@login_required
+def check_in(request, **kwargs):
+    """
+    Checks in a student once he/she enters a name.
+    :param request: HTTP request
+    :return: successful page if checking-in is done successfully,
+             otherwise, form page to prompt the student a name
+    """
+    aca_id = kwargs['pk']
+    form = AttendanceForm(aca_id=aca_id)
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST, aca_id=aca_id)
+        if form.is_valid():
+            record = form.save(commit=False)
+            record.aca_id = aca_id # Save academy id
+            # Get entered name
+            fname = form.cleaned_data['first_name']
+            lname = form.cleaned_data['last_name']
+            # If wrong name, show an error message
+            member = find_member(aca_id, fname, lname)
+            if member is None:
+                # https://simpleisbetterthancomplex.com/tips/2016/09/06
+                # /django-tip-14-messages-framework.html
+                messages.error(request, 'Please check your name and enter '
+                                        'again!')
+                return render(request, 'acagiaApp/checkin_form.html',
+                            {'form': form, 'aca_id': aca_id})
+            record.member_id = member.id # Save matching member id
+            # Save course id
+            record.course_id = form.cleaned_data['course'].id
+            form.save()
+            return redirect('/academy/checkin/success/' + str(aca_id))
+    return render(request, 'acagiaApp/checkin_form.html',
+                      {'form': form, 'aca_id': aca_id})
+
+def find_member(aca_id, fname, lname):
+    """
+    Find a member by academy id, first name and last name.
+    :param aca_id: academy id
+    :param fname: member's first name
+    :param lname: member's last name
+    :return: Member object if found, otherwise, None
+    """
+    try:
+        return Member.objects.get(aca_id=aca_id, first_name=fname,
+                                last_name=lname)
+    except Member.DoesNotExist:
+        return None
+
+def check_in_success(request, **kwargs):
+    return render(request, 'acagiaApp/checkin_success.html',
+                  {'aca_id': kwargs['pk']})

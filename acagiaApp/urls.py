@@ -9,5 +9,8 @@ urlpatterns = [
     path('members/add_member/<int:pk>/', add_member, name='add_member'),
     path('courses/<int:pk>/', CourseListView.as_view(), name='course_list'),
     path('courses/add_course/<int:pk>/', add_course,
-         name='add_course')
+         name='add_course'),
+    path('checkin/<int:pk>/', check_in, name='check_in'),
+    path('checkin/success/<int:pk>/', check_in_success,
+         name='checkin_success')
 ]
