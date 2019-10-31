@@ -69,6 +69,11 @@ class MemberForm(forms.ModelForm):
         }
 
 class CourseForm(forms.ModelForm):
+    course_days = forms.MultipleChoiceField(
+        choices=Course.DAYS,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'mb-2 list-unstyled'})
+    )
+
     class Meta:
         model = Course
         fields = ('course_name', 'course_days', 'start_time',
@@ -79,16 +84,11 @@ class CourseForm(forms.ModelForm):
         }
         widgets = {
             'course_name': TextInput(attrs={'class':'form-control mb-2'}),
-            'course_days': Select(attrs={
-                'class':'form-control mb-2'}),
             'start_time': TimeInput(attrs={
                 'class':'form-control mb-2', 'type':'time'}),
             'end_time': TimeInput(attrs={
                 'class':'form-control mb-2', 'type':'time'}),
             'instructor': Select(attrs={'class':'form-control mb-2'})
-        }
-        choices = {
-            'course_days': Course.DAYS,
         }
 
     def __init__(self, *args, **kwargs):

@@ -16,7 +16,7 @@
       <a href="{% url 'mem_list' pk=aca_id %}">Members</a>
     </li>
     <li class="active">
-      <a href="{% url 'course_list' pk=aca_id %}">Courses</a>
+      <a href="{% url 'course_list' pk=aca_id %}">Classes</a>
     </li>
     <li>
       <a href="#">Events</a>
@@ -43,7 +43,7 @@
   {{ form.as_p }}
   <button
     type="submit"
-    class="btn btn-info my-3">Add Course</button>
+    class="btn btn-info my-3">Add Class</button>
 </form>
 <a href="{% url 'course_list' pk=aca_id %}"><button class="btn btn-info
 mb-2">Cancel</button></a>

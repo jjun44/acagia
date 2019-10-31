@@ -94,7 +94,7 @@ class Member(models.Model):
         :return: calculated age
         """
         today = date.today()
-        age = str((today - self.date_of_birth) / 365).split(' ')[0]
+        age = str((today - self.date_of_birth) / 365).split()[0]
         return age
 
 class Student(models.Model):
@@ -133,11 +133,12 @@ class Course(models.Model):
         (SAT, 'Sat'),
         (SUN, 'Sun')
     ]
+
     aca = models.ForeignKey(
         Academy, related_name='course_aca', on_delete=models.CASCADE
     )
     course_name = models.CharField(max_length=40)
-    course_days = models.CharField(max_length=10, choices=DAYS)
+    course_days = models.CharField(max_length=37)
     start_time = models.TimeField()
     end_time = models.TimeField()
     instructor = models.ForeignKey(

@@ -86,13 +86,13 @@ def member_list(request, **kwargs):
 
 @login_required
 def add_member(request, **kwargs):
-    '''
+    """
     Adds a new member to Member/Student tables.
     :param request: HTTP request
     :param kwargs:
     :return: member list page if member is added successfully,
              otherwise, form page to prompt the user member information
-    '''
+    """
     mem_form = MemberForm()
     if request.method == 'POST':
         mem_form = MemberForm(request.POST)
@@ -119,7 +119,6 @@ class CourseListView(ListView):
     template_name = 'acagiaApp/course_list.html'
 
     def get_context_data(self, **kwargs):
-        print(self.kwargs)
         context = super().get_context_data(**kwargs)
         context['courses'] = Course.objects.filter(
             aca_id=self.kwargs['pk']
@@ -154,12 +153,12 @@ class CourseCreateView(CreateView):
 
 @login_required
 def add_course(request, **kwargs):
-    '''
+    """
     Adds a new course to the course table.
     :param request: HTTP request
     :param kwargs:
     :return:
-    '''
+    """
     # Pass aca_id to the form.
     # https://stackoverflow.com/questions/28653699/passing-request-object-from-view-to-form-in-django
     pk = kwargs['pk']
@@ -168,6 +167,13 @@ def add_course(request, **kwargs):
         form = CourseForm(request.POST, aca_id=pk)
         if form.is_valid():
             course = form.save(commit=False)
+            # Format and save course days
+            course_days = form.cleaned_data['course_days']
+            formatted_days = ''
+            for day in course_days:
+                formatted_days += day + '/'
+            # Remove the last / ch and save
+            course.course_days = formatted_days[0:len(formatted_days)-1]
             # Save instructor's id
             course.aca_id = pk
             course.instructor_id = form.cleaned_data['instructor'].id
@@ -175,3 +181,4 @@ def add_course(request, **kwargs):
             return redirect('/academy/courses/' + str(pk))
     return render(request, 'acagiaApp/course_form.html',
                       {'form': form, 'aca_id': pk})
+
