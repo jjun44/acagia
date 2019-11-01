@@ -62,12 +62,22 @@ class Member(models.Model):
         ('M', 'Male'),
         ('F', 'Female')
     ]
+    ACTIVE = 'Active'
+    INACTIVE = 'Inactive'
+    HOLD = 'Hold'
+    STATUS = [
+        (ACTIVE, 'Active'),
+        (INACTIVE, 'Inactive'),
+        (HOLD, 'Hold')
+    ]
+
     aca = models.ForeignKey(
         Academy, related_name='mem_aca', on_delete=models.CASCADE
     )
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     mem_type = models.CharField(max_length=10, choices=MEM_TYPE, default=STU)
+    status = models.CharField(max_length=7, choices=STATUS, default=ACTIVE)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=1, choices=GENDER)
     cell_phone = models.CharField(max_length=12)
@@ -96,25 +106,6 @@ class Member(models.Model):
         today = date.today()
         age = str((today - self.date_of_birth) / 365).split()[0]
         return age
-
-class Student(models.Model):
-    ACTIVE = 'Active'
-    INACTIVE = 'Inactive'
-    HOLD = 'Hold'
-    STATUS = [
-        (ACTIVE, 'Active'),
-        (INACTIVE, 'Inactive'),
-        (HOLD, 'Hold')
-    ]
-    status = models.CharField(max_length=7, choices=STATUS, default=ACTIVE)
-    mem = models.OneToOneField(
-        Member, related_name='stu_mem', on_delete=models.CASCADE
-    )
-
-    @classmethod
-    def create(cls, member_id):
-        student = cls(mem_id=member_id)
-        return student
 
 class Course(models.Model):
     M = 'M'
@@ -160,12 +151,12 @@ class Event(models.Model):
     event_end_time = models.TimeField(blank=True, null=True)
     event_name = models.CharField(max_length=30)
 
-class StudentEvent(models.Model):
+class MemberEvent(models.Model):
     aca = models.ForeignKey(
         Academy, related_name='se_aca', on_delete=models.CASCADE
     )
-    student = models.ForeignKey(
-        Student, related_name='se_stu', on_delete=models.CASCADE
+    member = models.ForeignKey(
+        Member, related_name='se_mem', on_delete=models.CASCADE
     )
     event = models.ForeignKey(
         Event, related_name='se_event', on_delete=models.SET('Deleted')
@@ -220,9 +211,9 @@ class Rank(models.Model):
     def __str__(self):
         return self.rank_type + ' - ' + self.rank
 
-class StudentRank(models.Model):
-    student = models.ForeignKey(
-        Student, related_name='sr_stu', on_delete=models.CASCADE
+class MemberRank(models.Model):
+    member = models.ForeignKey(
+        Member, related_name='sr_mem', on_delete=models.CASCADE
     )
     rank = models.ForeignKey(
         Rank, null=True, related_name='sr_rank', on_delete=models.SET_NULL

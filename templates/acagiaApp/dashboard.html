@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
+
 {% block sidebar_block %}
 <!-- Sidebar -->
 <nav id="sidebar">
@@ -9,34 +10,32 @@
   </div>
   <ul class="list-unstyled components">
     <li class="active">
-      <a href="{% url 'dashboard' pk=academy.pk %}">Home</a>
+      <a href="{% url 'dashboard' %}">
+        <i class="fas fa-home fa-lg"></i>&nbsp;&nbsp;Home
+      </a>
     </li>
     <li>
-      <a href="{% url 'mem_list' pk=academy.pk %}">Members</a>
+      <a href="{% url 'mem_list' %}">
+        <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;Members
+      </a>
     </li>
     <li>
-      <a href="{% url 'course_list' pk=academy.pk %}">Classes</a>
+      <a href="{% url 'course_list' %}">
+        <i class="fas fa-school fa-lg"></i>&nbsp;&nbsp;Classes
+      </a>
     </li>
     <li>
-      <a href="#">Events</a>
-    </li>
-  </ul>
-  <ul class="list-unstyled sidebar-button">
-    <li>
-      <a href="{% url 'check_in' pk=academy.pk %}">Check-In</a>
-    </li>
-    <li>
-      <a href="{% url 'aca_list' %}">Academy List</a>
-    </li>
-    <li>
-      <a href="{% url 'logout' %}">Log Out</a>
+      <a href="#">
+       <i class="fas fa-calendar-alt fa-lg"></i>&nbsp;&nbsp;Events
+      </a>
     </li>
   </ul>
 </nav>
 {% endblock %}
+
 {% block content_block %}
 <!-- Jumbtron academy information -->
-<div class="jumbotron jumbotron-fluid bg-dark">
+<div class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-3">{{ academy.aca_name }}</h1><br/>
         <h5>Type: {{ academy.aca_type }}</h5>
@@ -46,17 +45,21 @@
 </div>
 <!-- Numbers -->
 <div class="card-columns">
-    <div class="card bg-info text-center">
+    <div class="card bg-primary text-light text-center">
       <div class="card-body">
-          <h4 class="card-title display-3">{{ num_stu }}</h4>
+          <h4 class="card-title display-3">
+            <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;{{ num_stu }}
+          </h4>
           <h3 class="card-text">
-            Students
+            Members
           </h3>
       </div>
     </div>
-    <div class="card bg-info text-center">
+    <div class="card bg-danger text-light text-center">
       <div class="card-body">
-          <h4 class="card-title display-3">{{ num_att }}</h4>
+          <h4 class="card-title display-3">
+            <i class="far fa-calendar-check"></i>&nbsp;&nbsp;{{ num_att }}
+          </h4>
           <h3 class="card-text">
             Attended Today
           </h3>

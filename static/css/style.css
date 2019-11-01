@@ -54,7 +54,8 @@ body {
   border-radius: 5px;
 }
 
-/* DASHBOARD SIDEBAR */
+/* DASHBOARD */
+
 .wrapper {
   display: flex;
   width: 100%;
@@ -128,28 +129,34 @@ ul.sidebar-button a {
   background: cadetblue;
 }
 
-/* DASHBOARD CONTENT */
-#content {
+/* DASHBOARD PAGE (ON THE RIGHT SIDE OF SIDEBAR) */
+#page {
   width: calc(100% - 250px);
-  padding: 20px 30px;
   min-height: 100vh;
   transition: all 0.3s;
   position: absolute;
   top: 0;
   right: 0;
+  background: #fff;
+  color: #252525;
 }
 
-#content.active {
+/* DASHBOARD CONTENT UNDER NAV BAR */
+#content {
+  padding: 40px 40px;
+}
+
+#page.active {
   width: 100%;
 }
 
 /* DASHBOARD NAVBAR */
 #dashboard-navbar {
   padding: 10px 10px;
-  background: #fff;
+  background: #252525;
   border: none;
   border-radius: 0;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -161,10 +168,10 @@ ul.sidebar-button a {
   #sidebar.active {
     margin-left: 0;
   }
-  #content {
+  #page {
       width: 100%;
   }
-  #content.active {
+  #page.active {
       width: calc(100% - 250px);
   }
   #sidebarCollapse span {
@@ -172,7 +179,10 @@ ul.sidebar-button a {
   }
 }
 
+/* FORM WRAPPER (e.g. member form, course form) */
 .form-wrapper {
-  width: 500px;
+  padding: 30px 50px;
+  width: 700px;
   margin-left: 50px;
+  background: #f8f9fa;
 }
