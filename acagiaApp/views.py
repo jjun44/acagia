@@ -208,6 +208,16 @@ def add_course(request, **kwargs):
     return render(request, 'acagiaApp/course_form.html',
                       {'form': form})
 
+@method_decorator(login_required, name='dispatch')
+class CourseDeleteView(DeleteView):
+    """
+    Deletes a selected course and redirects to a course list page.
+    """
+    model = Course
+
+    def get_success_url(self):
+        return reverse('course_list')
+
 @login_required
 def check_in(request, **kwargs):
     """

@@ -63,43 +63,60 @@ mb-2">Add
         <a href="#" class="btn btn-success btn-sm mr-2">
           <i class="fas fa-edit fa-lg"></i>
         </a>
-        <a href="#"  class="btn btn-danger btn-sm mr-2" role="button"
-           data-toggle="modal"
-           data-target="#{{ course.id }}">
+        <a href="#confirm-modal" class="btn btn-danger btn-sm"
+           id="delete-link" data-toggle="modal"
+           data-id="{{ course.id }}" data-name="{{ course }}">
             <i class="fas fa-trash-alt fa-lg"></i>
         </a>
       </td>
     </tr>
-    <!-- Delete confirm modal -->
-    <div class="modal" id="confirm">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Delete Confirmation</h5>
-          <button class="close" data-dismiss="modal">&times;</button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to delete {{ course }}
-        </div>
-        <div class="modal-footer">
-          <a href="">
-            <button class="btn btn-success">
-            Yes
-            </button>
-          </a>
-          <button class="btn btn-danger" data-dismiss="modal">
-            No
-          </button>
-        </div>
-      </div>
-    </div>
-    </div> <!-- end delete confirm modal -->
     {% endfor %}
   </tbody>
 </table>
 {% else %}
 <h3 class="mt-3">No classes yet. Add your first class now!</h3>
 {% endif %}
+<!-- Delete confirm modal -->
+<div class="modal" id="confirm-modal">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Delete Confirmation</h5>
+      <button class="close" data-dismiss="modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to delete <p><strong
+            id="modal-msg"></strong></p>
+    </div>
+    <div class="modal-footer">
+      <form method="POST" id="delete-mem"
+            action="/academy/courses/delete-course/">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">
+        Yes
+        </button>
+      </form>
+      <button class="btn btn-danger" data-dismiss="modal">
+        No
+      </button>
+    </div>
+  </div>
+</div>
+</div> <!-- end delete confirm modal -->
+{% endblock %}
+{% block script_block %}
+<script>
+    /* How to change modal's value (how to pass parameters):
+       https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal */
+    // Triggered when modal is about to be shown
+    $('#confirm-modal').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('id');
+        var name = $(e.relatedTarget).data('name');
+        var link = $('#delete-mem').attr("action");
+        $('#modal-msg').text(name + '?');
+        $('#delete-mem').attr("action", link + id + '/');
+    });
+</script>
 {% endblock %}
 
 
