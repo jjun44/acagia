@@ -14,7 +14,7 @@
         <i class="fas fa-home fa-lg mr-3"></i>Home
       </a>
     </li>
-    <li class="active">
+    <li>
       <a href="{% url 'mem_list' %}">
         <i class="fas fa-users fa-lg mr-3"></i>Members
       </a>
@@ -34,7 +34,7 @@
        <i class="fas fa-bolt fa-lg ml-2 mr-4"></i>Promotion
       </a>
     </li>
-    <li>
+    <li class="active">
       <a href="{% url 'att_list' %}">
        <i class="fas fa-clipboard-check fa-lg ml-1 mr-4"></i>Attendance
       </a>
@@ -46,47 +46,35 @@
 {% block content_block %}
 <a href="{% url 'add_member' %}"><button class="btn btn-dark
 mb-2">Add
-    New
-    Member</button></a>
-{% if members %}
+    New Record</button></a>
+{% if records %}
 <table class="table table-hover table-striped">
   <thead>
     <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Age</th>
-      <th>Gender</th>
-      <th>Rank</th>
-      <th>Status</th>
-      <th>Type</th>
+      <th>Checked-In Date</th>
+      <th>Checked-In Time</th>
+      <th>Checked-In Student</th>
+      <th>Checked-In Class</th>
       <th>Operations</th>
     </tr>
   </thead>
   <tbody>
-    {% for member in members %}
+    {% for record in records %}
     <tr>
-      <td>{{ member.first_name }}</td>
-      <td>{{ member.last_name }}</td>
-      <td>{{ member.age }}</td>
-      <td>{{ member.gender }}</td>
-      <td></td>
-      <td>{{ member.status }}</td>
-      <td>{{ member.mem_type }}</td>
+      <td>{{ record.date_attended|date:"Y-m-d" }}</td>
+      <td>{{ record.time_attended|time:"H:i:s" }}</td>
+      <td>{{ record.member }}</td>
+      <td>{{ record.course }}</td>
       <td>
-        <a href="/academy/members/detail/{{ member.id }}" class="btn
-        btn-primary btn-sm mr-2">
-          <i class="far fa-id-card fa-lg"></i>
-        </a>
-        <a href="#" class="btn btn-info btn-sm mr-2">
-          <i class="far fa-calendar-check fa-lg"></i>
-        </a>
-        <a href="/academy/members/update-member/{{ member.id }}" class="btn
-        btn-success btn-sm mr-2">
-          <i class="fas fa-user-edit fa-lg"></i>
+        <a href="/academy/courses/update-course/{{ course.id }}" class="btn
+        btn-success
+        btn-sm mr-2">
+          <i class="fas fa-edit fa-lg"></i>
         </a>
         <a href="#confirm-modal" class="btn btn-danger btn-sm"
            id="delete-link" data-toggle="modal"
-           data-id="{{ member.id }}" data-name="{{ member }}" data-link="/academy/members/delete-member/">
+           data-id="{{ record.id }}" data-name="{{ record }}"
+           data-link="/academy/attendance/delete-record/">
             <i class="fas fa-trash-alt fa-lg"></i>
         </a>
       </td>
@@ -95,6 +83,6 @@ mb-2">Add
   </tbody>
 </table>
 {% else %}
-<h3 class="mt-3">No members yet. Add your first member now!</h3>
+<h3 class="mt-3">No attendance record found!</h3>
 {% endif %}
 {% endblock %}

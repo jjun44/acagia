@@ -16,6 +16,7 @@ urlpatterns = [
          name='delete_member'),
     path('members/update-member/<int:pk>/', MemberUpdateView.as_view(),
          name='update_member'),
+    path('members/detail/<int:pk>/', member_detail_view, name='mem_detail'),
 
     path('courses/', CourseListView.as_view(), name='course_list'),
     path('courses/add-course/', add_course,
@@ -27,5 +28,9 @@ urlpatterns = [
 
     path('checkin/', check_in, name='check_in'),
     path('checkin/success/', check_in_success,
-         name='checkin_success')
+         name='checkin_success'),
+
+    path('attendance/', AttendanceListView.as_view(), name='att_list'),
+    path('attendance/delete-record/<int:pk>/', AttendanceDeleteView.as_view(),
+         name='delete_att')
 ]

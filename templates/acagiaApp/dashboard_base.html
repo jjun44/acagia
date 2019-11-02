@@ -50,10 +50,36 @@
   <div id="content">
     {% block content_block %}
     {% endblock %}
+      <!-- Delete confirm modal -->
+    <div class="modal" id="confirm-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Confirmation</h5>
+          <button class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete <p><strong
+                id="modal-msg"></strong></p>
+        </div>
+        <div class="modal-footer">
+          <form method="POST" id="delete-mem" action="">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">
+            Yes
+            </button>
+          </form>
+          <button class="btn btn-danger" data-dismiss="modal">
+            No
+          </button>
+        </div>
+      </div>
+    </div>
+    </div> <!-- end delete confirm modal -->
   </div> <!-- end content -->
 </div> <!-- end page -->
 </div> <!-- end wrapper -->
-{% endblock %}
+{% endblock %} <!-- end body block -->
 
 {% block script_block %}
   <!-- jQuery Custom Scroller CDN -->
@@ -69,6 +95,19 @@
     });
   });
   </script>
+    <script>
+    // Delete confirmation modal
+    /* How to change modal's value (how to pass parameters):
+       https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal */
+    // Triggered when modal is about to be shown
+    $('#confirm-modal').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('id');
+        var name = $(e.relatedTarget).data('name');
+        var link = $(e.relatedTarget).data('link');
+        $('#modal-msg').text(name + '?');
+        $('#delete-mem').attr("action", link + id + '/');
+    });
+    </script>
 {% endblock %}
 
 

@@ -113,6 +113,34 @@ class Member(models.Model):
         age = str((today - self.date_of_birth) / 365).split()[0]
         return age
 
+    @classmethod
+    def find_member_by_name(cls, aca_id, fname, lname):
+        """
+        Finds a member by academy id and member's first and last name.
+        :param aca_id: academy id
+        :param fname: member's first name
+        :param lname: member's last name
+        :return: Member object if found, otherwise, None
+        """
+        try:
+            return Member.objects.get(aca_id=aca_id, first_name=fname,
+                                      last_name=lname)
+        except Member.DoesNotExist:
+            return None
+
+    @classmethod
+    def find_member_by_id(cls, mem_id):
+        """
+        Finds a member by member id.
+        :param mem_id: member id
+        :return: Member object if found, otherwise, None
+        """
+        try:
+            return Member.objects.get(id=mem_id)
+        except Member.DoesNotExist:
+            return None
+
+
 class Course(models.Model):
     M = 'M'
     T = 'T'
@@ -144,8 +172,7 @@ class Course(models.Model):
     )
 
     def __str__(self):
-        return self.course_name + ' ' + self.course_days + ' ' + \
-               self.time_range
+        return self.course_name
 
     @property
     def time_range(self):
@@ -159,13 +186,13 @@ class Event(models.Model):
 
 class MemberEvent(models.Model):
     aca = models.ForeignKey(
-        Academy, related_name='se_aca', on_delete=models.CASCADE
+        Academy, related_name='me_aca', on_delete=models.CASCADE
     )
     member = models.ForeignKey(
-        Member, related_name='se_mem', on_delete=models.CASCADE
+        Member, related_name='me_mem', on_delete=models.CASCADE
     )
     event = models.ForeignKey(
-        Event, related_name='se_event', on_delete=models.SET('Deleted')
+        Event, related_name='me_event', on_delete=models.SET('Deleted')
     )
     division = models.CharField(max_length=30)
     weight = models.FloatField(blank=True, null=True)
@@ -212,7 +239,8 @@ class Rank(models.Model):
         ]
     }
     rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
-    rank = models.CharField(max_length=10, choices=RANK[TKD], default='None')
+    rank = models.CharField(max_length=10, choices=RANK[GENERAL],
+                            default='None')
 
     def __str__(self):
         return self.rank_type + ' - ' + self.rank
@@ -233,10 +261,13 @@ class Attendance(models.Model):
     date_attended = models.DateField(auto_now_add=True)
     time_attended = models.TimeField(auto_now_add=True)
     member = models.ForeignKey(
-        Member, related_name='att_mem',
-        null=True, on_delete=models.SET_NULL
+        Member, related_name='att_mem', on_delete=models.CASCADE
     )
     course = models.ForeignKey(
         Course, null=True,
         related_name='att_course', on_delete=models.SET_NULL
     )
+
+    def __str__(self):
+        return str(self.member) + '\'s attendance record on ' + str(
+            self.date_attended)

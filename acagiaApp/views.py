@@ -95,7 +95,7 @@ def dashboard(request, **kwargs):
                    'num_att': num_of_attended})
 
 @login_required
-def member_list(request, **kwargs):
+def member_list(request):
     """
     Shows the list of members in the academy with basic information.
     :param request: HTTP request
@@ -161,6 +161,17 @@ class MemberUpdateView(UpdateView):
         context['template'] = {'action_name': 'Update a Member', 'btn_name':
             'Update'}
         return context
+
+@login_required
+def member_detail_view(request, **kwargs):
+    """
+    Displays selected member's detailed information.
+    :param request: HTTP request
+    :param kwargs: keyword arguments including member id
+    :return:
+    """
+    member = Member.find_member_by_id(mem_id=kwargs['pk'])
+    return render(request, 'acagiaApp/member_detail.html', {'member': member})
 
 @method_decorator(login_required, name='dispatch')
 class CourseListView(ListView):
@@ -265,7 +276,7 @@ class CourseUpdateView(UpdateView):
         return context
 
 @login_required
-def check_in(request, **kwargs):
+def check_in(request):
     """
     Checks in a student once he/she enters a correct name.
     :param request: HTTP request
@@ -283,7 +294,7 @@ def check_in(request, **kwargs):
             fname = form.cleaned_data['first_name']
             lname = form.cleaned_data['last_name']
             # If wrong name, show an error message
-            member = find_member(aca_id, fname, lname)
+            member = Member.find_member_by_name(aca_id, fname, lname)
             if member is None:
                 # How to use django messages
                 # https://simpleisbetterthancomplex.com/tips/2016/09/06
@@ -300,20 +311,6 @@ def check_in(request, **kwargs):
     return render(request, 'acagiaApp/checkin_form.html',
                       {'form': form})
 
-def find_member(aca_id, fname, lname):
-    """
-    Finds a member by academy id and member's first and last name.
-    :param aca_id: academy id
-    :param fname: member's first name
-    :param lname: member's last name
-    :return: Member object if found, otherwise, None
-    """
-    try:
-        return Member.objects.get(aca_id=aca_id, first_name=fname,
-                                last_name=lname)
-    except Member.DoesNotExist:
-        return None
-
 @login_required
 def check_in_success(request, **kwargs):
     """
@@ -323,3 +320,27 @@ def check_in_success(request, **kwargs):
     :return:
     """
     return render(request, 'acagiaApp/checkin_success.html')
+
+@method_decorator(login_required, name='dispatch')
+class AttendanceListView(ListView):
+    """
+    Shows the list of attendance records.
+    """
+    model = Attendance
+    template_name = 'acagiaApp/att_list.html'
+
+    def get_context_data(self, **kwargs):
+        aca_id = self.request.session['aca_id']
+        context = super().get_context_data(**kwargs)
+        context['records'] = Attendance.objects.filter(aca_id=aca_id)
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class AttendanceDeleteView(DeleteView):
+    """
+    Deletes a selected course and redirects to a course list page.
+    """
+    model = Attendance
+
+    def get_success_url(self):
+        return reverse('att_list')

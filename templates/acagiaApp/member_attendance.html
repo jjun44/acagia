@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+
+{% block sidebar_block %}
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <a href="{% url 'dashboard' %}"><h2>Acagia</h2></a>
+  </div>
+  <ul class="list-unstyled components">
+    <li>
+      <a href="{% url 'dashboard' %}">
+        <i class="fas fa-home fa-lg mr-3"></i>Home
+      </a>
+    </li>
+    <li class="active">
+      <a href="{% url 'mem_list' %}">
+        <i class="fas fa-users fa-lg mr-3"></i>Members
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'course_list' %}">
+        <i class="fas fa-school fa-lg mr-3"></i>Classes
+      </a>
+    </li>
+    <li>
+      <a href="#">
+       <i class="fas fa-calendar-alt fa-lg ml-1 mr-4"></i>Events
+      </a>
+    </li>
+    <li>
+      <a href="#">
+       <i class="fas fa-bolt fa-lg ml-2 mr-4"></i>Promotion
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'att_list' %}">
+       <i class="fas fa-clipboard-check fa-lg ml-1 mr-4"></i>Attendance
+      </a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block content_block %}
+<a href="{% url 'add_member' %}"><button class="btn btn-dark
+mb-2">Add
+    New Record</button></a>
+{% if records %}
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Checked-In Date</th>
+      <th>Checked-In Time</th>
+      <th>Checked-In Student</th>
+      <th>Checked-In Class</th>
+      <th>Operations</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in records %}
+    <tr>
+      <td>{{ record.date_attended|date:"Y-m-d" }}</td>
+      <td>{{ record.time_attended|time:"H:i:s" }}</td>
+      <td>{{ record.member }}</td>
+      <td>{{ record.course }}</td>
+      <td>
+        <a href="/academy/courses/update-course/{{ course.id }}" class="btn
+        btn-success
+        btn-sm mr-2">
+          <i class="fas fa-edit fa-lg"></i>
+        </a>
+        <a href="#confirm-modal" class="btn btn-danger btn-sm"
+           id="delete-link" data-toggle="modal"
+           data-id="{{ course.id }}" data-name="{{ course }}">
+            <i class="fas fa-trash-alt fa-lg"></i>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h3 class="mt-3">No attendance record found!</h3>
+{% endif %}
+<!-- Delete confirm modal -->
+<div class="modal" id="confirm-modal">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Delete Confirmation</h5>
+      <button class="close" data-dismiss="modal">&times;</button>
+    </div>
+    <div class="modal-body">
+      Are you sure you want to delete <p><strong
+            id="modal-msg"></strong></p>
+    </div>
+    <div class="modal-footer">
+      <form method="POST" id="delete-mem" action="/academy/members/delete-member/">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">
+        Yes
+        </button>
+      </form>
+      <button class="btn btn-danger" data-dismiss="modal">
+        No
+      </button>
+    </div>
+  </div>
+</div>
+</div> <!-- end delete confirm modal -->
+{% endblock %}
+{% block script_block %}
+  <script>
+    /* How to change modal's value (how to pass parameters):
+       https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal */
+    // Triggered when modal is about to be shown
+    $('#confirm-modal').on('show.bs.modal', function(e) {
+        var id = $(e.relatedTarget).data('id');
+        var name = $(e.relatedTarget).data('name');
+        var link = $('#delete-mem').attr("action");
+        $('#modal-msg').text(name + '?');
+        $('#delete-mem').attr("action", link + id + '/');
+    });
+  </script>
+{% endblock %}

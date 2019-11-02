@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
+
 {% block sidebar_block %}
-<!-- Sidebar -->
 <!-- Sidebar -->
 <nav id="sidebar">
   <div class="sidebar-header">
@@ -45,20 +44,14 @@
 {% endblock %}
 
 {% block content_block %}
-<div class="form-wrapper">
-<h2 class="mb-3">{{ template.action_name }}</h2>
-<form method="POST">
-  {% csrf_token %}
-  {{ form|crispy }}
-  <button
-    type="submit"
-    class="btn btn-dark my-3">{{ template.btn_name }}</button>
-</form>
+{% if member %}
+{{ member }}
+
+
+
+{% else %}
+<h4>Oops! Something's wrong. Please try again. </h4>
+{% endif %}
 <a href="{% url 'mem_list' %}"><button class="btn btn-dark
-mb-2">Cancel</button></a>
-</div>
+mb-2">Member List</button></a>
 {% endblock %}
-
-
-
-
