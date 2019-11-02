@@ -2,6 +2,7 @@ from django.db import models
 from users.models import CustomUser as User
 from datetime import date
 
+'''
 class Address(models.Model):
     STATES = [
         # left: shown in the db, right: shown in the form
@@ -23,6 +24,7 @@ class Address(models.Model):
         else:
             location = self.city + ', ' + self.state
         return location
+'''
 
 class Academy(models.Model):
     MMA = 'MMA'
@@ -40,11 +42,14 @@ class Academy(models.Model):
         default=GENERAL
     )
     office_phone = models.CharField(max_length=12)
+    location = models.CharField(max_length=255)
+    '''
     # when Address deleted, Academy won't be deleted
     addr = models.ForeignKey(
         Address, related_name='aca_addr',
         null=True, blank=True, on_delete=models.SET_NULL
     )
+    '''
 
     def __str__(self):
         return self.aca_name
@@ -60,7 +65,8 @@ class Member(models.Model):
     ]
     GENDER = [
         ('M', 'Male'),
-        ('F', 'Female')
+        ('F', 'Female'),
+        ('N/A', 'Other')
     ]
     ACTIVE = 'Active'
     INACTIVE = 'Inactive'
@@ -74,14 +80,18 @@ class Member(models.Model):
     aca = models.ForeignKey(
         Academy, related_name='mem_aca', on_delete=models.CASCADE
     )
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=35)
+    last_name = models.CharField(max_length=35)
     mem_type = models.CharField(max_length=10, choices=MEM_TYPE, default=STU)
     status = models.CharField(max_length=7, choices=STATUS, default=ACTIVE)
     date_of_birth = models.DateField()
-    gender = models.CharField(max_length=1, choices=GENDER)
+    gender = models.CharField(max_length=3, choices=GENDER)
     cell_phone = models.CharField(max_length=12)
-    email = models.EmailField(max_length=40)
+    email = models.EmailField(max_length=255)
+    address = models.CharField(
+        max_length=255,
+        null=True, blank=True
+    )
     img = models.ImageField(
         height_field='300',
         width_field='200',
@@ -89,10 +99,6 @@ class Member(models.Model):
         null=True, blank=True
     )
     member_since = models.DateField(auto_now_add=True)
-    addr = models.ForeignKey(
-        Address, related_name='mem_addr',
-        blank=True, null=True, on_delete=models.SET_NULL
-    )
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name

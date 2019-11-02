@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from users.models import CustomUser as User
-from .forms import AcademyForm, AddressForm, MemberForm, CourseForm, AttendanceForm
+from .forms import AcademyForm, MemberForm, CourseForm, AttendanceForm
 from .models import Academy, Member, Attendance, Course
 from datetime import date
 from django.contrib import messages
@@ -23,7 +23,7 @@ class AcademyListView(ListView):
             user_id=self.request.user.id
         )
         return context
-
+'''
 @login_required
 def add_academy(request):
     """
@@ -47,9 +47,26 @@ def add_academy(request):
             return redirect('/academy')
 
     return render(request, 'acagiaApp/academy_form.html', {
-        'aca_form': aca_form,
-        'addr_form': addr_form
+        'aca_form': aca_form
     })
+'''
+@method_decorator(login_required, name='dispatch')
+class AcademyCreateView(CreateView):
+    """
+    Adds a new academy.
+    """
+    model = Academy
+    form_class = AcademyForm
+    template_name = 'acagiaApp/academy_form.html'
+    success_url = reverse_lazy('aca_list')
+
+    # https://www.agiliq.com/blog/2019/01/django-createview/
+    # https://docs.djangoproject.com/en/2.2/topics/class-based-views/generic-editing/
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user_id = self.request.user.id
+        self.object.save()
+        return super().form_valid(form)
 
 @login_required
 def dashboard(request, **kwargs):
@@ -93,34 +110,29 @@ def member_list(request, **kwargs):
     return render(request, 'acagiaApp/member_list.html',
                   {'members': member_list})
 
-@login_required
-def add_member(request, **kwargs):
+@method_decorator(login_required, name='dispatch')
+class MemberCreateView(CreateView):
     """
-    Adds a new member to Member/Student table(s).
-    :param request: HTTP request
-    :param kwargs: keyword arguments including academy id
-    :return: member list page if member is added successfully,
-             otherwise, form page to prompt the user member information
+    Adds a new member.
     """
-    aca_id = request.session['aca_id']
-    mem_form = MemberForm()
-    if request.method == 'POST':
-        mem_form = MemberForm(request.POST)
-        if mem_form.is_valid():
-            member = mem_form.save(commit=False)
-            member.aca_id = aca_id # Save aca_id
-            member.save()
-            '''
-            # if it's a student, add to the Student table too
-            if member.mem_type == Member.STU:
-                # Create student object with mem_id
-                student = Student.create(member.id)
-                student.save()
-            '''
-            return redirect('/academy/members/')
-    return render(request, 'acagiaApp/member_form.html', {
-        'form': mem_form
-    })
+    model = Member
+    form_class = MemberForm
+    template_name = 'acagiaApp/member_form.html'
+    success_url = reverse_lazy('mem_list')
+
+    # https://www.agiliq.com/blog/2019/01/django-createview/
+    # https://docs.djangoproject.com/en/2.2/topics/class-based-views/generic-editing/
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.aca_id = self.request.session['aca_id']
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Add a New Member', 'btn_name':
+            'Add Member'}
+        return context
 
 @method_decorator(login_required, name='dispatch')
 class MemberDeleteView(DeleteView):
@@ -133,6 +145,22 @@ class MemberDeleteView(DeleteView):
         # How to pass kwargs?
         # https://stackoverflow.com/questions/46915320/reverse-got-an-unexpected-keyword-argument-pk-url-kwarg-updateview
         return reverse('mem_list')
+
+@method_decorator(login_required, name='dispatch')
+class MemberUpdateView(UpdateView):
+    """
+    Updates an existing course.
+    """
+    model = Member
+    form_class = MemberForm
+    success_url = reverse_lazy('mem_list')
+    template_name = 'acagiaApp/member_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Update a Member', 'btn_name':
+            'Update'}
+        return context
 
 @method_decorator(login_required, name='dispatch')
 class CourseListView(ListView):
@@ -188,17 +216,12 @@ def add_course(request, **kwargs):
     # https://stackoverflow.com/questions/28653699/passing-request-object-from-view-to-form-in-django
     aca_id = request.session['aca_id']
     form = CourseForm(aca_id=aca_id)
+    template = {'action_name': 'Add a Class', 'btn_name':
+        'Add Class'}
     if request.method == 'POST':
         form = CourseForm(request.POST, aca_id=aca_id)
         if form.is_valid():
             course = form.save(commit=False)
-            # Format and save course days
-            course_days = form.cleaned_data['course_days']
-            formatted_days = ''
-            for day in course_days:
-                formatted_days += day + '/'
-            # Remove the last '/' ch and save to the db
-            course.course_days = formatted_days[0:len(formatted_days)-1]
             course.aca_id = aca_id
             # Save instructor's id
             if form.cleaned_data['instructor']:
@@ -206,7 +229,7 @@ def add_course(request, **kwargs):
             form.save()
             return redirect('/academy/courses/')
     return render(request, 'acagiaApp/course_form.html',
-                      {'form': form})
+                      {'form': form, 'template': template})
 
 @method_decorator(login_required, name='dispatch')
 class CourseDeleteView(DeleteView):
@@ -217,6 +240,29 @@ class CourseDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('course_list')
+
+@method_decorator(login_required, name='dispatch')
+class CourseUpdateView(UpdateView):
+    """
+    Updates an existing course.
+    """
+    model = Course
+    form_class = CourseForm
+    success_url = reverse_lazy('course_list')
+    template_name = 'acagiaApp/course_form.html'
+
+    # Pass aca_id to the form.
+    # https://stackoverflow.com/questions/28653699/passing-request-object-from-view-to-form-in-django
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'aca_id': self.request.session['aca_id']})
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Update a Class', 'btn_name':
+            'Update'}
+        return context
 
 @login_required
 def check_in(request, **kwargs):
@@ -268,6 +314,7 @@ def find_member(aca_id, fname, lname):
     except Member.DoesNotExist:
         return None
 
+@login_required
 def check_in_success(request, **kwargs):
     """
     Displays a checked-in successful message.

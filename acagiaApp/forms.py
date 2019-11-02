@@ -1,53 +1,53 @@
 from django import forms
-from .models import Academy, Address, Member, Course, Attendance
+from .models import Academy, Member, Course, Attendance
 from django.forms.widgets import *
 
 class AcademyForm(forms.ModelForm):
-    aca_name = forms.CharField(
-        widget=forms.TextInput(attrs={'class':'form-control'})
-    )
-    aca_type = forms.ChoiceField(
-        choices=Academy.ACA_TYPE,
-        widget=forms.Select(attrs={'class':'form-control'})
-    )
-    office_phone = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder':'###-###-####',
-                                      'class':'form-control'})
-    )
-
     class Meta:
         model = Academy
-        fields = ('aca_name', 'aca_type', 'office_phone')
+        fields = ('aca_name', 'aca_type', 'office_phone', 'location')
+        labels = {
+            'aca_name': 'Academy name',
+            'aca_type': 'Academy type',
+            'location': 'Location (for display purpose)'
+        }
+        widgets = {
+            'aca_name': TextInput(attrs={'class':'form-control mb-2'}),
+            'aca_type': Select(attrs={'class':'form-control mb-2'}),
+            'office_phone': TextInput(attrs={'placeholder':'###-###-####',
+                                             'class':'form-control mb-2'}),
+            'location': TextInput(attrs={'placeholder': '272 May Street, '
+                                                        'San Jose, CA',
+                                         'class': 'form-control mb-2'})
+        }
+        choices = {
+            'aca_type': Academy.ACA_TYPE,
+        }
 
+'''
 class AddressForm(forms.ModelForm):
-    street = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={'class':'form-control'})
-    )
-    city = forms.CharField(
-        widget=forms.TextInput(attrs={'class':'form-control'})
-    )
-    state = forms.ChoiceField(
-        choices=Address.STATES,
-        widget=forms.Select(attrs={'class':'form-control'})
-    )
-    zip = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={'class':'form-control'})
-    )
-
     class Meta:
         model = Address
         fields = ('street', 'city', 'state', 'zip')
+        widgets = {
+            'street': TextInput(attrs={'class':'form-control mb-2'}),
+            'city': TextInput(attrs={'class':'form-control mb-2'}),
+            'state': Select(attrs={'class':'form-control mb-2'}),
+            'zip': TextInput(attrs={'class':'form-control mb-2'})
+        }
+        choices = {
+            'state': Address.STATES,
+        }
+'''
 
 class MemberForm(forms.ModelForm):
     class Meta:
         model = Member
         fields = ('first_name', 'last_name', 'mem_type', 'date_of_birth',
-                  'gender', 'cell_phone', 'email', 'img')
+                  'gender', 'cell_phone', 'email', 'address', 'img')
         labels = {
-            'mem_type': 'Member Type',
-            'img': 'Member Photo'
+            'mem_type': 'Member type',
+            'img': 'Member photo'
         }
         widgets = {
             'first_name': TextInput(attrs={'class':'form-control mb-2'}),
@@ -56,11 +56,14 @@ class MemberForm(forms.ModelForm):
             'date_of_birth': DateInput(attrs={
                 'class':'form-control mb-2', 'type':'date'}),
             'gender': Select(attrs={'class':'form-control mb-2'}),
-            'cell_phone': TextInput(attrs={'class':'form-control mb-2'}),
-            'email': EmailInput(attrs={'class':'form-control mb-2'}),
+            'cell_phone': TextInput(attrs={'class':'form-control mb-2',
+                                           'placeholder':'###-###-####'}),
+            'email': EmailInput(attrs={'class':'form-control mb-2',
+                                       'placeholder':'acagia@example.com'}),
             'img': FileInput(attrs={'class':'form-control-file mb-2'})
         }
         required = {
+            'address': False,
             'img': False,
         }
         choices = {
@@ -71,7 +74,7 @@ class MemberForm(forms.ModelForm):
 class CourseForm(forms.ModelForm):
     course_days = forms.MultipleChoiceField(
         choices=Course.DAYS,
-        label='Class Days',
+        label='Class days (select all that apply)',
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'mb-2 list-unstyled'})
     )
 
@@ -80,14 +83,20 @@ class CourseForm(forms.ModelForm):
         fields = ('course_name', 'course_days', 'start_time',
                   'end_time', 'instructor')
         labels = {
-            'course_name': 'Class Name',
+            'course_name': 'Class name',
+            'start_time': 'Start time (e.g. 10:00 AM)',
+            'end_time': 'End time (e.g. 12:00 PM)',
+            'instructor': 'Instructor (not selecting will be set to '
+                          '\'Not Specified\')'
         }
         widgets = {
             'course_name': TextInput(attrs={'class':'form-control mb-2'}),
             'start_time': TimeInput(format='%H:%M', attrs={
-                'class':'form-control mb-2', 'type':'time'}),
+                'class':'form-control mb-2', 'type':'time'
+            }),
             'end_time': TimeInput(format='%H:%M', attrs={
-                'class':'form-control mb-2', 'type':'time'}),
+                'class':'form-control mb-2', 'type':'time'
+            }),
             'instructor': Select(attrs={'class':'form-control mb-2'})
         }
         required = {
@@ -95,11 +104,24 @@ class CourseForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        academy = kwargs.pop('aca_id')
+        aca_id = kwargs.pop('aca_id')
         super().__init__(*args, **kwargs)
         # Show only current academy's instructors as an option
         self.fields['instructor'].queryset = Member.objects.filter(
-            mem_type=Member.INST, aca_id=academy)
+            mem_type=Member.INST, aca_id=aca_id)
+
+    def clean_course_days(self):
+        """
+        Formats course_days e.g. ['M', 'W', 'F'] -> M/W/F.
+        :return:
+        """
+        # Format and save course days
+        course_days = self.cleaned_data['course_days']
+        formatted_days = ''
+        for day in course_days:
+            formatted_days += day + '/'
+        # Remove the last '/' ch
+        return formatted_days[0:len(formatted_days) - 1]
 
 class AttendanceForm(forms.ModelForm):
     first_name = forms.CharField(
