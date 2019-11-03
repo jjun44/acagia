@@ -41,14 +41,18 @@ class AddressForm(forms.ModelForm):
 '''
 
 class MemberForm(forms.ModelForm):
-    # Image upload: https://coderwall.com/p/bz0sng/simple-django-image-upload-to-model-imagefield
+    # https://coderwall.com/p/bz0sng/simple-django-image-upload-to-model-imagefield
+    img = forms.ImageField(
+        label='Member photo',
+        required = False
+    )
+
     class Meta:
         model = Member
         fields = ('first_name', 'last_name', 'mem_type', 'date_of_birth',
                   'gender', 'cell_phone', 'email', 'address', 'img')
         labels = {
             'mem_type': 'Member type',
-            'img': 'Member photo'
         }
         widgets = {
             'first_name': TextInput(attrs={'class':'form-control mb-2'}),
@@ -65,11 +69,24 @@ class MemberForm(forms.ModelForm):
         }
         required = {
             'address': False,
-            'img': False,
         }
         choices = {
             'mem_type': Member.MEM_TYPE,
             'gender': Member.GENDER
+        }
+
+class MemberUpdateForm(MemberForm):
+    class Meta:
+        model = Member
+        fields = ('first_name', 'last_name', 'status', 'mem_type',
+                  'date_of_birth', 'gender', 'cell_phone', 'email',
+                  'member_since', 'address', 'img')
+        labels = {
+            'member_since': 'Member since',
+            'mem_type': 'Member type'
+        }
+        widgets = {
+            'member_since': DateInput(attrs={'type':'date'}),
         }
 
 class CourseForm(forms.ModelForm):

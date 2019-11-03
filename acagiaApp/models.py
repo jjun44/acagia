@@ -2,6 +2,7 @@ from django.db import models
 from users.models import CustomUser as User
 from datetime import date
 from PIL import Image # for resizing image file
+from datetime import date, datetime
 
 '''
 class Address(models.Model):
@@ -77,7 +78,7 @@ class Member(models.Model):
         (INACTIVE, 'Inactive'),
         (HOLD, 'Hold')
     ]
-    IMAGE_SIZE = (380, 400)
+    IMAGE_SIZE = (350, 400)
 
     aca = models.ForeignKey(
         Academy, related_name='mem_aca', on_delete=models.CASCADE
@@ -85,7 +86,7 @@ class Member(models.Model):
     first_name = models.CharField(max_length=35)
     last_name = models.CharField(max_length=35)
     mem_type = models.CharField(max_length=10, choices=MEM_TYPE, default=STU)
-    status = models.CharField(max_length=7, choices=STATUS, default=ACTIVE)
+    status = models.CharField(max_length=8, choices=STATUS, default=ACTIVE)
     date_of_birth = models.DateField()
     gender = models.CharField(max_length=3, choices=GENDER)
     cell_phone = models.CharField(max_length=12)
@@ -99,13 +100,13 @@ class Member(models.Model):
         default='mem_photos/no-img.png',
         null=True, blank=True
     )
-    member_since = models.DateField(auto_now_add=True)
+    member_since = models.DateField(default=date.today, null=True)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
 
     # https://stackoverflow.com/questions/24373341/django-image-resizing-and-convert-before-upload
-    # 
+    #
     def save(self):
         """
         Resizes a profile image.
@@ -273,8 +274,9 @@ class Attendance(models.Model):
     aca = models.ForeignKey(
         Academy, related_name='att_aca', on_delete=models.CASCADE
     )
-    date_attended = models.DateField(auto_now_add=True)
-    time_attended = models.TimeField(auto_now_add=True)
+    date_attended = models.DateField(default=date.today, editable=True)
+    time_attended = models.TimeField(default=datetime.now().strftime(
+        '%H:%M:%S'), null=True)
     member = models.ForeignKey(
         Member, related_name='att_mem', on_delete=models.CASCADE
     )

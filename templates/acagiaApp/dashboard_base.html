@@ -5,12 +5,47 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}?"/>
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">>
-    <title>Acagia - Academy Dashboard</title>
 {% endblock %}
 {% block body_block %}
 <div class="wrapper">
-{% block sidebar_block %}
-{% endblock %}
+<!-- Sidebar -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <a href="{% url 'dashboard' %}"><h2>Acagia</h2></a>
+  </div>
+  <ul class="list-unstyled components">
+    <li id="dashboard" class="">
+      <a href="{% url 'dashboard' %}">
+        <i class="fas fa-home fa-lg mr-3"></i>Home
+      </a>
+    </li>
+    <li id="members" class="">
+      <a href="{% url 'mem_list' %}">
+        <i class="fas fa-users fa-lg mr-3"></i>Members
+      </a>
+    </li>
+    <li id="classes" class="">
+      <a href="{% url 'course_list' %}">
+        <i class="fas fa-school fa-lg mr-3"></i>Classes
+      </a>
+    </li>
+    <li id="events" class="">
+      <a href="#">
+       <i class="fas fa-calendar-alt fa-lg ml-1 mr-4"></i>Events
+      </a>
+    </li>
+    <li id="ranks" class="">
+      <a href="#">
+       <i class="fas fa-bolt fa-lg ml-2 mr-4"></i>Promotion
+      </a>
+    </li>
+    <li id="attendance" class="">
+      <a href="{% url 'att_list' %}">
+       <i class="fas fa-clipboard-check fa-lg ml-1 mr-4"></i>Attendance
+      </a>
+    </li>
+  </ul>
+</nav> <!-- end sidebar -->
 <!-- PAGE ON THE RIGHT SIDE OF SIDEBAR -->
 <div id="page">
   <!-- Navbar -->
@@ -95,19 +130,26 @@
     });
   });
   </script>
-    <script>
-    // Delete confirmation modal
-    /* How to change modal's value (how to pass parameters):
-       https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal */
-    // Triggered when modal is about to be shown
-    $('#confirm-modal').on('show.bs.modal', function(e) {
-        var id = $(e.relatedTarget).data('id');
-        var name = $(e.relatedTarget).data('name');
-        var link = $(e.relatedTarget).data('link');
-        $('#modal-msg').text(name + '?');
-        $('#delete-mem').attr("action", link + id + '/');
-    });
-    </script>
+  <script>
+  // Change activeness on the current tab on the side bar
+  $(document).ready(function () {
+      var title_name = $('title').attr('name');
+      $('#' + title_name).attr("class", 'active');
+  });
+  </script>
+  <script>
+  // Delete confirmation modal
+  /* How to change modal's value (how to pass parameters):
+     https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal */
+  // Triggered when modal is about to be shown
+  $('#confirm-modal').on('show.bs.modal', function(e) {
+    var id = $(e.relatedTarget).data('id');
+    var name = $(e.relatedTarget).data('name');
+    var link = $(e.relatedTarget).data('link');
+    $('#modal-msg').text(name + '?');
+    $('#delete-mem').attr("action", link + id + '/');
+  });
+  </script>
 {% endblock %}
 
 

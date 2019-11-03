@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from users.models import CustomUser as User
-from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm
+from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, MemberUpdateForm
 from .models import Academy, Member, Attendance, Course
 from datetime import date
 from django.contrib import messages
@@ -149,10 +149,10 @@ class MemberDeleteView(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class MemberUpdateView(UpdateView):
     """
-    Updates an existing course.
+    Updates existing member information.
     """
     model = Member
-    form_class = MemberForm
+    form_class = MemberUpdateForm
     success_url = reverse_lazy('mem_list')
     template_name = 'acagiaApp/member_form.html'
 

@@ -2,45 +2,8 @@
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
-{% block sidebar_block %}
-<!-- Sidebar -->
-<nav id="sidebar">
-  <div class="sidebar-header">
-    <a href="{% url 'dashboard' %}"><h2>Acagia</h2></a>
-  </div>
-  <ul class="list-unstyled components">
-    <li>
-      <a href="{% url 'dashboard' %}">
-        <i class="fas fa-home fa-lg mr-3"></i>Home
-      </a>
-    </li>
-    <li>
-      <a href="{% url 'mem_list' %}">
-        <i class="fas fa-users fa-lg mr-3"></i>Members
-      </a>
-    </li>
-    <li class="active">
-      <a href="{% url 'course_list' %}">
-        <i class="fas fa-school fa-lg mr-3"></i>Classes
-      </a>
-    </li>
-    <li>
-      <a href="#">
-       <i class="fas fa-calendar-alt fa-lg ml-1 mr-4"></i>Events
-      </a>
-    </li>
-    <li>
-      <a href="#">
-       <i class="fas fa-bolt fa-lg ml-2 mr-4"></i>Promotion
-      </a>
-    </li>
-    <li>
-      <a href="{% url 'att_list' %}">
-       <i class="fas fa-clipboard-check fa-lg ml-1 mr-4"></i>Attendance
-      </a>
-    </li>
-  </ul>
-</nav>
+{% block title_block %}
+  <title name="classes">{{ academy }} - Classes</title>
 {% endblock %}
 
 {% block content_block %}
