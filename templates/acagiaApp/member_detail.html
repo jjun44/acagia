@@ -33,8 +33,12 @@ mb-2">Member
         </tr>
         <tr>
           <td class="table-info text-primary">Status</td>
-          <td class="text-center {% if member.status == 'Active' %}text-success
-{% else %}text-danger{% endif %}">{{ member.status }}</td>
+          <td class="{% if member.status == 'Active' %} text-success
+                {% elif member.status == 'Inactive' %} text-warning
+                {% else %}text-danger
+                {% endif %}">
+              {{ member.status }}
+          </td>
         </tr>
         <tr>
           <td class="table-info text-primary">Date of Birth</td>
