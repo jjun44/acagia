@@ -186,3 +186,11 @@ ul.sidebar-button a {
   margin-left: 50px;
   background: #f8f9fa;
 }
+
+/* DETAIL VIEW PAGE (e.g. student detail view) */
+.detail-wrapper {
+  padding: 30px 50px;
+  width: 80%;
+  margin-left: 50px;
+  background: #f8f9fa;
+}

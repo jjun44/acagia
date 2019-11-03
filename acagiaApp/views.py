@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from users.models import CustomUser as User
-from .forms import AcademyForm, MemberForm, CourseForm, AttendanceForm
+from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm
 from .models import Academy, Member, Attendance, Course
 from datetime import date
 from django.contrib import messages
@@ -284,9 +284,9 @@ def check_in(request):
              otherwise, form page to prompt the student a name
     """
     aca_id = request.session['aca_id']
-    form = AttendanceForm(aca_id=aca_id)
+    form = CheckInForm(aca_id=aca_id)
     if request.method == 'POST':
-        form = AttendanceForm(request.POST, aca_id=aca_id)
+        form = CheckInForm(request.POST, aca_id=aca_id)
         if form.is_valid():
             record = form.save(commit=False)
             record.aca_id = aca_id # Save academy id

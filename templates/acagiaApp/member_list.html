@@ -70,7 +70,8 @@ mb-2">Add
       <td>{{ member.age }}</td>
       <td>{{ member.gender }}</td>
       <td></td>
-      <td>{{ member.status }}</td>
+      <td class="{% if member.status == 'Active' %}text-success
+            {% else %}text-danger{% endif %}">{{ member.status }}</td>
       <td>{{ member.mem_type }}</td>
       <td>
         <a href="/academy/members/detail/{{ member.id }}" class="btn

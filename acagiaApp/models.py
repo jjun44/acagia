@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import CustomUser as User
 from datetime import date
+from PIL import Image # for resizing image file
 
 '''
 class Address(models.Model):
@@ -76,6 +77,7 @@ class Member(models.Model):
         (INACTIVE, 'Inactive'),
         (HOLD, 'Hold')
     ]
+    IMAGE_SIZE = (380, 400)
 
     aca = models.ForeignKey(
         Academy, related_name='mem_aca', on_delete=models.CASCADE
@@ -93,15 +95,27 @@ class Member(models.Model):
         null=True, blank=True
     )
     img = models.ImageField(
-        height_field='300',
-        width_field='200',
-        upload_to='profiles/',
+        upload_to='mem_photos/',
+        default='mem_photos/no-img.png',
         null=True, blank=True
     )
     member_since = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+
+    # https://stackoverflow.com/questions/24373341/django-image-resizing-and-convert-before-upload
+    # 
+    def save(self):
+        """
+        Resizes a profile image.
+        """
+        if self.img:
+            super().save()
+            image = Image.open(self.img)
+            size = Member.IMAGE_SIZE
+            image = image.resize(size, Image.ANTIALIAS)
+            image.save(self.img.path)
 
     @property
     def age(self):
@@ -172,11 +186,12 @@ class Course(models.Model):
     )
 
     def __str__(self):
-        return self.course_name
+        return self.course_name + ' ' + self.course_days + ' ' + \
+               self.time_range
 
     @property
     def time_range(self):
-        return str(self.start_time) + ' - ' + str(self.end_time)
+        return str(self.start_time)[0:5] + ' - ' + str(self.end_time)[0:5]
 
 class Event(models.Model):
     event_date = models.DateField()

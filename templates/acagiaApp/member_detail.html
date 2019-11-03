@@ -44,14 +44,65 @@
 {% endblock %}
 
 {% block content_block %}
-{% if member %}
-{{ member }}
-
-
-
-{% else %}
-<h4>Oops! Something's wrong. Please try again. </h4>
-{% endif %}
-<a href="{% url 'mem_list' %}"><button class="btn btn-dark
-mb-2">Member List</button></a>
+<a href="{% url 'mem_list' %}" class="pl-5 mb-4"><button class="btn btn-dark
+mb-2">Member
+    List</button></a>
+<div class="detail-wrapper">
+  {% if member %}
+  <div class="row mb-5">
+    <div class="col-md-5 pl-5">
+    <img src="{{ member.img.url }}" alt="{{ member }}"/>
+    </div>
+    <div class="col-md-7 text-center">
+      <p class="display-2">{{ member }}</p>
+      <h2>Blue belt</h2>
+      <h4>Next promotion: 13 days left</h4>
+    </div>
+  </div>
+  <hr/>
+  <div class="pl-5 table-responsive-sm">
+    <table class="table text-center">
+      <col width="30%">
+      <col width="70%">
+      <tbody>
+        <tr>
+          <td class="table-info text-primary">Type</td>
+          <td class="text-center">{{ member.mem_type }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Status</td>
+          <td class="text-center {% if member.status == 'Active' %}text-success
+{% else %}text-danger{% endif %}">{{ member.status }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Date of Birth</td>
+          <td class="text-center">{{ member.date_of_birth }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Gender</td>
+          <td class="text-center">{{ member.gender }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Phone Number</td>
+          <td class="text-center">{{ member.cell_phone }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Email</td>
+          <td class="text-center">{{ member.email }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Address</td>
+          <td class="text-center">{% if member.address %}{{ member.address }}{% else %}
+        No address information{% endif %}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Member Since</td>
+          <td class="text-center">{{ member.member_since }}</td>
+        </tr>
+      </tbody>
+    </table>
+  {% else %}
+  <h4>Oops! Something's wrong. Please try again. </h4>
+  {% endif %}
+</div>
 {% endblock %}

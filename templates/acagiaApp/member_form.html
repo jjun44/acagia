@@ -4,7 +4,6 @@
 {% load crispy_forms_tags %}
 {% block sidebar_block %}
 <!-- Sidebar -->
-<!-- Sidebar -->
 <nav id="sidebar">
   <div class="sidebar-header">
     <a href="{% url 'dashboard' %}"><h2>Acagia</h2></a>
@@ -47,7 +46,7 @@
 {% block content_block %}
 <div class="form-wrapper">
 <h2 class="mb-3">{{ template.action_name }}</h2>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form|crispy }}
   <button

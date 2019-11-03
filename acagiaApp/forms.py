@@ -41,6 +41,7 @@ class AddressForm(forms.ModelForm):
 '''
 
 class MemberForm(forms.ModelForm):
+    # Image upload: https://coderwall.com/p/bz0sng/simple-django-image-upload-to-model-imagefield
     class Meta:
         model = Member
         fields = ('first_name', 'last_name', 'mem_type', 'date_of_birth',
@@ -60,7 +61,7 @@ class MemberForm(forms.ModelForm):
                                            'placeholder':'###-###-####'}),
             'email': EmailInput(attrs={'class':'form-control mb-2',
                                        'placeholder':'acagia@example.com'}),
-            'img': FileInput(attrs={'class':'form-control-file mb-2'})
+            #'img': FileInput(attrs={'class':'form-control-file mb-2'})
         }
         required = {
             'address': False,
@@ -123,7 +124,7 @@ class CourseForm(forms.ModelForm):
         # Remove the last '/' ch
         return formatted_days[0:len(formatted_days) - 1]
 
-class AttendanceForm(forms.ModelForm):
+class CheckInForm(forms.ModelForm):
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder':'First Name',
                                       'class':'form-control form-control-lg'})
