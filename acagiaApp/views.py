@@ -8,6 +8,10 @@ from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, MemberUpdat
 from .models import Academy, Member, Attendance, Course
 from datetime import date
 from django.contrib import messages
+from django.utils import timezone
+
+DATE_FORMAT = '%Y-%m-%d'
+TIME_FORMAT = '%H:%M:%S'
 
 @method_decorator(login_required, name='dispatch')
 class AcademyListView(ListView):
@@ -82,10 +86,15 @@ def dashboard(request, **kwargs):
     if kwargs.get('pk'):
         aca_id = kwargs['pk']
         request.session['aca_id'] = aca_id
+        # Get the selected academy object
+        academy = Academy.objects.get(id=aca_id)
+        # Set timezone
+        request.session['django_timezone'] = academy.time_zone
     # Revisitied from other tabs in the current dashboard?
     else:
         aca_id = request.session['aca_id']
-    academy = Academy.objects.get(id=aca_id)
+        academy = Academy.objects.get(id=aca_id)
+
     num_of_students = Member.objects.filter(aca_id=aca_id).count()
     num_of_attended = Attendance.objects.filter(
         aca_id=aca_id, date_attended=date.today()).count()
@@ -125,6 +134,7 @@ class MemberCreateView(CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.aca_id = self.request.session['aca_id']
+        self.object.member_since = timezone.localdate()
         self.object.save()
         return super().form_valid(form)
 
@@ -306,6 +316,8 @@ def check_in(request):
             record.member_id = member.id # Save matching member id
             # Save course id
             record.course_id = form.cleaned_data['course'].id
+            record.date_attended = timezone.localdate()
+            record.time_attended = timezone.localtime().strftime(TIME_FORMAT)
             form.save()
             return redirect('/academy/checkin/success/')
     return render(request, 'acagiaApp/checkin_form.html',
@@ -344,3 +356,4 @@ class AttendanceDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('att_list')
+

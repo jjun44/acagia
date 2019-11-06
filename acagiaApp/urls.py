@@ -32,5 +32,5 @@ urlpatterns = [
 
     path('attendance/', AttendanceListView.as_view(), name='att_list'),
     path('attendance/delete-record/<int:pk>/', AttendanceDeleteView.as_view(),
-         name='delete_att')
+         name='delete_att'),
 ]

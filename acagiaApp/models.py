@@ -2,7 +2,9 @@ from django.db import models
 from users.models import CustomUser as User
 from datetime import date
 from PIL import Image # for resizing image file
-from datetime import date, datetime
+from datetime import timedelta # for calculating age based on birth day
+import pytz # for choices of common time zones
+from django.utils import timezone
 
 '''
 class Address(models.Model):
@@ -35,6 +37,8 @@ class Academy(models.Model):
         (GENERAL, 'General'),
         (MMA, 'MMA')
     ]
+    TIME_ZONES = [(zone, zone) for zone in pytz.common_timezones]
+
     # when User account deleted, Academy will be deleted as well
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     aca_name = models.CharField(max_length=30)
@@ -45,16 +49,14 @@ class Academy(models.Model):
     )
     office_phone = models.CharField(max_length=12)
     location = models.CharField(max_length=255)
-    '''
-    # when Address deleted, Academy won't be deleted
-    addr = models.ForeignKey(
-        Address, related_name='aca_addr',
-        null=True, blank=True, on_delete=models.SET_NULL
+    time_zone = models.CharField(max_length=20,
+                                 choices=TIME_ZONES,
+                                 default='US/Pacific'
     )
-    '''
 
     def __str__(self):
         return self.aca_name
+
 
 class Member(models.Model):
     STU = 'Student'
@@ -78,7 +80,7 @@ class Member(models.Model):
         (INACTIVE, 'Inactive'),
         (HOLD, 'Hold')
     ]
-    IMAGE_SIZE = (350, 400)
+    IMAGE_SIZE = (250, 300)
 
     aca = models.ForeignKey(
         Academy, related_name='mem_aca', on_delete=models.CASCADE
@@ -100,13 +102,12 @@ class Member(models.Model):
         default='mem_photos/no-img.png',
         null=True, blank=True
     )
-    member_since = models.DateField(default=date.today, null=True)
+    member_since = models.DateField()
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
 
     # https://stackoverflow.com/questions/24373341/django-image-resizing-and-convert-before-upload
-    #
     def save(self):
         """
         Resizes a profile image.
@@ -118,14 +119,15 @@ class Member(models.Model):
             image = image.resize(size, Image.ANTIALIAS)
             image.save(self.img.path)
 
+    # https://stackoverflow.com/questions/2217488/age-from-birthdate-in-python
     @property
     def age(self):
         """
         Calculate age based on the date of birth.
         :return: calculated age
         """
-        today = date.today()
-        age = str((today - self.date_of_birth) / 365).split()[0]
+        today = timezone.localdate()
+        age = (today - self.date_of_birth) // timedelta(365.2425)
         return age
 
     @classmethod
@@ -274,9 +276,8 @@ class Attendance(models.Model):
     aca = models.ForeignKey(
         Academy, related_name='att_aca', on_delete=models.CASCADE
     )
-    date_attended = models.DateField(default=date.today, editable=True)
-    time_attended = models.TimeField(default=datetime.now().strftime(
-        '%H:%M:%S'), null=True)
+    date_attended = models.DateField()
+    time_attended = models.TimeField()
     member = models.ForeignKey(
         Member, related_name='att_mem', on_delete=models.CASCADE
     )

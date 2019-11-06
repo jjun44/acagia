@@ -16,6 +16,7 @@
         <h5>Type: {{ academy.aca_type }}</h5>
         <h5>Office Phone: {{ academy.office_phone }}</h5>
         <h5>Location: {{ academy.location }}</h5>
+        <h5>Time Zone: {{ academy.time_zone }}</h5>
     </div>
 </div>
 <!-- Numbers -->
@@ -31,8 +32,9 @@
           </h3>
       </div>
     </a>
-    </div>
+    </div> <!-- end card -->
     <div class="card bg-danger text-light text-center">
+      <a href="{% url 'att_list' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
             <i class="far fa-calendar-check"></i>&nbsp;&nbsp;{{ num_att }}
@@ -41,7 +43,21 @@
             Attended Today
           </h3>
       </div>
-    </div>
+      </a>
+    </div> <!-- end card -->
+    <div class="card bg-info text-light text-center">
+      <a href="{% url 'mem_list' %}">
+      <div class="card-body">
+          <h4 class="card-title display-3">
+            <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;{{ active }}/
+              {{ inactive }}/{{ hold }}
+          </h4>
+          <h3 class="card-text">
+            Active/Inactive/Hold Members
+          </h3>
+      </div>
+      </a>
+    </div> <!-- end card -->
 </div>
 {% endblock %}
 

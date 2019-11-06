@@ -5,7 +5,7 @@ from django.forms.widgets import *
 class AcademyForm(forms.ModelForm):
     class Meta:
         model = Academy
-        fields = ('aca_name', 'aca_type', 'office_phone', 'location')
+        fields = ('aca_name', 'aca_type', 'office_phone', 'location', 'time_zone')
         labels = {
             'aca_name': 'Academy name',
             'aca_type': 'Academy type',
@@ -22,6 +22,7 @@ class AcademyForm(forms.ModelForm):
         }
         choices = {
             'aca_type': Academy.ACA_TYPE,
+            'time_zone': Academy.TIME_ZONES,
         }
 
 '''
