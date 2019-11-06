@@ -13,6 +13,7 @@ import pytz
 
 DATE_FORMAT = '%Y-%m-%d'
 TIME_FORMAT = '%H:%M:%S'
+DATETIME_FORMAT = '%a, %d %b %Y %I:%M %p'
 
 @method_decorator(login_required, name='dispatch')
 class AcademyListView(ListView):
@@ -89,11 +90,30 @@ class AcademyUpdateView(UpdateView):
     template_name = 'acagiaApp/academy_form.html'
     success_url = reverse_lazy('dashboard')
 
+    def form_valid(self, form):
+        set_timezone(self.request, self.object)
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['template'] = {'action_name': 'Update Academy Information',
                                'btn_name': 'Update'}
         return context
+
+# Set the current time zone
+# https://docs.djangoproject.com/en/2.2/topics/i18n/timezones/
+# https://stackoverflow.com/questions/27517259/django-activate-not-showing-effect
+def set_timezone(request, academy):
+    """
+    Sets the user's timezone.
+    :param request: HTTP request
+    :param academy: current academy object
+    """
+    if academy.time_zone:
+        request.session['django_timezone'] = academy.time_zone
+        timezone.activate(pytz.timezone(academy.time_zone))
+    else:
+        timezone.deactivate()
 
 @login_required
 def dashboard(request, **kwargs):
@@ -111,14 +131,7 @@ def dashboard(request, **kwargs):
         request.session['aca_id'] = aca_id
         # Get the selected academy object
         academy = Academy.objects.get(id=aca_id)
-        # Set the current time zone
-        # https://docs.djangoproject.com/en/2.2/topics/i18n/timezones/
-        # https://stackoverflow.com/questions/27517259/django-activate-not-showing-effect
-        if academy.time_zone:
-            request.session['django_timezone'] = academy.time_zone
-            timezone.activate(pytz.timezone(academy.time_zone))
-        else:
-            timezone.deactivate()
+        set_timezone(request, academy)
     # Revisitied from other tabs in the current dashboard?
     else:
         aca_id = request.session['aca_id']
@@ -150,7 +163,8 @@ def dashboard(request, **kwargs):
                    'num_inactive': num_of_inactive,
                    'num_hold': num_of_hold,
                    'num_att': num_of_attended,
-                   'bday_members': bday_members
+                   'bday_members': bday_members,
+                   'today': timezone.localtime().strftime(DATETIME_FORMAT)
                    })
 
 @login_required
