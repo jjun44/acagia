@@ -3,7 +3,8 @@ from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, MemberUpdateForm
+from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, \
+    MemberUpdateForm, AttendanceForm
 from .models import Academy, Member, Attendance, Course
 from django.contrib import messages
 from django.utils import timezone
@@ -383,3 +384,24 @@ class AttendanceDeleteView(DeleteView):
     def get_success_url(self):
         return reverse('att_list')
 
+@method_decorator(login_required, name='dispatch')
+class AttendanceUpdateView(UpdateView):
+    """
+    Updates an existing attendance record.
+    """
+    model = Attendance
+    form_class = AttendanceForm
+    success_url = reverse_lazy('att_list')
+    template_name = 'acagiaApp/attendance_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'aca_id': self.request.session['aca_id']})
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Update an Attendance',
+                               'btn_name':
+            'Update'}
+        return context

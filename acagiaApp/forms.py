@@ -166,3 +166,13 @@ class CheckInForm(forms.ModelForm):
         # Show only current academy's courses as an option
         self.fields['course'].queryset = Course.objects.filter(aca_id=aca_id)
 
+class AttendanceForm(forms.ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ('date_attended', 'time_attended', 'member', 'course')
+
+    def __init__(self, *args, **kwargs):
+        aca_id = kwargs.pop('aca_id')
+        super().__init__(*args, **kwargs)
+        self.fields['member'].queryset = Member.objects.filter(aca_id=aca_id)
+        self.fields['course'].queryset = Course.objects.filter(aca_id=aca_id)
