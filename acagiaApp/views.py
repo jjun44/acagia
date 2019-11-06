@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect, render_to_response
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-from users.models import CustomUser as User
 from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, MemberUpdateForm
 from .models import Academy, Member, Attendance, Course
-from datetime import date
 from django.contrib import messages
 from django.utils import timezone
+from datetime import date, timedelta
+import pytz
 
 DATE_FORMAT = '%Y-%m-%d'
 TIME_FORMAT = '%H:%M:%S'
@@ -88,20 +88,46 @@ def dashboard(request, **kwargs):
         request.session['aca_id'] = aca_id
         # Get the selected academy object
         academy = Academy.objects.get(id=aca_id)
-        # Set timezone
-        request.session['django_timezone'] = academy.time_zone
+        # Set the current time zone
+        # https://docs.djangoproject.com/en/2.2/topics/i18n/timezones/
+        # https://stackoverflow.com/questions/27517259/django-activate-not-showing-effect
+        if academy.time_zone:
+            timezone.activate(pytz.timezone(academy.time_zone))
+        else:
+            timezone.deactivate()
     # Revisitied from other tabs in the current dashboard?
     else:
         aca_id = request.session['aca_id']
         academy = Academy.objects.get(id=aca_id)
 
-    num_of_students = Member.objects.filter(aca_id=aca_id).count()
+    today = timezone.localdate()
+    members = Member.objects.filter(aca_id=aca_id)
+    num_of_members = members.count()
+    num_of_active = members.filter(status=Member.ACTIVE).count()
+    num_of_inactive = members.filter(status=Member.INACTIVE).count()
+    num_of_hold = members.filter(status=Member.HOLD).count()
+
+    # Number of attended students today
     num_of_attended = Attendance.objects.filter(
-        aca_id=aca_id, date_attended=date.today()).count()
+        aca_id=aca_id, date_attended=today).count()
+    # Birthday members
+    bday_members = members.filter(
+        date_of_birth__month=today.month,
+        date_of_birth__day=today.day
+    )
+    # Birthday in next x days
+    # https://stackoverflow.com/questions/6128921/queryset-of-people-with-a
+    # -birthday-in-the-next-x-days
+    end_date = today + timedelta(days=7)
+
     return render(request, 'acagiaApp/dashboard.html',
-                  {'academy': academy, 'num_stu':
-                      num_of_students,
-                   'num_att': num_of_attended})
+                  {'academy': academy, 'num_mem':
+                      num_of_members, 'num_active': num_of_active,
+                   'num_inactive': num_of_inactive,
+                   'num_hold': num_of_hold,
+                   'num_att': num_of_attended,
+                   'bday_members': bday_members
+                   })
 
 @login_required
 def member_list(request):

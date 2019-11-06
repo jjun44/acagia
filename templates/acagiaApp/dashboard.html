@@ -25,15 +25,20 @@
     <a href="{% url 'mem_list' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
-            <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;{{ num_stu }}
+            <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;{{ num_mem }}
           </h4>
           <h3 class="card-text">
-            Members
+            Total Members<hr/>
           </h3>
+          <h5 class="card-text text-light">
+            {{ num_active }} Active members<br/>
+            {{ num_inactive }} Inactive members<br/>
+            {{ num_hold }} Hold Members
+          </h5>
       </div>
     </a>
     </div> <!-- end card -->
-    <div class="card bg-danger text-light text-center">
+    <div class="card bg-info text-light text-center">
       <a href="{% url 'att_list' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
@@ -45,15 +50,20 @@
       </div>
       </a>
     </div> <!-- end card -->
-    <div class="card bg-info text-light text-center">
+    <div class="card bg-danger text-light text-center">
       <a href="{% url 'mem_list' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
-            <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;{{ active }}/
-              {{ inactive }}/{{ hold }}
-          </h4>
+            <i class="fas fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;Birthday
+          </h4><hr/>
           <h3 class="card-text">
-            Active/Inactive/Hold Members
+            {% if bday_members %}
+            {% for member in bday_members %}
+            {{ member }} turning in {{ member.age }}
+            {% endfor %}
+            {% else %}
+            No birthday members today.
+            {% endif %}
           </h3>
       </div>
       </a>
