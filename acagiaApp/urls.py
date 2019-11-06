@@ -35,4 +35,6 @@ urlpatterns = [
          name='delete_att'),
     path('attendance/update-record/<int:pk>/', AttendanceUpdateView.as_view(),
          name='update_att'),
+    path('attendance/add-record/', AttendanceCreateView.as_view(),
+         name='add_att')
 ]

@@ -170,6 +170,10 @@ class AttendanceForm(forms.ModelForm):
     class Meta:
         model = Attendance
         fields = ('date_attended', 'time_attended', 'member', 'course')
+        widgets = {
+            'date_attended': DateInput(attrs={'type': 'date'}),
+            'time_attended': TimeInput(attrs={'type': 'time'}),
+        }
 
     def __init__(self, *args, **kwargs):
         aca_id = kwargs.pop('aca_id')

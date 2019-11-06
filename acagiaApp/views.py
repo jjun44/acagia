@@ -167,7 +167,7 @@ class MemberCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['template'] = {'action_name': 'Add a New Member', 'btn_name':
+        context['template'] = {'action_name': 'Add New Member', 'btn_name':
             'Add Member'}
         return context
 
@@ -195,7 +195,7 @@ class MemberUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['template'] = {'action_name': 'Update a Member', 'btn_name':
+        context['template'] = {'action_name': 'Update Member', 'btn_name':
             'Update'}
         return context
 
@@ -264,7 +264,7 @@ def add_course(request, **kwargs):
     # https://stackoverflow.com/questions/28653699/passing-request-object-from-view-to-form-in-django
     aca_id = request.session['aca_id']
     form = CourseForm(aca_id=aca_id)
-    template = {'action_name': 'Add a Class', 'btn_name':
+    template = {'action_name': 'Add New Class', 'btn_name':
         'Add Class'}
     if request.method == 'POST':
         form = CourseForm(request.POST, aca_id=aca_id)
@@ -308,7 +308,7 @@ class CourseUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['template'] = {'action_name': 'Update a Class', 'btn_name':
+        context['template'] = {'action_name': 'Update Class', 'btn_name':
             'Update'}
         return context
 
@@ -401,7 +401,34 @@ class AttendanceUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['template'] = {'action_name': 'Update an Attendance',
+        context['template'] = {'action_name': 'Update Attendance Record',
                                'btn_name':
             'Update'}
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class AttendanceCreateView(CreateView):
+    """
+    Adds a new attendance record.
+    """
+    model = Attendance
+    form_class = AttendanceForm
+    success_url = reverse_lazy('att_list')
+    template_name = 'acagiaApp/attendance_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'aca_id': self.request.session['aca_id']})
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.aca_id = self.request.session['aca_id']
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Add New Attendance Record',
+                               'btn_name': 'Add Record'}
         return context
