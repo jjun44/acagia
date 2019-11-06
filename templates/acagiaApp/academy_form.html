@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 {% block head_block %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
-    <title>Acagia - Add Academy</title>
+    <title>Acagia - {{ template.action_name }}</title>
 {% endblock %}
 {% block body_block %}
 <!-- ACADEMY FORM -->
@@ -15,12 +15,12 @@
         <div class="card-body">
           <form method="post">
             {% csrf_token %}
-            <h3 class="mb-3 text-center" >Add a New Academy</h3>
+            <h3 class="mb-3 text-center" >{{ template.action_name }}</h3>
             {{ form|crispy }}
             <button
               type="submit"
               class="btn btn-outline-light btn-block mt-3 mb-3">
-                Add Academy
+                {{ template.btn_name }}
             </button>
             <a href="{% url 'aca_list' %}" class="text-info
             col-6 offset-3">Go back to the academy list</a>

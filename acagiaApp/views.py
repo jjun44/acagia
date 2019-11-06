@@ -73,6 +73,28 @@ class AcademyCreateView(CreateView):
         self.object.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Add New Academy',
+                               'btn_name': 'Add Academy'}
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class AcademyUpdateView(UpdateView):
+    """
+    Updates Academy information.
+    """
+    model = Academy
+    form_class = AcademyForm
+    template_name = 'acagiaApp/academy_form.html'
+    success_url = reverse_lazy('dashboard')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Update Academy Information',
+                               'btn_name': 'Update'}
+        return context
+
 @login_required
 def dashboard(request, **kwargs):
     """

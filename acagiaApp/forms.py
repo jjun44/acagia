@@ -18,7 +18,7 @@ class AcademyForm(forms.ModelForm):
                                              'class':'form-control mb-2'}),
             'location': TextInput(attrs={'placeholder': '272 May Street, '
                                                         'San Jose, CA',
-                                         'class': 'form-control mb-2'})
+                                         'class': 'form-control mb-2'}),
         }
         choices = {
             'aca_type': Academy.ACA_TYPE,

@@ -4,6 +4,9 @@ from .views import *
 urlpatterns = [
     path('', AcademyListView.as_view(), name='aca_list'),
     path('add-academy/', AcademyCreateView.as_view(), name='add_academy'),
+    path('update-academy/<int:pk>/', AcademyUpdateView.as_view(),
+         name='update_aca'),
+
     # Entered dashboard initially
     path('dashboard/<int:pk>/', dashboard, name='first_dashboard'),
     # Home tab clicked in the current dashboard
