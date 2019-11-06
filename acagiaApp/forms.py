@@ -156,7 +156,6 @@ class CheckInForm(forms.ModelForm):
         model = Attendance
         fields = ('course',)
         widgets = {
-            'time_attended': TimeInput(format='%H:%M:%S'),
             'course': Select(attrs={'class':'form-control mb-2'})
         }
 
@@ -172,7 +171,8 @@ class AttendanceForm(forms.ModelForm):
         fields = ('date_attended', 'time_attended', 'member', 'course')
         widgets = {
             'date_attended': DateInput(attrs={'type': 'date'}),
-            'time_attended': TimeInput(attrs={'type': 'time'}),
+            'time_attended': TimeInput(format='%H:%M', attrs={
+                'type':'time'})
         }
 
     def __init__(self, *args, **kwargs):

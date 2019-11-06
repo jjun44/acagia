@@ -1,8 +1,10 @@
 import pytz
 from django.utils import timezone
 
-'''
 class TimezoneMiddleware:
+    """
+    Middleware to properly handle the users timezone
+    """
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -13,4 +15,4 @@ class TimezoneMiddleware:
         else:
             timezone.deactivate()
         return self.get_response(request)
-'''
+

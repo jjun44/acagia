@@ -93,6 +93,7 @@ def dashboard(request, **kwargs):
         # https://docs.djangoproject.com/en/2.2/topics/i18n/timezones/
         # https://stackoverflow.com/questions/27517259/django-activate-not-showing-effect
         if academy.time_zone:
+            request.session['django_timezone'] = academy.time_zone
             timezone.activate(pytz.timezone(academy.time_zone))
         else:
             timezone.deactivate()
