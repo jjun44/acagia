@@ -228,10 +228,12 @@ class Rank(models.Model):
     GENERAL = 'General'
     BJJ = 'Jiu-jitsu'
     TKD = 'Taekwondo'
+    CUST = 'Custom'
     RANK_TYPE = [
+        (CUST, 'Custom'),
         (BJJ, 'Jiu-jitsu'),
         (GENERAL, 'General'),
-        (TKD, 'Taekwondo')
+        (TKD, 'Taekwondo'),
     ]
     RANK = {
         GENERAL:[
@@ -279,7 +281,8 @@ class Rank(models.Model):
     rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
     rank_order = models.IntegerField()
     rank = models.CharField(max_length=20)
-    days_required = models.IntegerField() # number of attendance required
+    # number of attendance required
+    days_required = models.IntegerField(default=0)
 
     def __str__(self):
         return self.rank_type + ' - ' + self.rank

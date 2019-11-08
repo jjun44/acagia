@@ -8,7 +8,7 @@
 
 {% block content_block %}
 <div class="form-wrapper">
-<h2 class="mb-3">{{ action_name }}</h2>
+<h2 class="mb-5">{{ action_name }}</h2>
 <div class="row text-center">
     <div class="col-3">
         Rank Type
@@ -27,7 +27,7 @@
   {% csrf_token %}
   {{ formset.management_form }}
   {% for form in formset %}
-  <div class="row form-row spacer">
+  <div class="row form-row spacer mb-3">
     <div class="col-3">
       <div class="input-group">
           {{ form.rank_type }}
@@ -53,11 +53,23 @@
     </div>
   </div>
   {% endfor %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible mt-4"
+      role="alert">
+      <button type="button" class="close" data-dismiss="alert"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{ message }}
+    </div>
+    {% endfor %}
+  {% endif %}
   <div class="row spacer">
     <button type="submit" class="btn btn-block btn-dark my-3">{{ btn_name }}</button>
   </div>
 </form>
-<a href="{% url 'mem_list' %}"><button class="btn btn-dark
+<a href="{% url 'rank_sys_list' %}"><button class="btn btn-dark
 mb-2">Cancel</button></a>
 </div>
 {% endblock %}

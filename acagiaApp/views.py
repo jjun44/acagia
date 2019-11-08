@@ -4,11 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, \
-    MemberUpdateForm, AttendanceForm, RankFormset
+    MemberUpdateForm, AttendanceForm, RankFormset, RankForm
 from .models import Academy, Member, Attendance, Course, Rank
 from django.contrib import messages
 from django.utils import timezone
 from datetime import date, timedelta
+from django.db import IntegrityError
 import pytz
 
 DATE_FORMAT = '%Y-%m-%d'
@@ -478,16 +479,52 @@ def add_rank(request):
     elif request.method == 'POST':
         formset = RankFormset(request.POST)
         if formset.is_valid():
+            if formset.errors:
+                msg = 'Please complete all fields. Enter numbers for rank order ' \
+                      'and days required.'
+                messages.error(request, msg)
             for form in formset:
-                rank = form.save(commit=False)
-                rank.aca_id = aca_id
-                form.save()
-                return redirect('/academy/rank-sys/')
-    return render(request, 'acagiaApp/rank_form.html', {
+                try:
+                    formset.clean()
+                    rank = form.save(commit=False)
+                    rank.aca_id = aca_id
+                    form.save()
+                    return redirect('/academy/rank-sys/')
+                except IntegrityError:
+                    msg = 'Please select rank type.'
+                    messages.error(request, msg)
+
+    return render(request, 'acagiaApp/rank_multi_forms.html', {
         'formset': formset,
-        'action_name': 'Add New Rank System',
+        'action_name': 'Add New Rank',
         'btn_name': 'Add Rank'
     })
+
+@method_decorator(login_required, name='dispatch')
+class RankDeleteView(DeleteView):
+    """
+    Deletes selected rank information and redirects to the rank system page.
+    """
+    model = Rank
+
+    def get_success_url(self):
+        return reverse('rank_sys_list')
+
+@method_decorator(login_required, name='dispatch')
+class RankUpdateView(UpdateView):
+    """
+    Updates existing member information.
+    """
+    model = Rank
+    form_class = RankForm
+    success_url = reverse_lazy('rank_sys_list')
+    template_name = 'acagiaApp/rank_single_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Update Rank', 'btn_name':
+            'Update'}
+        return context
 
 @method_decorator(login_required, name='dispatch')
 class RankSystemListView(ListView):
@@ -513,3 +550,4 @@ class RankSystemListView(ListView):
                 'rank_order').defer('id', 'aca_id'))
         context['rank_systems'] = rank_systems
         return context
+

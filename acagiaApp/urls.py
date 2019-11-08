@@ -41,6 +41,10 @@ urlpatterns = [
     path('attendance/add-record/', AttendanceCreateView.as_view(),
          name='add_att'),
 
-    path('rank-sys', RankSystemListView.as_view(), name='rank_sys_list'),
-    path('rank-sys/add-rank-sys/', add_rank, name='add_rank_sys'),
+    path('rank-sys/', RankSystemListView.as_view(), name='rank_sys_list'),
+    path('rank-sys/add-rank/', add_rank, name='add_rank'),
+    path('rank-sys/delete-rank/<int:pk>/', RankDeleteView.as_view(),
+         name='delete_rank'),
+    path('rank-sys/update-rank/<int:pk>/', RankUpdateView.as_view(),
+         name='update_rank'),
 ]
