@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, \
     MemberUpdateForm, AttendanceForm, RankFormset, RankForm
-from .models import Academy, Member, Attendance, Course, Rank
+from .models import Academy, Member, Attendance, Course, Rank, MemberRank
 from django.contrib import messages
 from django.utils import timezone
 from datetime import date, timedelta
@@ -551,3 +551,8 @@ class RankSystemListView(ListView):
         context['rank_systems'] = rank_systems
         return context
 
+@method_decorator(login_required, name='dispatch')
+def promotion_list(request):
+    aca_id = request.session['aca_id']
+    # get all members in the academy
+    members = Member.find_member_by_id(aca_id)

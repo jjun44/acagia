@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import formset_factory
-from .models import Academy, Member, Course, Attendance, Rank
+from .models import Academy, Member, Course, Attendance, Rank, MemberRank
 from django.forms.widgets import TextInput, Select, EmailInput, DateInput, \
     TimeInput
 
@@ -117,10 +117,10 @@ class CourseForm(forms.ModelForm):
 
     def clean_course_days(self):
         """
-        Formats course_days e.g. ['M', 'W', 'F'] -> M/W/F.
+        Formats course_days e.g. ['M', 'W', 'F'] -> M/W/F before saving.
         :return:
         """
-        # Format and save course days
+        # Format course days
         course_days = self.cleaned_data['course_days']
         formatted_days = ''
         for day in course_days:
@@ -166,6 +166,19 @@ class AttendanceForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['member'].queryset = Member.objects.filter(aca_id=aca_id)
         self.fields['course'].queryset = Course.objects.filter(aca_id=aca_id)
+
+class MemberRankForm(forms.ModelForm):
+    rank_type = forms.ChoiceField(choices=Rank.RANK_TYPE)
+
+    class Meta:
+        model = MemberRank
+        fields = ['rank']
+
+    def __init__(self, *args, **kwargs):
+        aca_id = kwargs.pop('aca_id')
+        super().__init__(*args, **kwargs)
+        
+
 
 class RankForm(forms.ModelForm):
     class Meta:

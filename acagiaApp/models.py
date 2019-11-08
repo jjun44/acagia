@@ -291,9 +291,9 @@ class MemberRank(models.Model):
     member = models.ForeignKey(
         Member, related_name='sr_mem', on_delete=models.CASCADE
     )
-    rank = models.CharField(max_length=20)
-    days_attended = models.IntegerField(default=0)
-    total_days = models.IntegerField()
+    rank = models.CharField(max_length=20, default='None', null=True)
+    days_attended = models.IntegerField(default=0, null=True)
+    total_days = models.IntegerField(null=True)
 
 class Attendance(models.Model):
     aca = models.ForeignKey(

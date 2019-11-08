@@ -9,7 +9,6 @@
 <a href="{% url 'add_att' %}"><button class="btn btn-dark
 mb-2">Add
     New Record</button></a>
-{% if records %}
 <table class="table table-hover table-striped">
   <thead>
     <tr>
@@ -20,6 +19,7 @@ mb-2">Add
       <th>Operations</th>
     </tr>
   </thead>
+  {% if records %}
   <tbody>
     {% for record in records %}
     <tr>
@@ -42,9 +42,10 @@ mb-2">Add
       </td>
     </tr>
     {% endfor %}
+  {% else %}
+  <td colspan="5" class="text-center">No attendance record found! Make sure to
+      check-in your students!</td>
+  {% endif %}
   </tbody>
 </table>
-{% else %}
-<h3 class="mt-3">No attendance record found!</h3>
-{% endif %}
 {% endblock %}
