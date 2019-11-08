@@ -282,7 +282,7 @@ class Rank(models.Model):
     rank_order = models.IntegerField()
     rank = models.CharField(max_length=20)
     # number of attendance required
-    days_required = models.IntegerField(default=0)
+    days_required = models.IntegerField()
 
     def __str__(self):
         return self.rank_type + ' - ' + self.rank

@@ -479,20 +479,20 @@ def add_rank(request):
     elif request.method == 'POST':
         formset = RankFormset(request.POST)
         if formset.is_valid():
-            if formset.errors:
-                msg = 'Please complete all fields. Enter numbers for rank order ' \
-                      'and days required.'
-                messages.error(request, msg)
             for form in formset:
                 try:
-                    formset.clean()
                     rank = form.save(commit=False)
                     rank.aca_id = aca_id
                     form.save()
-                    return redirect('/academy/rank-sys/')
                 except IntegrityError:
-                    msg = 'Please select rank type.'
-                    messages.error(request, msg)
+                    redirect('/academy/rank-sys/add-rank/')
+
+            return redirect('/academy/rank-sys/')
+        else:
+            msg = 'Please complete all fields correctly. ' \
+                  'Make sure to enter whole numbers for rank order ' \
+                  '(e.g. 1) and days required (e.g. 25). '
+            messages.error(request, msg)
 
     return render(request, 'acagiaApp/rank_multi_forms.html', {
         'formset': formset,
