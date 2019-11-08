@@ -291,16 +291,22 @@ class Rank(models.Model):
     days_required = models.IntegerField()
 
     def __str__(self):
-        return str(self.rank_order) + ' ' + self.rank
+        return (self.rank or 'X')
 
 class MemberRank(models.Model):
+    aca = models.ForeignKey(
+        Academy, related_name='mr_aca', on_delete=models.CASCADE
+    )
     member = models.OneToOneField(
         Member, related_name='mr_mem', on_delete=models.CASCADE
     )
     rank = models.OneToOneField(Rank, related_name='mr_rank',
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE, null=True)
     days_attended = models.IntegerField(default=0, blank=True)
     total_days = models.IntegerField(default=0, blank=True)
+
+    def __str__(self):
+        return str(self.member) + ' ' + (self.rank or 'X')
 
 class Attendance(models.Model):
     aca = models.ForeignKey(

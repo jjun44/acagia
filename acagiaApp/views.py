@@ -201,6 +201,9 @@ class MemberCreateView(CreateView):
         self.object.aca_id = self.request.session['aca_id']
         self.object.member_since = timezone.localdate()
         self.object.save()
+        # Create member's rank with default value
+        member_rank = MemberRank(member_id=self.object.id)
+        member_rank.save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -571,14 +574,13 @@ class RankSystemListView(ListView):
         context['ranks'] = ranks
         context['academy'] = Academy.objects.get(
             id=aca_id)
-        print(context['academy'])
         return context
 
 @login_required
 def promotion_list(request):
     aca_id = request.session['aca_id']
     # get all members in the academy
-    members = Member.objects.filter(aca_id=aca_id)
+    members = MemberRank.objects.filter(aca_id=aca_id)
     template_name = 'acagiaApp/promotion_list.html'
     return render(request, template_name, {'members': members})
 

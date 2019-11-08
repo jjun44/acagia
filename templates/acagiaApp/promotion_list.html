@@ -9,10 +9,15 @@
 <a href="{% url 'add_course' %}"><button class="btn btn-dark
 mb-2">Assign
     New Ranking</button></a>
-<table class="table table-hover table-striped">
+<table class="table table-hover table-striped text-center">
   <thead>
     <tr>
-      <th>Select</th>
+      <th>
+        <a class="uncheckall" href="#"><i class="far fa-square fa-lg
+        mr-3"></i></a>
+        <a class="checkall" href="#"><i class="fas fa-check-square
+        fa-lg"></i></a>
+      </th>
       <th>Member Name</th>
       <th>Previous Rank</th>
       <th>Current Rank</th>
@@ -24,23 +29,12 @@ mb-2">Assign
   <tbody>
     {% for member in members %}
     <tr>
-      <td class="pl-4"><input type="checkbox" name={{ member.id }}/></td>
-      <td>{{ member }}</td>
-      <td>{{ member.mr_mem }}</td>
-      <td>{{ member.mr_mem.mr_rank }}</td>
-      <td>{{ member.mr_mem.days_attended }}</td>
-      <td>
-        <a href="/academy/courses/update-course/{{ course.id }}" class="btn
-        btn-success
-        btn-sm mr-2">
-          <i class="fas fa-edit fa-lg"></i>
-        </a>
-        <a href="#confirm-modal" class="btn btn-danger btn-sm"
-           id="delete-link" data-toggle="modal"
-           data-id="{{ course.id }}" data-name="{{ course }}" data-link="/academy/courses/delete-course/">
-            <i class="fas fa-trash-alt fa-lg"></i>
-        </a>
-      </td>
+      <td><input type="checkbox" name={{ member.id }}/></td>
+      <td>{{ member.member }}</td>
+      <td>{{ member.rank.rank_order }}</td>
+      <td>{{ member.rank }}</td>
+      <td>{{ member.rank.days_required }}</td>
+      <td>{{ member.days_attended }}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -48,8 +42,30 @@ mb-2">Assign
   <td colspan="6" class="text-center">No members yet. Add members first!</td>
   {% endif %}
 </table>
+<div class="text-center">
+    <button class="btn btn-danger btn-lg mr-3">
+      <i class="fas fa-arrow-left fa-lg mr-2"></i>Demote
+    </button>
+    <button class="btn btn-success btn-lg ml-3">
+    Promote<i class="fas fa-arrow-right fa-lg ml-2"></i>
+    </button>
+</div>
 {% endblock %}
 
+{% block dashboard_script_block %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        // Check all checkboxes in the table
+        $('.checkall').click(function(){
+            $(":checkbox").prop("checked", true);
+        });
+        // Uncheck all checkboxes in the table
+        $('.uncheckall').click(function(){
+            $(":checkbox").prop("checked", false);
+        });
+    });
+</script>
+{% endblock %}
 
 
 
