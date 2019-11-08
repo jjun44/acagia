@@ -31,12 +31,18 @@ class Address(models.Model):
 '''
 
 class Academy(models.Model):
-    MMA = 'MMA'
     GENERAL = 'General'
+    BJJ = 'Jiu-jitsu'
+    MMA = 'MMA'
+    TKD = 'Taekwondo'
+
     ACA_TYPE = [
         (GENERAL, 'General'),
-        (MMA, 'MMA')
+        (BJJ, 'Jiu-jitsu'),
+        (MMA, 'MMA'),
+        (TKD, 'Taekwondo')
     ]
+
     TIME_ZONES = [(zone, zone) for zone in pytz.common_timezones]
 
     # when User account deleted, Academy will be deleted as well
@@ -47,6 +53,7 @@ class Academy(models.Model):
         choices=ACA_TYPE,
         default=GENERAL
     )
+    rank_sys = models.CharField(max_length=20)
     office_phone = models.CharField(max_length=12)
     location = models.CharField(max_length=255)
     time_zone = models.CharField(max_length=20,
@@ -56,7 +63,6 @@ class Academy(models.Model):
 
     def __str__(self):
         return self.aca_name
-
 
 class Member(models.Model):
     STU = 'Student'
@@ -278,22 +284,23 @@ class Rank(models.Model):
     aca = models.ForeignKey(
         Academy, related_name='rank_aca', on_delete=models.CASCADE
     )
-    rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
+    #rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
     rank_order = models.IntegerField()
     rank = models.CharField(max_length=20)
     # number of attendance required
     days_required = models.IntegerField()
 
     def __str__(self):
-        return self.rank_type + ' - ' + self.rank
+        return str(self.rank_order) + ' ' + self.rank
 
 class MemberRank(models.Model):
-    member = models.ForeignKey(
-        Member, related_name='sr_mem', on_delete=models.CASCADE
+    member = models.OneToOneField(
+        Member, related_name='mr_mem', on_delete=models.CASCADE
     )
-    rank = models.CharField(max_length=20, default='None', null=True)
-    days_attended = models.IntegerField(default=0, null=True)
-    total_days = models.IntegerField(null=True)
+    rank = models.OneToOneField(Rank, related_name='mr_rank',
+                                on_delete=models.CASCADE)
+    days_attended = models.IntegerField(default=0, blank=True)
+    total_days = models.IntegerField(default=0, blank=True)
 
 class Attendance(models.Model):
     aca = models.ForeignKey(

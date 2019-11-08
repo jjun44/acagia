@@ -7,10 +7,13 @@ from django.forms.widgets import TextInput, Select, EmailInput, DateInput, \
 class AcademyForm(forms.ModelForm):
     class Meta:
         model = Academy
-        fields = ('aca_name', 'aca_type', 'office_phone', 'location', 'time_zone')
+        fields = ('aca_name', 'aca_type', 'rank_sys', 'office_phone',
+                  'location',
+                  'time_zone')
         labels = {
             'aca_name': 'Academy name',
             'aca_type': 'Academy type',
+            'rank_sys': 'Rank system name (e.g. Jiu-Jitsu)',
             'location': 'Location (for display purpose)'
         }
         widgets = {
@@ -177,15 +180,14 @@ class MemberRankForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         aca_id = kwargs.pop('aca_id')
         super().__init__(*args, **kwargs)
-        
+
 
 
 class RankForm(forms.ModelForm):
     class Meta:
         model = Rank
-        fields = ('rank_type', 'rank_order', 'rank', 'days_required')
+        fields = ('rank_order', 'rank', 'days_required')
         widgets = {
-            'rank_type': Select(attrs={'class':'form-control'}),
             'rank_order': TextInput(attrs={
                 'placeholder':'e.g. 1',
                 'class':'form-control'
@@ -195,7 +197,7 @@ class RankForm(forms.ModelForm):
                 'class':'form-control'
             }),
             'days_required': TextInput(attrs={
-                'placeholder': 'e.g. 16',
+                'placeholder': 'e.g. 30',
                 'class': 'form-control'
             }),
         }

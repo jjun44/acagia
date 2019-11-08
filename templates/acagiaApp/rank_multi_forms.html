@@ -3,23 +3,20 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 {% block title_block %}
-  <title name="ranks">Rank</title>
+  <title name="settings">Rank</title>
 {% endblock %}
 
 {% block content_block %}
 <div class="form-wrapper">
 <h2 class="mb-5">{{ action_name }}</h2>
 <div class="row text-center">
-    <div class="col-3">
-        Rank Type
-    </div>
     <div class="col-2">
         Rank Order
     </div>
-    <div class="col-4">
+    <div class="col-6">
         Rank
     </div>
-    <div class="col-2">
+    <div class="col-3">
         Days Required
     </div>
 </div>
@@ -28,22 +25,17 @@
   {{ formset.management_form }}
   {% for form in formset %}
   <div class="row form-row spacer mb-3">
-    <div class="col-3">
-      <div class="input-group">
-          {{ form.rank_type }}
-      </div>
-    </div>
     <div class="col-2">
       <div class="input-group">
           {{ form.rank_order }}
       </div>
     </div>
-    <div class="col-4">
+    <div class="col-6">
       <div class="input-group">
           {{ form.rank }}
       </div>
     </div>
-    <div class="col-2">
+    <div class="col-3">
       <div class="input-group">
           {{ form.days_required }}
       </div>

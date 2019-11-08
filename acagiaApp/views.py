@@ -491,7 +491,7 @@ def add_rank(request):
         else:
             msg = 'Please complete all fields correctly. ' \
                   'Make sure to enter whole numbers for rank order ' \
-                  '(e.g. 1) and days required (e.g. 25). '
+                  '(e.g. 1) and days required (e.g. 30). '
             messages.error(request, msg)
 
     return render(request, 'acagiaApp/rank_multi_forms.html', {
@@ -526,6 +526,7 @@ class RankUpdateView(UpdateView):
             'Update'}
         return context
 
+'''
 @method_decorator(login_required, name='dispatch')
 class RankSystemListView(ListView):
     """
@@ -550,9 +551,34 @@ class RankSystemListView(ListView):
                 'rank_order').defer('id', 'aca_id'))
         context['rank_systems'] = rank_systems
         return context
+'''
 
 @method_decorator(login_required, name='dispatch')
+class RankSystemListView(ListView):
+    """
+    Shows the list of Ranking system customized by the user.
+    """
+    model = Rank
+    template_name = 'acagiaApp/rank_system_list.html'
+
+    def get_context_data(self, **kwargs):
+        aca_id = self.request.session['aca_id']
+        context = super().get_context_data(**kwargs)
+        # Get all the ranks associated with the academy in ascending order
+        # defer excludes columns specified
+        ranks = Rank.objects.filter(aca_id=aca_id).order_by(
+            'rank_order').defer('id', 'aca_id')
+        context['ranks'] = ranks
+        context['academy'] = Academy.objects.get(
+            id=aca_id)
+        print(context['academy'])
+        return context
+
+@login_required
 def promotion_list(request):
     aca_id = request.session['aca_id']
     # get all members in the academy
-    members = Member.find_member_by_id(aca_id)
+    members = Member.objects.filter(aca_id=aca_id)
+    template_name = 'acagiaApp/promotion_list.html'
+    return render(request, template_name, {'members': members})
+

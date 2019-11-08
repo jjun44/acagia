@@ -21,6 +21,8 @@ urlpatterns = [
          name='update_member'),
     path('members/detail/<int:pk>/', member_detail_view, name='mem_detail'),
 
+    path('promotion/', promotion_list, name='promo_list'),
+
     path('courses/', CourseListView.as_view(), name='course_list'),
     path('courses/add-course/', add_course,
          name='add_course'),
