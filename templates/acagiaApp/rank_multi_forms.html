@@ -3,7 +3,7 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 {% block title_block %}
-  <title name="rank">{{ academy }} - Rank</title>
+  <title name="ranks">Rank</title>
 {% endblock %}
 
 {% block content_block %}
@@ -74,7 +74,7 @@ mb-2">Cancel</button></a>
 </div>
 {% endblock %}
 
-{% block script_block %}
+{% block dashboard_script_block %}
 <script type='text/javascript'>
 // https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
 function updateElementIndex(el, prefix, ndx) {

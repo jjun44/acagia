@@ -2,7 +2,7 @@
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-  <title name="rank_system">{{ academy }} - Rank System</title>
+  <title name="rank_system">Rank System</title>
 {% endblock %}
 
 {% block content_block %}
@@ -11,7 +11,7 @@ mb-2 float-right">Add
     New Rank</button></a>
 {% if rank_systems %}
 {% for system, ranks in rank_systems.items %}
-  <h4>{{ system }} Ranking System</h4>
+  <h4>{{ system }}</h4>
   <table class="table table-hover table-striped text-center mb-5">
   <thead>
     <tr>

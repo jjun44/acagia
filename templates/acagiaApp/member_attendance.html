@@ -73,17 +73,3 @@ mb-2">Add
 </div>
 </div> <!-- end delete confirm modal -->
 {% endblock %}
-{% block script_block %}
-  <script>
-    /* How to change modal's value (how to pass parameters):
-       https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal */
-    // Triggered when modal is about to be shown
-    $('#confirm-modal').on('show.bs.modal', function(e) {
-        var id = $(e.relatedTarget).data('id');
-        var name = $(e.relatedTarget).data('name');
-        var link = $('#delete-mem').attr("action");
-        $('#modal-msg').text(name + '?');
-        $('#delete-mem').attr("action", link + id + '/');
-    });
-  </script>
-{% endblock %}
