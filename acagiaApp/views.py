@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, \
-    MemberUpdateForm, AttendanceForm
-from .models import Academy, Member, Attendance, Course
+    MemberUpdateForm, AttendanceForm, RankFormset
+from .models import Academy, Member, Attendance, Course, Rank
 from django.contrib import messages
 from django.utils import timezone
 from datetime import date, timedelta
@@ -155,7 +155,7 @@ def dashboard(request, **kwargs):
     # Birthday in next x days
     # https://stackoverflow.com/questions/6128921/queryset-of-people-with-a
     # -birthday-in-the-next-x-days
-    end_date = today + timedelta(days=7)
+    #end_date = today + timedelta(days=7)
 
     return render(request, 'acagiaApp/dashboard.html',
                   {'academy': academy, 'num_mem':
@@ -468,4 +468,48 @@ class AttendanceCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['template'] = {'action_name': 'Add New Attendance Record',
                                'btn_name': 'Add Record'}
+        return context
+
+@login_required
+def add_rank(request):
+    aca_id = request.session['aca_id']
+    if request.method == 'GET':
+        formset = RankFormset(request.GET or None)
+    elif request.method == 'POST':
+        formset = RankFormset(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                rank = form.save(commit=False)
+                rank.aca_id = aca_id
+                form.save()
+                return redirect('/academy/rank-sys/')
+    return render(request, 'acagiaApp/rank_form.html', {
+        'formset': formset,
+        'action_name': 'Add New Rank System',
+        'btn_name': 'Add Rank'
+    })
+
+@method_decorator(login_required, name='dispatch')
+class RankSystemListView(ListView):
+    """
+    Shows the list of Ranking systems customized by the user.
+    """
+    model = Rank
+    template_name = 'acagiaApp/rank_system_list.html'
+
+    def get_context_data(self, **kwargs):
+        aca_id = self.request.session['aca_id']
+        context = super().get_context_data(**kwargs)
+        # Get all the rank info associated with the academy
+        ranks = Rank.objects.filter(aca_id=aca_id)
+        # Get the list of rank types used in the academy
+        # flat option will return only the values not including column names
+        rank_types = list(ranks.values_list('rank_type', flat=True).distinct())
+        rank_systems = {}
+        for type in rank_types:
+            # Get all ranks associated with each rank type in the rank order
+            # defer excludes columns specified
+            rank_systems[type] = list(ranks.filter(rank_type=type).order_by(
+                'rank_order').defer('id', 'aca_id'))
+        context['rank_systems'] = rank_systems
         return context

@@ -182,7 +182,7 @@ ul.sidebar-button a {
 /* FORM WRAPPER (e.g. member form, course form) */
 .form-wrapper {
   padding: 30px 50px;
-  width: 700px;
+  width: 80%;
   margin-left: 50px;
   background: #f8f9fa;
 }

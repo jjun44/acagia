@@ -39,5 +39,8 @@ urlpatterns = [
     path('attendance/update-record/<int:pk>/', AttendanceUpdateView.as_view(),
          name='update_att'),
     path('attendance/add-record/', AttendanceCreateView.as_view(),
-         name='add_att')
+         name='add_att'),
+
+    path('rank-sys', RankSystemListView.as_view(), name='rank_sys_list'),
+    path('rank-sys/add-rank-sys/', add_rank, name='add_rank_sys'),
 ]

@@ -1,6 +1,8 @@
 from django import forms
-from .models import Academy, Member, Course, Attendance
-from django.forms.widgets import *
+from django.forms import formset_factory
+from .models import Academy, Member, Course, Attendance, Rank
+from django.forms.widgets import TextInput, Select, EmailInput, DateInput, \
+    TimeInput
 
 class AcademyForm(forms.ModelForm):
     class Meta:
@@ -24,22 +26,6 @@ class AcademyForm(forms.ModelForm):
             'aca_type': Academy.ACA_TYPE,
             'time_zone': Academy.TIME_ZONES,
         }
-
-'''
-class AddressForm(forms.ModelForm):
-    class Meta:
-        model = Address
-        fields = ('street', 'city', 'state', 'zip')
-        widgets = {
-            'street': TextInput(attrs={'class':'form-control mb-2'}),
-            'city': TextInput(attrs={'class':'form-control mb-2'}),
-            'state': Select(attrs={'class':'form-control mb-2'}),
-            'zip': TextInput(attrs={'class':'form-control mb-2'})
-        }
-        choices = {
-            'state': Address.STATES,
-        }
-'''
 
 class MemberForm(forms.ModelForm):
     # https://coderwall.com/p/bz0sng/simple-django-image-upload-to-model-imagefield
@@ -180,3 +166,27 @@ class AttendanceForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['member'].queryset = Member.objects.filter(aca_id=aca_id)
         self.fields['course'].queryset = Course.objects.filter(aca_id=aca_id)
+
+class RankForm(forms.ModelForm):
+    class Meta:
+        model = Rank
+        fields = ('rank_type', 'rank_order', 'rank', 'days_required')
+        widgets = {
+            'rank_type': Select(attrs={'class':'form-control'}),
+            'rank_order': TextInput(attrs={
+                'placeholder':'e.g. 1',
+                'class':'form-control'
+            }),
+            'rank': TextInput(attrs={
+                'placeholder': 'Enter rank name e.g. White',
+                'class':'form-control'
+            }),
+            'days_required': TextInput(attrs={
+                'placeholder': 'e.g. 16',
+                'class': 'form-control'
+            }),
+        }
+
+# https://docs.djangoproject.com/en/2.2/topics/forms/formsets/
+# https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
+RankFormset = formset_factory(RankForm, extra=1)

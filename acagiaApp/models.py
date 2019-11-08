@@ -80,7 +80,7 @@ class Member(models.Model):
         (INACTIVE, 'Inactive'),
         (HOLD, 'Hold')
     ]
-    IMAGE_SIZE = (250, 300)
+    IMAGE_SIZE = (300, 350)
 
     aca = models.ForeignKey(
         Academy, related_name='mem_aca', on_delete=models.CASCADE
@@ -157,7 +157,6 @@ class Member(models.Model):
         except Member.DoesNotExist:
             return None
 
-
 class Course(models.Model):
     M = 'M'
     T = 'T'
@@ -197,10 +196,19 @@ class Course(models.Model):
         return str(self.start_time)[0:5] + ' - ' + str(self.end_time)[0:5]
 
 class Event(models.Model):
-    event_date = models.DateField()
-    event_start_time = models.TimeField(blank=True, null=True)
-    event_end_time = models.TimeField(blank=True, null=True)
-    event_name = models.CharField(max_length=30)
+    e_date = models.DateField()
+    e_start_time = models.TimeField()
+    e_end_time = models.TimeField()
+    e_name = models.CharField(max_length=30)
+    e_location = models.CharField(max_length=255)
+    e_note = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.e_name + ' on ' + self.e_date
+
+    @property
+    def time_range(self):
+        return str(self.e_start_time)[0:5] + ' - ' + str(self.e_end_time)[0:5]
 
 class MemberEvent(models.Model):
     aca = models.ForeignKey(
@@ -218,11 +226,11 @@ class MemberEvent(models.Model):
 
 class Rank(models.Model):
     GENERAL = 'General'
-    BJJ = 'BJJ'
-    TKD = 'TKD'
+    BJJ = 'Jiu-jitsu'
+    TKD = 'Taekwondo'
     RANK_TYPE = [
-        (GENERAL, 'General'),
         (BJJ, 'Jiu-jitsu'),
+        (GENERAL, 'General'),
         (TKD, 'Taekwondo')
     ]
     RANK = {
@@ -245,20 +253,33 @@ class Rank(models.Model):
         ],
         TKD:[
             ('White', 'White'),
-            ('Orange', 'Orange'),
             ('Yellow', 'Yellow'),
-            ('Green', 'Green'),
+            ('Ad-Yellow', 'Ad-Yellow'),
+            ('Orange', 'Orange'),
             ('Purple', 'Purple'),
+            ('Ad-Purple', 'Ad-Purple'),
+            ('Green', 'Green'),
             ('Blue', 'Blue'),
+            ('Ad-Blue', 'Ad-Blue'),
             ('Brown', 'Brown'),
             ('Red', 'Red'),
-            ('Red/Black', 'Red/Black'),
+            ('Ad-Red', 'Ad-Red'),
+            ('Danbo', 'Danbo'),
             ('Black', 'Black')
         ]
     }
+    TKD_DAYS = {'White':16, 'Yellow':16, 'Ad-Yellow':16, 'Orange':16,
+                'Purple':24, 'Ad-Purple':24, 'Green':24, 'Blue':24,
+                'Ad-Blue':24, 'Brown':24, 'Red':24, 'Ad-Red':30, 'Danbo':None,
+                'Black':None}
+
+    aca = models.ForeignKey(
+        Academy, related_name='rank_aca', on_delete=models.CASCADE
+    )
     rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
-    rank = models.CharField(max_length=10, choices=RANK[GENERAL],
-                            default='None')
+    rank_order = models.IntegerField()
+    rank = models.CharField(max_length=20)
+    days_required = models.IntegerField() # number of attendance required
 
     def __str__(self):
         return self.rank_type + ' - ' + self.rank
@@ -267,10 +288,9 @@ class MemberRank(models.Model):
     member = models.ForeignKey(
         Member, related_name='sr_mem', on_delete=models.CASCADE
     )
-    rank = models.ForeignKey(
-        Rank, null=True, related_name='sr_rank', on_delete=models.SET_NULL
-    )
-    days_at_this_rank = models.IntegerField(default=0)
+    rank = models.CharField(max_length=20)
+    days_attended = models.IntegerField(default=0)
+    total_days = models.IntegerField()
 
 class Attendance(models.Model):
     aca = models.ForeignKey(
