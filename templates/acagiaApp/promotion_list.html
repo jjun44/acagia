@@ -25,16 +25,16 @@ mb-2">Assign
       <th>Days Left for Promotion</th>
     </tr>
   </thead>
-  {% if members %}
+  {% if prom_list %}
   <tbody>
-    {% for member in members %}
+    {% for member in prom_list %}
     <tr>
-      <td><input type="checkbox" name={{ member.id }}/></td>
-      <td>{{ member.member }}</td>
-      <td>{{ member.rank.rank_order }}</td>
-      <td>{{ member.rank }}</td>
-      <td>{{ member.rank.days_required }}</td>
-      <td>{{ member.days_attended }}</td>
+      <td><input type="checkbox" id={{ member.id }}/></td>
+      <td>{{ member.name }}</td>
+      <td>{{ member.pre }}</td>
+      <td>{{ member.current }}</td>
+      <td>{{ member.next }}</td>
+      <td>{{ member.days_left }}</td>
     </tr>
     {% endfor %}
   </tbody>

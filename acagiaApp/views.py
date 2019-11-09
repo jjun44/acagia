@@ -180,7 +180,7 @@ def member_list(request):
     aca_id = request.session['aca_id']
     member_list = Member.objects.filter(
         aca_id=aca_id
-    )
+    ).order_by('first_name')
     return render(request, 'acagiaApp/member_list.html',
                   {'members': member_list})
 
@@ -568,7 +568,7 @@ class RankSystemListView(ListView):
         aca_id = self.request.session['aca_id']
         context = super().get_context_data(**kwargs)
         # Get all the ranks associated with the academy in ascending order
-        # defer excludes columns specified
+        # Defer excludes columns specified
         ranks = Rank.objects.filter(aca_id=aca_id).order_by(
             'rank_order').defer('id', 'aca_id')
         context['ranks'] = ranks
@@ -579,8 +579,51 @@ class RankSystemListView(ListView):
 @login_required
 def promotion_list(request):
     aca_id = request.session['aca_id']
-    # get all members in the academy
-    members = MemberRank.objects.filter(aca_id=aca_id)
     template_name = 'acagiaApp/promotion_list.html'
-    return render(request, template_name, {'members': members})
+    # Get all members
+    members = MemberRank.objects.filter(aca_id=aca_id)
+    # Get all ranks in order
+    all_ranks = Rank.objects.filter(aca_id=aca_id).order_by('rank_order')
+    first_rank = all_ranks.first() # Get the first rank in the ranking system
+    last_rank = all_ranks.last() # Get the last rank in the ranking system
+    promotion_list = [] # All members' promotion info
+    # Go through each member and set pre/current/next rank and days left
+    for member in members:
+        mem_rank = {} # Each member's promotion info will be saved
+        if member.rank == None: # Member isn't assigned a rank yet
+            pre = 'X'
+            current = 'X'
+            next = first_rank
+        else: # Member is currently associated with a rank
+            current = member.rank # Get the current rank
+            '''
+            If member isn't at his first rank, previous rank will be the 
+            rank in the order that is the last smaller rank than the current 
+            rank's order.
+            If member isn't at his last rank, next rank will be the rank
+            in the order that is the smallest larger rank than the current 
+            rank's order. 
+            '''
+            if member.rank == first_rank: # Member is at first rank
+                pre = 'X'
+                next = all_ranks.filter(
+                    rank_order__gt=member.rank.rank_order).first()
+            elif member.rank == last_rank: # Member is at last rank
+                pre = all_ranks.filter(
+                    rank_order__lt=member.rank.rank_order).last()
+                next = 'X'
+            else:
+                pre = all_ranks.filter(
+                    rank_order__lt=member.rank.rank_order).last()
+                next = all_ranks.filter(
+                    rank_order__gt=member.rank.rank_order).first()
+        # if current is set to X, calculate days left with 0 
+        mem_rank = {'name': member.member, 'pre': pre, 'current': current,
+                    'next': next, 'days_left':
+                        (current.days_required if current != 'X' else 0) -
+                        member.days_attended
+                    }
+        promotion_list.append(mem_rank) # Append to list of all members
+
+    return render(request, template_name, {'prom_list': promotion_list})
 
