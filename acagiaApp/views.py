@@ -665,9 +665,9 @@ def promote_demote(request, operation, members, ranks):
     success_msg = ' members ' + operation + 'd successfully: '
     # Get all selected member ids
     selected_ids = request.POST.getlist('members')
-    total_selected = len(selected_ids)
     # number of failed members
     num_fail = 0
+    num_success = 0
 
     # No members selected? send error msg and return.
     if not selected_ids:
@@ -681,10 +681,7 @@ def promote_demote(request, operation, members, ranks):
         pre = None
         # Get pre or next rank
         if not member.rank:  # Member isn't assigned a rank yet
-            if operation == 'demote': # demotion
-                fail_msg += str(member.member) + ', '
-                num_fail += 1
-            else: # promotion
+            if operation == 'promote':
                 next = ranks.first() # next rank will be the first rank
         else:
             if operation == 'demote':
@@ -706,12 +703,13 @@ def promote_demote(request, operation, members, ranks):
                 member.rank = next
             else:
                 member.rank = pre
+            num_success += 1
             member.save()
 
     # Send successful message if 1 or more members are promoted
-    if num_fail < total_selected:
-        num_success = total_selected - num_fail
+    if num_success > 0:
         messages.success(request, str(num_success) + success_msg[0:-2])
     # Send fail message if 1 or more members are failed to be promoted
     if num_fail > 0:
         messages.error(request, str(num_fail) + fail_msg[0:-2])
+
