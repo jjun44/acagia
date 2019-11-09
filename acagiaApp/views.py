@@ -387,6 +387,7 @@ def check_in(request):
             record.date_attended = timezone.localdate()
             record.time_attended = timezone.localtime().strftime(TIME_FORMAT)
             form.save()
+            increase_days(member.id)
             return redirect('/academy/checkin/success/')
     return render(request, 'acagiaApp/checkin_form.html',
                       {'form': form})
@@ -400,6 +401,13 @@ def check_in_success(request, **kwargs):
     :return:
     """
     return render(request, 'acagiaApp/checkin_success.html')
+
+def increase_days(id):
+    """
+    Increase member's days attended at the current rank.
+    :param id: member id
+    """
+
 
 @method_decorator(login_required, name='dispatch')
 class AttendanceListView(ListView):
@@ -585,6 +593,11 @@ def promotion_list(request):
     members = MemberRank.objects.filter(aca_id=aca_id)
     # Get all ranks in order
     all_ranks = Rank.objects.filter(aca_id=aca_id).order_by('rank_order')
+    # If no rank system is made, sends an error message.
+    if not all_ranks:
+        messages.info(request, 'Make your ranking system first to use '
+                               'PROMOTION tab now!')
+        return redirect('/academy/rank-sys/')
     first_rank = all_ranks.first() # Get the first rank in the ranking system
     last_rank = all_ranks.last() # Get the last rank in the ranking system
     promotion_list = [] # All members' promotion info

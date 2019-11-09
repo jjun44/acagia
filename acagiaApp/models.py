@@ -301,7 +301,7 @@ class MemberRank(models.Model):
         Member, related_name='mr_mem', on_delete=models.CASCADE
     )
     rank = models.ForeignKey(Rank, related_name='mr_rank',
-                                on_delete=models.CASCADE, null=True)
+                                on_delete=models.SET_NULL, null=True)
     days_attended = models.IntegerField(default=0, blank=True)
     total_days = models.IntegerField(default=0, blank=True)
 

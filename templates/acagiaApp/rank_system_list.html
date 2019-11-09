@@ -6,7 +6,19 @@
 {% endblock %}
 
 {% block content_block %}
-<a href="{% url 'add_rank' %}"><button class="btn btn-dark
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible mb-5"
+      role="alert">
+      <button type="button" class="close" data-dismiss="alert"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h2 class="text-center">{{ message }}</h2>
+    </div>
+    {% endfor %}
+  {% endif %}
+  <a href="{% url 'add_rank' %}"><button class="btn btn-dark
 mb-2 float-right">Add
     New Rank</button></a>
 

@@ -6,9 +6,13 @@
 {% endblock %}
 
 {% block content_block %}
-<a href="{% url 'add_course' %}"><button class="btn btn-dark
-mb-2">Assign
-    New Ranking</button></a>
+<div class="card bg-light text-center mb-4">
+  <div class="card-body">
+      <h4 class="card-text text-info">
+         Promote or Demote your members!
+      </h4>
+  </div>
+</div>
 {% if messages %}
     {% for message in messages %}
     <div class="alert {{ message.tags }} alert-dismissible mt-4"
@@ -23,7 +27,6 @@ mb-2">Assign
 {% endif %}
 <table class="table table-hover table-striped text-center">
   <thead>
-    <table-tile
     <tr>
       <th>
         <a class="uncheckall" href="#"><i class="far fa-square fa-lg
@@ -87,8 +90,6 @@ mb-2">Assign
             $(":checkbox").prop("checked", false);
         });
     });
-
-    // Get
 </script>
 {% endblock %}
 
