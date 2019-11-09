@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f4f0b1c2-2e62-409f-94b7-c334943346a0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acagiaApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,8 +34,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/acagiaApp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="654" column="21" lean-forward="true" selection-start-line="654" selection-start-column="21" selection-end-line="654" selection-end-column="21" />
+            <state relative-caret-position="259">
+              <caret line="205" column="59" lean-forward="true" selection-start-line="205" selection-start-column="59" selection-end-line="205" selection-end-column="59" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
               </folding>
@@ -122,8 +124,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-566">
-              <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
+            <state relative-caret-position="-1594">
+              <caret line="30" column="9" lean-forward="true" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -221,7 +223,6 @@
         <option value="$PROJECT_DIR$/templates/acagiaApp/attendance_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/rank_single_form.html" />
         <option value="$PROJECT_DIR$/acagiaApp/urls.py" />
-        <option value="$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/member_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/rank_multi_forms.html" />
         <option value="$PROJECT_DIR$/acagiaApp/forms.py" />
@@ -229,6 +230,7 @@
         <option value="$PROJECT_DIR$/templates/acagiaApp/promotion_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/rank_system_list.html" />
         <option value="$PROJECT_DIR$/acagiaApp/models.py" />
+        <option value="$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html" />
         <option value="$PROJECT_DIR$/acagiaApp/views.py" />
       </list>
     </option>
@@ -359,23 +361,23 @@
       <option name="presentableId" value="Default" />
       <updated>1571278954477</updated>
       <workItem from="1571278955691" duration="2000" />
-      <workItem from="1571278967411" duration="292585000" />
+      <workItem from="1571278967411" duration="293194000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="292587000" />
+    <option name="totallyTimeSpent" value="293196000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20529328" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20529328" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.25732484" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.25732484" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -742,13 +744,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-566">
-          <caret line="37" column="33" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_attendance.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="870">
@@ -787,10 +782,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1594">
+          <caret line="30" column="9" lean-forward="true" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/acagiaApp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="654" column="21" lean-forward="true" selection-start-line="654" selection-start-column="21" selection-end-line="654" selection-end-column="21" />
+        <state relative-caret-position="259">
+          <caret line="205" column="59" lean-forward="true" selection-start-line="205" selection-start-column="59" selection-end-line="205" selection-end-column="59" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>

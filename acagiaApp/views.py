@@ -202,7 +202,8 @@ class MemberCreateView(CreateView):
         self.object.member_since = timezone.localdate()
         self.object.save()
         # Create member's rank with default value
-        member_rank = MemberRank(member_id=self.object.id)
+        member_rank = MemberRank(member_id=self.object.id,
+                                 aca_id=self.object.aca_id)
         member_rank.save()
         return super().form_valid(form)
 
@@ -647,11 +648,14 @@ def promotion_list(request):
                     rank_order__lt=member.rank.rank_order).last()
                 next = all_ranks.filter(
                     rank_order__gt=member.rank.rank_order).first()
+
+        if current == 'X' or next == 'X':
+            days_left = 'X'
+        else:
+            days_left = current.days_required - member.days_attended
         # if current is set to X, calculate days left with 0
         mem_rank = {'id': member.id, 'name': member.member, 'pre': pre,
-                    'current': current, 'next': next, 'days_left':
-                    (current.days_required if current != 'X' and next != 'X'
-                     else 0) - (member.days_attended if next != 'X' else 0)
+                    'current': current, 'next': next, 'days_left': days_left
                     }
         promotion_list.append(mem_rank) # Append to list of all members
 
