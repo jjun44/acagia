@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f4f0b1c2-2e62-409f-94b7-c334943346a0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acagiaApp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acagiaApp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,8 +33,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/acagiaApp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="448">
-              <caret line="715" column="8" selection-start-line="715" selection-start-column="8" selection-end-line="715" selection-end-column="8" />
+            <state relative-caret-position="235">
+              <caret line="620" column="38" lean-forward="true" selection-start-line="620" selection-start-column="38" selection-end-line="620" selection-end-column="38" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
               </folding>
@@ -45,8 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/acagiaApp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="296" column="28" lean-forward="true" selection-start-line="296" selection-start-column="28" selection-end-line="296" selection-end-column="28" />
+            <state relative-caret-position="395">
+              <caret line="308" column="36" selection-start-line="308" selection-start-column="36" selection-end-line="308" selection-end-column="36" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -360,23 +360,23 @@
       <option name="presentableId" value="Default" />
       <updated>1571278954477</updated>
       <workItem from="1571278955691" duration="2000" />
-      <workItem from="1571278967411" duration="291126000" />
+      <workItem from="1571278967411" duration="291615000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="291128000" />
+    <option name="totallyTimeSpent" value="291617000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20529328" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20529328" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.25732484" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.25732484" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -780,8 +780,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/acagiaApp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="296" column="28" lean-forward="true" selection-start-line="296" selection-start-column="28" selection-end-line="296" selection-end-column="28" />
+        <state relative-caret-position="395">
+          <caret line="308" column="36" selection-start-line="308" selection-start-column="36" selection-end-line="308" selection-end-column="36" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
@@ -790,8 +790,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/acagiaApp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="715" column="8" selection-start-line="715" selection-start-column="8" selection-end-line="715" selection-end-column="8" />
+        <state relative-caret-position="235">
+          <caret line="620" column="38" lean-forward="true" selection-start-line="620" selection-start-column="38" selection-end-line="620" selection-end-column="38" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>

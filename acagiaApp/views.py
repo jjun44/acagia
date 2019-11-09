@@ -618,11 +618,15 @@ def promotion_list(request):
             in the order that is the smallest larger rank than the current 
             rank's order. 
             '''
-            if member.rank == first_rank: # Member is at first rank
+            # when there's only 1 rank
+            if current == first_rank and current == last_rank:
+                pre = 'X'
+                next = 'X'
+            elif current == first_rank: # Member is at first rank
                 pre = 'X'
                 next = all_ranks.filter(
                     rank_order__gt=member.rank.rank_order).first()
-            elif member.rank == last_rank: # Member is at last rank
+            elif current == last_rank: # Member is at last rank
                 pre = all_ranks.filter(
                     rank_order__lt=member.rank.rank_order).last()
                 next = 'X'
