@@ -404,10 +404,22 @@ def check_in_success(request, **kwargs):
 
 def increase_days(id):
     """
-    Increase member's days attended at the current rank.
-    :param id: member id
+    Increases member's days attended at the current rank.
+    :param id: (Number) member id
     """
+    # Get the given member's rank object
+    mem_rank = MemberRank.objects.get(member_id=id)
+    mem_rank.days_attended += 1
+    mem_rank.total_days += 1
+    mem_rank.save()
 
+def reset_days(member):
+    """
+    Resets member's days attended at the current rank to 0
+    when he/she gets promoted or demoted (whenever rank changes).
+    :param member: (MemberRank) given member's rank object
+    """
+    member.days_attended = 0
 
 @method_decorator(login_required, name='dispatch')
 class AttendanceListView(ListView):
@@ -639,7 +651,7 @@ def promotion_list(request):
         mem_rank = {'id': member.id, 'name': member.member, 'pre': pre,
                     'current': current, 'next': next, 'days_left':
                     (current.days_required if current != 'X' and next != 'X'
-                     else 0) - member.days_attended
+                     else 0) - (member.days_attended if next != 'X' else 0)
                     }
         promotion_list.append(mem_rank) # Append to list of all members
 
@@ -708,6 +720,7 @@ def promote_demote(request, operation, members, ranks):
             else:
                 member.rank = pre
             num_success += 1
+            reset_days(member)
             member.save()
 
     # Send successful message if 1 or more members are promoted

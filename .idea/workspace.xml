@@ -32,8 +32,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/acagiaApp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="637" column="60" lean-forward="true" selection-start-line="637" selection-start-column="60" selection-end-line="637" selection-end-column="60" />
+            <state relative-caret-position="415">
+              <caret line="654" column="21" lean-forward="true" selection-start-line="654" selection-start-column="21" selection-end-line="654" selection-end-column="21" />
               <folding>
                 <element signature="e#0#45#0" expanded="true" />
               </folding>
@@ -359,12 +359,12 @@
       <option name="presentableId" value="Default" />
       <updated>1571278954477</updated>
       <workItem from="1571278955691" duration="2000" />
-      <workItem from="1571278967411" duration="291783000" />
+      <workItem from="1571278967411" duration="292585000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="291785000" />
+    <option name="totallyTimeSpent" value="292587000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
@@ -789,8 +789,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/acagiaApp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="637" column="60" lean-forward="true" selection-start-line="637" selection-start-column="60" selection-end-line="637" selection-end-column="60" />
+        <state relative-caret-position="415">
+          <caret line="654" column="21" lean-forward="true" selection-start-line="654" selection-start-column="21" selection-end-line="654" selection-end-column="21" />
           <folding>
             <element signature="e#0#45#0" expanded="true" />
           </folding>
