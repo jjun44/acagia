@@ -412,7 +412,8 @@ class AttendanceListView(ListView):
     def get_context_data(self, **kwargs):
         aca_id = self.request.session['aca_id']
         context = super().get_context_data(**kwargs)
-        context['records'] = Attendance.objects.filter(aca_id=aca_id)
+        context['records'] = Attendance.objects.filter(
+            aca_id=aca_id).order_by('-date_attended', '-time_attended')
         return context
 
 @method_decorator(login_required, name='dispatch')
@@ -590,7 +591,7 @@ def promotion_list(request):
     # Go through each member and set pre/current/next rank and days left
     for member in members:
         mem_rank = {} # Each member's promotion info will be saved
-        if member.rank == None: # Member isn't assigned a rank yet
+        if not member.rank: # Member isn't assigned a rank yet
             pre = 'X'
             current = 'X'
             next = first_rank
@@ -617,13 +618,87 @@ def promotion_list(request):
                     rank_order__lt=member.rank.rank_order).last()
                 next = all_ranks.filter(
                     rank_order__gt=member.rank.rank_order).first()
-        # if current is set to X, calculate days left with 0 
-        mem_rank = {'name': member.member, 'pre': pre, 'current': current,
-                    'next': next, 'days_left':
-                        (current.days_required if current != 'X' else 0) -
-                        member.days_attended
+        # if current is set to X, calculate days left with 0
+        mem_rank = {'id': member.id, 'name': member.member, 'pre': pre,
+                    'current': current, 'next': next, 'days_left':
+                    (current.days_required if current != 'X' else 0) -
+                     member.days_attended
                     }
         promotion_list.append(mem_rank) # Append to list of all members
 
+    # When promote button clicked
+    if request.method == 'POST' and 'promote_btn' in request.POST:
+        promote_demote(request, 'promote', members, all_ranks)
+        return redirect('/academy/promotion/')
+
+    # When demote button clicked
+    if request.method == 'POST' and 'demote_btn' in request.POST:
+        promote_demote(request, 'demote', members, all_ranks)
+        return redirect('/academy/promotion/')
+
     return render(request, template_name, {'prom_list': promotion_list})
 
+def promote_demote(request, operation, members, ranks):
+    """
+    Handles promotion and demotion of selected members.
+    :param request: HTTP request
+    :param operation: (string) indicates either promote or demote
+    :param members: (MemberRank) members in the academy
+    :param ranks: (Rank) all ranks used in the academy
+    """
+    # Messages to send to the user
+    error_msg = 'You didn\'t select any members! Please select members first.'
+    fail_msg = ' members are failed to be ' + operation + 'd: '
+    success_msg = ' members ' + operation + 'd successfully: '
+    # Get all selected member ids
+    selected_ids = request.POST.getlist('members')
+    total_selected = len(selected_ids)
+    # number of failed members
+    num_fail = 0
+
+    # No members selected? send error msg and return.
+    if not selected_ids:
+        messages.error(request, error_msg)
+        return
+
+    # For each id, find the member and promote.
+    for id in selected_ids:
+        member = members.get(id=id)
+        next = None
+        pre = None
+        # Get pre or next rank
+        if not member.rank:  # Member isn't assigned a rank yet
+            if operation == 'demote': # demotion
+                fail_msg += str(member.member) + ', '
+                num_fail += 1
+            else: # promotion
+                next = ranks.first() # next rank will be the first rank
+        else:
+            if operation == 'demote':
+                pre = ranks.filter(rank_order__lt=member.rank.rank_order).last()
+            else:
+                next = ranks.filter(rank_order__gt=member.rank.rank_order).first()
+        # No more higher rank to promote?
+        if operation == 'promote' and not next:
+            # Set error msg indicating who's failed and decrease # of success
+            fail_msg += str(member.member) + ', '
+            num_fail += 1
+        # No more lower rank to demote?
+        elif operation == 'demote' and not pre:
+            fail_msg += str(member.member) + ', '
+            num_fail += 1
+        else:
+            success_msg += str(member.member) + ', '
+            if operation == 'promote':
+                member.rank = next
+            else:
+                member.rank = pre
+            member.save()
+
+    # Send successful message if 1 or more members are promoted
+    if num_fail < total_selected:
+        num_success = total_selected - num_fail
+        messages.success(request, str(num_success) + success_msg[0:-2])
+    # Send fail message if 1 or more members are failed to be promoted
+    if num_fail > 0:
+        messages.error(request, str(num_fail) + fail_msg[0:-2])
