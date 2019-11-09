@@ -16,9 +16,12 @@ mb-2">Member
     <img src="{{ member.img.url }}" alt="{{ member }}"/>
     </div>
     <div class="col-md-7 text-center">
-      <p class="display-2">{{ member }}</p>
-      <h2>Blue belt</h2>
-      <h4>Next promotion: 13 days left</h4>
+      <p class="display-2 mt-5">{{ member }}</p>
+      {% if member.mr_mem.rank %}
+      <h1>{{ member.mr_mem.rank }} Rank</h1>
+      {% else %}
+      <h1>No Rank Assigned</h1>
+      {% endif %}
     </div>
   </div>
   <hr/>
