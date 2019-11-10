@@ -39,6 +39,7 @@
       <th>Current Rank</th>
       <th>Next Rank</th>
       <th>Days Left for Promotion</th>
+      <th>Update Manually</th>
     </tr>
   </thead>
   {% if prom_list %}
@@ -53,6 +54,13 @@
       <td>{{ member.current }}</td>
       <td>{{ member.next }}</td>
       <td>{{ member.days_left }}</td>
+      <td>
+        <a href="/academy/promotion/update-rank/{{ member.id }}" class="btn
+        btn-success
+        btn-sm mr-2">
+          <i class="fas fa-edit fa-lg"></i>
+        </a>
+      </td>
     </tr>
     {% endfor %}
   </tbody>

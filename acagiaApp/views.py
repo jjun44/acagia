@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, \
-    MemberUpdateForm, AttendanceForm, RankFormset, RankForm
+    MemberUpdateForm, AttendanceForm, RankFormset, RankForm, MemberRankForm
 from .models import Academy, Member, Attendance, Course, Rank, MemberRank
 from django.contrib import messages
 from django.utils import timezone
@@ -480,6 +480,7 @@ class AttendanceCreateView(CreateView):
     template_name = 'acagiaApp/attendance_form.html'
 
     def get_form_kwargs(self):
+        # pass kwargs to form
         kwargs = super().get_form_kwargs()
         kwargs.update({'aca_id': self.request.session['aca_id']})
         return kwargs
@@ -735,3 +736,24 @@ def promote_demote(request, operation, members, ranks):
     if num_fail > 0:
         messages.error(request, str(num_fail) + fail_msg[0:-2])
 
+@method_decorator(login_required, name='dispatch')
+class MemberRankUpdateView(UpdateView):
+    """
+    Updates member's ranking information.
+    """
+    model = MemberRank
+    form_class = MemberRankForm
+    success_url = reverse_lazy('promo_list')
+    template_name = 'acagiaApp/member_rank_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'aca_id': self.request.session['aca_id']})
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Update Rank', 'btn_name':
+            'Update'}
+        return context
+    

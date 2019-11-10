@@ -171,17 +171,15 @@ class AttendanceForm(forms.ModelForm):
         self.fields['course'].queryset = Course.objects.filter(aca_id=aca_id)
 
 class MemberRankForm(forms.ModelForm):
-    rank_type = forms.ChoiceField(choices=Rank.RANK_TYPE)
-
     class Meta:
         model = MemberRank
-        fields = ['rank']
+        fields = ('rank', 'days_attended', 'total_days')
 
     def __init__(self, *args, **kwargs):
         aca_id = kwargs.pop('aca_id')
         super().__init__(*args, **kwargs)
-
-
+        self.fields['rank'].queryset = Rank.objects.filter(
+            aca_id=aca_id).order_by('rank_order')
 
 class RankForm(forms.ModelForm):
     class Meta:
