@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block title_block %}
+  <title name="events">Manage Events</title>
+{% endblock %}
+
+{% block content_block %}
+<div class="form-wrapper">
+<h2 class="mb-3">{{ template.action_name }}</h2>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button
+    type="submit"
+    class="btn btn-dark my-3">{{ template.btn_name }}</button>
+</form>
+<a href="{% url 'mem_list' %}"><button class="btn btn-dark
+mb-2">Cancel</button></a>
+</div>
+{% endblock %}
+
+
+
+
