@@ -1,19 +1,19 @@
 from django import forms
 from django.forms import formset_factory
-from .models import Academy, Member, Course, Attendance, Rank, MemberRank
+from .models import Academy, Member, Course, Attendance, Rank, MemberRank, \
+    Event
 from django.forms.widgets import TextInput, Select, EmailInput, DateInput, \
-    TimeInput
+    TimeInput, SplitDateTimeWidget, DateTimeInput
 
 class AcademyForm(forms.ModelForm):
     class Meta:
         model = Academy
-        fields = ('aca_name', 'aca_type', 'rank_sys', 'office_phone',
+        fields = ('aca_name', 'aca_type', 'office_phone',
                   'location',
                   'time_zone')
         labels = {
             'aca_name': 'Academy name',
             'aca_type': 'Academy type',
-            'rank_sys': 'Rank system name (e.g. Jiu-Jitsu)',
             'location': 'Location (for display purpose)'
         }
         widgets = {
@@ -203,3 +203,24 @@ class RankForm(forms.ModelForm):
 # https://docs.djangoproject.com/en/2.2/topics/forms/formsets/
 # https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
 RankFormset = formset_factory(RankForm, extra=1)
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ('title', 'start_time', 'end_time', 'description')
+        widgets = {
+            'start_time': DateTimeInput(),
+            'end_time': DateTimeInput()
+        }
+        '''
+        widgets = {
+            'start_time': SplitDateTimeWidget(
+                date_attrs={'type': 'date', 'class': 'form-control'},
+                time_attrs={'type': 'time', 'class': 'form-control'}
+            ),
+            'end_time': SplitDateTimeWidget(
+                date_attrs={'type': 'date', 'class': 'form-control'},
+                time_attrs={'type': 'time', 'class': 'form-control'}
+            )
+        }
+        '''

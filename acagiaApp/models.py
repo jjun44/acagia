@@ -53,7 +53,6 @@ class Academy(models.Model):
         choices=ACA_TYPE,
         default=GENERAL
     )
-    rank_sys = models.CharField(max_length=20)
     office_phone = models.CharField(max_length=12)
     location = models.CharField(max_length=255)
     time_zone = models.CharField(max_length=20,
@@ -202,19 +201,16 @@ class Course(models.Model):
         return str(self.start_time)[0:5] + ' - ' + str(self.end_time)[0:5]
 
 class Event(models.Model):
-    e_date = models.DateField()
-    e_start_time = models.TimeField()
-    e_end_time = models.TimeField()
-    e_name = models.CharField(max_length=30)
-    e_location = models.CharField(max_length=255)
-    e_note = models.CharField(max_length=255, blank=True, null=True)
+    aca = models.ForeignKey(
+        Academy, related_name='e_aca', on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=30)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.e_name + ' on ' + self.e_date
-
-    @property
-    def time_range(self):
-        return str(self.e_start_time)[0:5] + ' - ' + str(self.e_end_time)[0:5]
+        return self.title
 
 class MemberEvent(models.Model):
     aca = models.ForeignKey(
@@ -325,3 +321,4 @@ class Attendance(models.Model):
     def __str__(self):
         return str(self.member) + '\'s attendance record on ' + str(
             self.date_attended)
+

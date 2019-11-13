@@ -33,6 +33,9 @@ urlpatterns = [
     path('courses/update-course/<int:pk>/', CourseUpdateView.as_view(),
          name='update_course'),
 
+    path('events/', EventListView.as_view(), name='event_list'),
+    path('events/add-event/', EventCreateView.as_view(), name='add_event'),
+
     path('checkin/', check_in, name='check_in'),
     path('checkin/success/', check_in_success,
          name='checkin_success'),

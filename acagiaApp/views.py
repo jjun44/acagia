@@ -4,8 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, \
-    MemberUpdateForm, AttendanceForm, RankFormset, RankForm, MemberRankForm
-from .models import Academy, Member, Attendance, Course, Rank, MemberRank
+    MemberUpdateForm, AttendanceForm, RankFormset, RankForm, MemberRankForm,\
+    EventForm
+from .models import Academy, Member, Attendance, Course, Rank, MemberRank, \
+    Event
 from django.contrib import messages
 from django.utils import timezone
 from datetime import date, timedelta
@@ -756,4 +758,41 @@ class MemberRankUpdateView(UpdateView):
         context['template'] = {'action_name': 'Update Rank', 'btn_name':
             'Update'}
         return context
-    
+
+@method_decorator(login_required, name='dispatch')
+class EventCreateView(CreateView):
+    """
+    Adds a new event.
+    """
+    model = Event
+    form_class = EventForm
+    success_url = reverse_lazy('event_list')
+    template_name = 'acagiaApp/event_form.html'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.aca_id = self.request.session['aca_id']
+        self.object.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Create New Event',
+                               'btn_name': 'Create Event'}
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class EventListView(ListView):
+    """
+    Shows the list of events in the academy.
+    """
+    model = Event
+    template_name = 'acagiaApp/event_list.html'
+
+    def get_context_data(self, **kwargs):
+        aca_id = self.request.session['aca_id']
+        context = super().get_context_data(**kwargs)
+        context['events'] = Event.objects.filter(
+            aca_id=aca_id
+        )
+        return context
