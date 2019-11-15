@@ -11,7 +11,8 @@
 <nav class="navbar navbar-expand-sm navbar-light bg-light mb-4">
       <form class="form-inline mr-auto" method="POST">
         {% csrf_token %}
-        Search By Date:&nbsp;&nbsp;{{ form.date_attended|as_crispy_field }}
+        Search Attendance By Date:&nbsp;&nbsp;
+          {{ form.date_attended|as_crispy_field }}
         <button type="submit" class="btn
         btn-outline-success ml-2"><i class="fas fa-search"></i></button>
       </form>
@@ -39,10 +40,10 @@
   </div>
 </div> <!-- end card -->
 {% if records %}
-<table class="table text-center">
+<table class="table text-center table-striped">
 <thead>
   <tr>
-    <th>Member Name</th>
+    <th>Member Attended</th>
     <th>Class Attended</th>
   </tr>
 </thead>
@@ -50,7 +51,10 @@
 {% for record in records %}
   <tr>
     <td>
-    {{ record.member }}
+        <a href="/academy/members/detail/{{ record.member.id }}"
+           class="text-info">
+        {{ record.member }}
+        </a>
     </td>
     <td>
     {{ record.course.time_range }}

@@ -40,7 +40,7 @@ urlpatterns = [
          name='update_course'),
 
     # EVENTS
-    path('events/', EventListView.as_view(), name='event_list'),
+    path('events/', events_by_date, name='event_list'),
     path('events/add-event/', EventCreateView.as_view(), name='add_event'),
 
     # CHECK-IN

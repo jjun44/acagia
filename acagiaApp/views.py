@@ -829,6 +829,36 @@ class EventListView(ListView):
         )
         return context
 
+@login_required
+def events_by_date(request):
+    """
+    Shows events by a specific date.
+    """
+    aca_id = request.session['aca_id']
+    template_name = 'acagiaApp/event_list.html'
+    form = AttendanceDateForm
+    today = timezone.localdate() # Get today
+    # Get today's events
+    events = Event.objects.filter(aca_id=aca_id, start_time__contains=today)
+    num = events.count()
+    day = 'Today'
+    # When specific date is given by the user, search records by the date
+    if request.method == 'POST':
+        form = AttendanceDateForm(request.POST)
+        if form.is_valid():
+            input_date = form.cleaned_data['date_attended']
+            events = Event.objects.filter(aca_id=aca_id,
+                                          start_time__contains=input_date)
+            num = events.count()
+            day = 'on ' + str(input_date)
+            if not events:
+                msg = 'No events found on ' + str(input_date)
+                messages.error(request, msg)
+                return redirect('/academy/events/')
+
+    return render(request, template_name, {'form': form, 'events': events,
+                                           'num': num, 'day' : day})
+
 @method_decorator(login_required, name='dispatch')
 class CalendarView(ListView):
     """
