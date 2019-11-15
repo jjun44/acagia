@@ -170,6 +170,17 @@ class AttendanceForm(forms.ModelForm):
         self.fields['member'].queryset = Member.objects.filter(aca_id=aca_id)
         self.fields['course'].queryset = Course.objects.filter(aca_id=aca_id)
 
+class AttendanceDateForm(forms.ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ('date_attended',)
+        widgets = {
+            'date_attended': DateInput(attrs={'type': 'date'})
+        }
+        labels = {
+            'date_attended': ''
+        }
+
 class MemberRankForm(forms.ModelForm):
     class Meta:
         model = MemberRank
@@ -209,18 +220,18 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ('title', 'start_time', 'end_time', 'description')
         widgets = {
-            'start_time': DateTimeInput(),
-            'end_time': DateTimeInput()
-        }
-        '''
-        widgets = {
-            'start_time': SplitDateTimeWidget(
-                date_attrs={'type': 'date', 'class': 'form-control'},
-                time_attrs={'type': 'time', 'class': 'form-control'}
+            'start_time': DateInput(
+                attrs={'type': 'datetime-local'},
+                format='%Y-%m-%dT%H:%M'
             ),
-            'end_time': SplitDateTimeWidget(
-                date_attrs={'type': 'date', 'class': 'form-control'},
-                time_attrs={'type': 'time', 'class': 'form-control'}
-            )
+            'end_time': DateInput(
+                attrs={'type': 'datetime-local'},
+                format='%Y-%m-%dT%H:%M'
+            ),
         }
-        '''
+
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        # Parse HTML5 datetime-local input to datetime field
+        self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
+        self.fields['end_time'].input_formats = ('%Y-%m-%dT%H:%M',)

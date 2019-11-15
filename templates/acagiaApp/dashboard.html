@@ -6,21 +6,7 @@
 {% endblock %}
 
 {% block content_block %}
-<!-- Jumbtron academy information -->
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <a href="/academy/update-academy/{{ academy.id }}" class="btn
-        btn-info float-right
-        btn-lg">
-          <i class="fas fa-edit fa-lg"></i>
-        </a>
-        <h1 class="display-3">{{ academy }}</h1><br/>
-        <h5>Academy Type: {{ academy.aca_type }}</h5>
-        <h5>Office Phone: {{ academy.office_phone }}</h5>
-        <h5>Location: {{ academy.location }}</h5>
-        <h5>Time Zone: {{ academy.time_zone }}</h5>
-    </div>
-</div>
+<a href="{% url 'cal' %}" class="btn btn-info btn-lg mb-5">Calendar</a>
 <!-- Numbers -->
 <div class="card-columns">
     <div class="card bg-primary text-light text-center">
@@ -41,7 +27,7 @@
     </a>
     </div> <!-- end card -->
     <div class="card bg-info text-light text-center">
-      <a href="{% url 'att_list' %}">
+      <a href="{% url 'att_by_date' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
             <i class="far fa-calendar-check"></i>&nbsp;&nbsp;{{ num_att }}

@@ -2,15 +2,18 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe # for calender
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .forms import AcademyForm, MemberForm, CourseForm, CheckInForm, \
     MemberUpdateForm, AttendanceForm, RankFormset, RankForm, MemberRankForm,\
-    EventForm
+    EventForm, AttendanceDateForm
 from .models import Academy, Member, Attendance, Course, Rank, MemberRank, \
     Event
+from .utils import Calendar
 from django.contrib import messages
 from django.utils import timezone
 from datetime import date, timedelta
+import calendar
 from django.db import IntegrityError
 import pytz
 
@@ -424,13 +427,42 @@ def reset_days(member):
     """
     member.days_attended = 0
 
+def attendance_by_date(request):
+    """
+    Shows a specific date's attendance records.
+    """
+    aca_id = request.session['aca_id']
+    template_name = 'acagiaApp/att_date_list.html'
+    form = AttendanceDateForm
+    today = timezone.localdate() # Get today
+    # Get today's attendance records
+    records = Attendance.objects.filter(aca_id=aca_id, date_attended=today)
+    num = records.count()
+    day = 'Today'
+    # When specific date is given by the user, search records by the date
+    if request.method == 'POST':
+        form = AttendanceDateForm(request.POST)
+        if form.is_valid():
+            input_date = form.cleaned_data['date_attended']
+            records = Attendance.objects.filter(aca_id=aca_id,
+                                                date_attended=input_date)
+            num = records.count()
+            day = 'on ' + str(input_date)
+            if not records:
+                msg = 'No records found on ' + str(input_date)
+                messages.error(request, msg)
+                return redirect('/academy/attendance/')
+
+    return render(request, template_name, {'form': form, 'records': records,
+                                           'num': num, 'day' : day})
+
 @method_decorator(login_required, name='dispatch')
 class AttendanceListView(ListView):
     """
     Shows the list of attendance records.
     """
     model = Attendance
-    template_name = 'acagiaApp/att_list.html'
+    template_name = 'acagiaApp/att_manage_list.html'
 
     def get_context_data(self, **kwargs):
         aca_id = self.request.session['aca_id']
@@ -796,3 +828,80 @@ class EventListView(ListView):
             aca_id=aca_id
         )
         return context
+
+@method_decorator(login_required, name='dispatch')
+class CalendarView(ListView):
+    """
+    Shows a calendar view with prev/next links.
+    """
+    model = Event
+    template_name = 'acagiaApp/calendar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Use today's date for the calender view
+        d = get_date(self.request.GET.get('month', None))
+
+        # Instantiate the calendar class with today's year and date
+        cal = Calendar(d.year, d.month)
+
+        # Call the formatmonth method, which returns the calendar as a table
+        html_cal = cal.formatmonth(withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        context['prev_month'] = prev_month(d)
+        context['next_month'] = next_month(d)
+        return context
+
+def get_date(req_day):
+    """
+    Gets a requested date to properly display monthly view.
+    :param req_day: requested day from previous/next month
+    :return: date to set a monthly view in the calendar.
+    """
+    if req_day:
+        year, month = (int(x) for x in req_day.split('-'))
+        print('req_day: ', req_day)
+        return date(year, month, day=1)
+    print('here')
+    return timezone.localdate()
+
+def prev_month(d):
+    """
+    Sets a previous month for display.
+    :param d: current day given
+    :return: previous month
+    """
+    first = d.replace(day=1)
+    prev_month = first - timedelta(days=1)
+    month = 'month=' + str(prev_month.year) + '-' + str(prev_month.month)
+    print('prev_month: ', month)
+    return month
+
+def next_month(d):
+    """
+    Sets a next month for display.
+    :param d: current day given
+    :return: next month
+    """
+    days_in_month = calendar.monthrange(d.year, d.month)[1]
+    last = d.replace(day=days_in_month)
+    next_month = last + timedelta(days=1)
+    month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
+    print('next_month: ', month)
+    return month
+
+@login_required
+def settings(request):
+    return render(request, 'acagiaApp/settings.html')
+
+@login_required
+def academy_info(request):
+    """
+    Shows academy information page
+    """
+    aca_id = request.session['aca_id']
+    academy = Academy.objects.get(id=aca_id)
+    template_name = 'acagiaApp/academy_info.html'
+    return render(request, template_name, {'academy': academy})
+

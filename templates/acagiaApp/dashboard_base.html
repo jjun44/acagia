@@ -6,6 +6,8 @@
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">>
 {% endblock %}
+{% block dash_head_block %}
+{% endblock %}
 {% block body_block %}
 <div class="wrapper">
 <!-- Sidebar -->
@@ -40,13 +42,13 @@
       </a>
     </li>
     <li id="attendance" class="">
-      <a href="{% url 'att_list' %}">
+      <a href="{% url 'att_by_date' %}">
        <i class="fas fa-clipboard-check fa-lg ml-1 mr-4"></i>Attendance
       </a>
     </li>
     <hr/>
     <li id="settings" class="">
-      <a href="{% url 'rank_sys_list' %}">
+      <a href="{% url 'settings' %}">
        <i class="fas fa-cog fa-lg ml-1 mr-3"></i>Settings
       </a>
     </li>

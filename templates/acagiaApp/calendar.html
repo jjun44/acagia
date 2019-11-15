@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+
+{% block dash_head_block %}
+  <link rel="stylesheet" href="{% static 'css/cal-style.css' %}?"/>
+{% endblock %}
+
+{% block title_block %}
+  <title name="dashboard">Calendar</title>
+{% endblock %}
+
+{% block content_block %}
+<div class="clearfix">
+    <a href="{% url 'cal' %}?{{ prev_month }}" class="btn btn-info
+    left">Previous Month</a>
+    <a href="{% url 'cal' %}?{{ next_month }}" class="btn btn-info
+    left">Next Month</a>
+</div>
+{{ calendar }}
+{% endblock %}
+
+
+
+

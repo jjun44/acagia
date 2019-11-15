@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+  <title name="settings">Settings</title>
+{% endblock %}
+
+{% block content_block %}
+<div class="detail-wrapper">
+<div class="row">
+  <div class="col-4">
+    Manage Academy Information:
+  </div>
+  <div class="col-8 text-left">
+    <a href="{% url 'aca_info' %}"><button class="btn btn-dark mb-2">
+        <i class="fas fa-cogs"></i>
+    </button></a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    Manage Ranking System:
+  </div>
+  <div class="col-8">
+    <a href="{% url 'rank_sys_list' %}"><button class="btn btn-dark mb-2">
+      <i class="fas fa-cogs"></i>
+    </button></a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    Manage Attendance Records:
+  </div>
+  <div class="col-8 text-left">
+    <a href="{% url 'att_list' %}"><button class="btn btn-dark mb-2">
+        <i class="fas fa-cogs"></i>
+    </button></a>
+  </div>
+</div>
+</div>
+{% endblock %}
