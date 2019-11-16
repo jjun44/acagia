@@ -15,6 +15,7 @@ from django.utils import timezone
 from datetime import date, timedelta
 import calendar
 from django.db import IntegrityError
+from django.db.models import Q
 import pytz
 
 DATE_FORMAT = '%Y-%m-%d'
@@ -655,7 +656,7 @@ def promotion_list(request):
         mem_rank = {} # Each member's promotion info will be saved
         if not member.rank: # Member isn't assigned a rank yet
             pre = 'X'
-            current = 'X'
+            current = 'New Member'
             next = first_rank
         else: # Member is currently associated with a rank
             current = member.rank # Get the current rank
@@ -685,7 +686,7 @@ def promotion_list(request):
                 next = all_ranks.filter(
                     rank_order__gt=member.rank.rank_order).first()
 
-        if current == 'X' or next == 'X':
+        if current == 'New Member' or next == 'X':
             days_left = 'X'
         else:
             days_left = current.days_required - member.days_attended
@@ -804,6 +805,10 @@ class EventCreateView(CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.aca_id = self.request.session['aca_id']
+        #self.object.start_time = localize_datetime(self.request,
+        # self.object.start_time)
+        #self.object.end_time = localize_datetime(self.request,
+        #                                          self.object.end_time)
         self.object.save()
         return super().form_valid(form)
 
@@ -812,6 +817,14 @@ class EventCreateView(CreateView):
         context['template'] = {'action_name': 'Create New Event',
                                'btn_name': 'Create Event'}
         return context
+
+def localize_datetime(request, dt):
+    tz = pytz.timezone(request.session['django_timezone'])
+    print(tz)
+    print(dt)
+    new_dt = tz.localize(dt.replace(tzinfo=None))
+    print(new_dt)
+    return new_dt
 
 @method_decorator(login_required, name='dispatch')
 class EventListView(ListView):
@@ -838,8 +851,10 @@ def events_by_date(request):
     template_name = 'acagiaApp/event_list.html'
     form = AttendanceDateForm
     today = timezone.localdate() # Get today
+    all_events = Event.objects.filter(aca_id=aca_id) # Get all events
     # Get today's events
-    events = Event.objects.filter(aca_id=aca_id, start_time__contains=today)
+    events = all_events.filter(Q(start_time__contains=today) |
+                               (Q(start_time__lte=today) & Q(end_time__gte=today)))
     num = events.count()
     day = 'Today'
     # When specific date is given by the user, search records by the date
@@ -847,8 +862,9 @@ def events_by_date(request):
         form = AttendanceDateForm(request.POST)
         if form.is_valid():
             input_date = form.cleaned_data['date_attended']
-            events = Event.objects.filter(aca_id=aca_id,
-                                          start_time__contains=input_date)
+            events = all_events.filter(Q(start_time__contains=input_date) |
+                                       (Q(start_time__lte=input_date) &
+                                       Q(end_time__gte=input_date))).order_by('start_time')
             num = events.count()
             day = 'on ' + str(input_date)
             if not events:
@@ -858,6 +874,32 @@ def events_by_date(request):
 
     return render(request, template_name, {'form': form, 'events': events,
                                            'num': num, 'day' : day})
+
+@method_decorator(login_required, name='dispatch')
+class EventUpdateView(UpdateView):
+    """
+    Updates event information.
+    """
+    model = Event
+    form_class = EventForm
+    template_name = 'acagiaApp/event_form.html'
+    success_url = reverse_lazy('event_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template'] = {'action_name': 'Update Event', 'btn_name':
+            'Update'}
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class EventDeleteView(DeleteView):
+    """
+    Deletes a selected event.
+    """
+    model = Event
+
+    def get_success_url(self):
+        return reverse('event_list')
 
 @method_decorator(login_required, name='dispatch')
 class CalendarView(ListView):

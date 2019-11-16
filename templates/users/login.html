@@ -7,36 +7,46 @@
 {% endblock %}
 {% block body_block %}
     <!-- LOGIN FORM -->
-    <div class="pt-5 container">
+<div class="pt-5 container">
     <div class="pt-5 row">
     <div class="col-md-6 offset-md-3">
-      <div class="card bg-primary text-center card-form">
+      <div class="card bg-white border-primary bg-light text-black-50
+      text-center
+      card-form">
         <div class="card-body">
-          <h3>Acagia</h3>
-          <p>{{ form.errors|striptags }}</p>
+          <h3 class="text-primary">Acagia</h3>
+          <p class="mb-4">Login with your account and manage your academy
+              now!</p>
+          <hr/>
+          <div class="mb-5"></div>
+          {% if form.errors %}
+          <p class="text-danger">Please enter correct username and password.</p>
+          {% endif %}
           <form method="post">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="form-group mx-auto" style="width:70%;">
                   {{ form.username }}
             </div>
-            <div class="form-group">
+            <div class="form-group mx-auto" style="width:70%;">
                   {{ form.password }}
             </div>
             <button
               type="submit"
-              class="btn btn-outline-light btn-block btn-lg">
+              class="my-5 btn btn-primary btn-block mx-auto"
+              style="width:70%;">
                 Log In
             </button>
             <p class="mt-3">Don't have an account?
-                <a href="{% url 'signup' %}" class="text-info">Sign up</a></p>
-            <a href="{% url 'home' %}" class="text-info mt-2">Go back to
-                home?</a>
+                <a href="{% url 'signup' %}" class="text-primary">Sign
+                    up</a></p>
+            <a href="{% url 'home' %}" class="text-primary mt-2">Go back to
+                home</a>
           </form>
         </div>
       </div>
     </div>
     </div>
-    </div>
+</div>
 {% endblock %}
 
 

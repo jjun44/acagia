@@ -52,15 +52,29 @@
     <th>Start Time</th>
     <th>End Time</th>
     <th>Description</th>
+    <th>Operations</th>
   </tr>
 </thead>
 <tboday>
 {% for event in events %}
   <tr>
     <td>{{ event.title }}</td>
-    <td>{{ event.start_time|date:"Y-m-d, H:i" }}</td>
-    <td>{{ event.end_time|date:"Y-m-d, H:i" }}</td>
+    <td>{{ event.start_time|date:"m/d/Y H:i" }}
+    <td>{{ event.end_time|date:"m/d/Y H:i" }}</td>
     <td>{{ event.description }}</td>
+    <td>
+        <a href="/academy/events/update-event/{{ event.id }}" class="btn
+        btn-success
+        btn-sm mr-2">
+          <i class="fas fa-edit fa-lg"></i>
+        </a>
+        <a href="#confirm-modal" class="btn btn-danger btn-sm"
+           id="delete-link" data-toggle="modal"
+           data-id="{{ event.id }}" data-name="{{ event }}"
+           data-link="/academy/events/delete-event/">
+            <i class="fas fa-trash-alt fa-lg"></i>
+        </a>
+    </td>
   </tr>
 {% endfor %}
 </tboday>

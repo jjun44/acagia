@@ -5,6 +5,8 @@ from PIL import Image # for resizing image file
 from datetime import timedelta # for calculating age based on birth day
 import pytz # for choices of common time zones
 from django.utils import timezone
+from django.utils.timezone import get_current_timezone, make_aware, utc
+import datetime
 
 '''
 class Address(models.Model):
@@ -211,6 +213,33 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def start_time_tz(self):
+        return localize_datetime(self.start_time)
+
+    @property
+    def end_time_tz(self):
+        return localize_datetime(self.end_time)
+    '''
+    def save(self, *args, **kwargs):
+        print(self.start_time, self.end_time)
+        tz = self.request.session['django_timezone']
+        print(localize_datetime(tz, self.start_time), localize_datetime(tz,
+            self.end_time))
+        super().save(*args, **kwargs)
+    '''
+
+def localize_datetime(tz_name, dtime):
+    """
+    Maeks DateTimeField value UTC-aware and returns datetime string
+    localized in user's timezone.
+    """
+    #tz_aware = make_aware(dtime, utc).astimezone(get_current_timezone())
+    #return datetime.datetime.strftime(tz_aware, '%Y-%m-%d %H:%M')
+    tz = pytz.timezone(tz_name)
+    new_dt = tz.localize(dtime.replace(tzinfo=None))
+    return new_dt
 
 class MemberEvent(models.Model):
     aca = models.ForeignKey(
