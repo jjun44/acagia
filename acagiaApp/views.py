@@ -83,7 +83,7 @@ class AcademyCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['template'] = {'action_name': 'Add New Academy',
+        context['template'] = {'action_name': 'Add new academy to manage now!',
                                'btn_name': 'Add Academy'}
         return context
 

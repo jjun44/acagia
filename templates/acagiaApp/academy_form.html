@@ -11,19 +11,23 @@
 <div class="pt-5 container">
   <div class="pt-5 row">
     <div class="col-md-6 offset-md-3">
-      <div class="card bg-primary text-left card-form">
+      <div class="card bg-white border-info bg-light text-black-50
+      text-center
+      card-form">
         <div class="card-body">
+          <h3 class="text-info">Acagia</h3>
+          <p class="mb-3">{{ template.action_name }}</p>
+          <hr/>
           <form method="post">
             {% csrf_token %}
-            <h3 class="mb-3 text-center" >{{ template.action_name }}</h3>
             {{ form|crispy }}
             <button
               type="submit"
-              class="btn btn-outline-light btn-block mt-3 mb-3">
+              class="btn btn-info btn-block mt-4 mb-3">
                 {{ template.btn_name }}
             </button>
             <a href="{% url 'aca_list' %}" class="text-info
-            col-6 offset-3">Go back to the academy list</a>
+            ">Go back to the academy list</a>
           </form>
         </div> <!-- end card body -->
       </div> <!-- end card -->
