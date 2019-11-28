@@ -10,15 +10,16 @@
 <div class="pt-5 container">
 <div class="pt-5 row">
 <div class="col-md-6 offset-md-3">
-  <div class="card bg-info text-center card-form">
-    <div class="card-body">
+  <div class="card border-info text-center card-form">
+    <div class="card-body text-info">
         <h2 class="mt-4">Thank you,</h2><br>
         <h3 class="mb-5">You are successfully checked in!</h3>
         <a href="{% url 'check_in' %}"><button
           type="submit"
-          class="btn btn-lg btn-outline-light btn-block">
+          class="my-4 btn btn-info btn-block btn-lg mx-auto"
+          style="width:80%;">
             Click to Check In
-        </button></a>
+        </button>
     </div>
   </div>
 </div>
