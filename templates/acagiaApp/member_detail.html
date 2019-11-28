@@ -2,7 +2,7 @@
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-  <title name="members">{{ academy }} - Members</title>
+  <title name="members">Member details</title>
 {% endblock %}
 
 {% block content_block %}
@@ -17,11 +17,6 @@ mb-2">Member
     </div>
     <div class="col-md-7 text-center">
       <p class="display-2 mt-5">{{ member }}</p>
-      {% if member.mr_mem.rank %}
-      <h1>{{ member.mr_mem.rank }} Rank</h1>
-      {% else %}
-      <h1>No Rank Assigned </h1>
-      {% endif %}
     </div>
   </div>
   <hr/>
@@ -33,6 +28,14 @@ mb-2">Member
         <tr>
           <td class="table-info text-primary">Type</td>
           <td class="text-center">{{ member.mem_type }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Rank</td>
+          {% if member.mr_mem.rank %}
+          <td>{{ member.mr_mem.rank }} Rank</td>
+          {% else %}
+          <td>No Rank Assigned </td>
+      {% endif %}
         </tr>
         <tr>
           <td class="table-info text-primary">Status</td>

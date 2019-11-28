@@ -2,12 +2,12 @@
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-  <title name="dashboard">{{ academy }} - Dashboard</title>
+  <title name="dashboard">Manage Academy Information</title>
 {% endblock %}
 
 {% block content_block %}
 <!-- Jumbtron academy information -->
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron-fluid text-black-50">
     <div class="container">
         <a href="/academy/update-academy/{{ academy.id }}" class="btn
         btn-info float-right

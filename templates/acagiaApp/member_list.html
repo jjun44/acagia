@@ -2,7 +2,7 @@
 {% extends 'acagiaApp/dashboard_base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-  <title name="members">{{ academy }} - Members</title>
+  <title name="members">Manage members</title>
 {% endblock %}
 
 {% block content_block %}
@@ -17,6 +17,7 @@ mb-2">Add
       <th>Last Name</th>
       <th>Age</th>
       <th>Gender</th>
+      <th>Rank</th>
       <th>Status</th>
       <th>Type</th>
       <th>Operations</th>
@@ -30,6 +31,7 @@ mb-2">Add
       <td>{{ member.last_name }}</td>
       <td>{{ member.age }}</td>
       <td>{{ member.gender }}</td>
+      <td>{{ member.mr_mem.rank }}</td>
       <td class="{% if member.status == 'Active' %} text-success
             {% elif member.status == 'Inactive' %} text-warning
             {% else %}text-danger
