@@ -351,3 +351,22 @@ class Attendance(models.Model):
         return str(self.member) + '\'s attendance record on ' + str(
             self.date_attended)
 
+class MemberPayment(models.Model):
+    PAID = 'Paid'
+    UNPAID = 'Unpaid'
+    PAY_STATUS = [
+        (PAID, 'Paid'),
+        (UNPAID, 'Unpaid'),
+    ]
+
+    aca = models.ForeignKey(
+        Academy, related_name='pay_aca', on_delete=models.CASCADE
+    )
+    member = models.OneToOneField(
+        Member, related_name='pay_mem', on_delete=models.CASCADE
+    )
+    payday = models.DateField(auto_now_add=True, editable=True)
+    last_payment = models.DateField(auto_now_add=True, editable=True)
+    status = models.CharField(max_length=6, choices=PAY_STATUS)
+
+

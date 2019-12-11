@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import *
+from acagiaApp.views.academy import *
+from acagiaApp.views.members import *
+from acagiaApp.views.courses import *
+from acagiaApp.views.attendance import *
+from acagiaApp.views.promotion import *
+from acagiaApp.views.events import *
 
 urlpatterns = [
     # ACADEMY
