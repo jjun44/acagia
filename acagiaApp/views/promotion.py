@@ -257,6 +257,14 @@ def promote_demote(request, operation, members, ranks):
     if num_fail > 0:
         messages.error(request, str(num_fail) + fail_msg[0:-2])
 
+def reset_days(member):
+    """
+    Resets member's days attended at the current rank to 0
+    when he/she gets promoted or demoted (whenever rank changes).
+    :param member: (MemberRank) given member's rank object
+    """
+    member.days_attended = 0
+
 @method_decorator(login_required, name='dispatch')
 class MemberRankUpdateView(UpdateView):
     """
@@ -277,3 +285,5 @@ class MemberRankUpdateView(UpdateView):
         context['template'] = {'action_name': 'Update Rank', 'btn_name':
             'Update'}
         return context
+
+

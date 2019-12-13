@@ -80,14 +80,6 @@ def increase_days(id):
     mem_rank.total_days += 1
     mem_rank.save()
 
-def reset_days(member):
-    """
-    Resets member's days attended at the current rank to 0
-    when he/she gets promoted or demoted (whenever rank changes).
-    :param member: (MemberRank) given member's rank object
-    """
-    member.days_attended = 0
-
 def attendance_by_date(request):
     """
     Shows a specific date's attendance records.
