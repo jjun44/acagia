@@ -76,8 +76,7 @@ class Member(models.Model):
     ]
     GENDER = [
         ('M', 'Male'),
-        ('F', 'Female'),
-        ('N/A', 'Other')
+        ('F', 'Female')
     ]
     ACTIVE = 'Active'
     INACTIVE = 'Inactive'
@@ -206,10 +205,12 @@ class Event(models.Model):
     aca = models.ForeignKey(
         Academy, related_name='e_aca', on_delete=models.CASCADE
     )
-    title = models.CharField(max_length=30)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    description = models.TextField(blank=True, null=True)
+    title = models.CharField(max_length=255)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title

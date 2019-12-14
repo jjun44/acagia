@@ -215,6 +215,7 @@ class RankForm(forms.ModelForm):
 # https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
 RankFormset = formset_factory(RankForm, extra=1)
 
+'''
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -235,3 +236,18 @@ class EventForm(forms.ModelForm):
         # Parse HTML5 datetime-local input to datetime field
         self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
         self.fields['end_time'].input_formats = ('%Y-%m-%dT%H:%M',)
+'''
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ('title', 'start_date', 'end_date', 'start_time',
+                  'end_time', 'notes')
+        widgets = {
+            'start_date': DateInput(attrs={'type': 'date'}),
+            'end_date': DateInput(attrs={'type': 'date'}),
+            'start_time': TimeInput(attrs={'type': 'time'},
+                                    format='%H:%M'),
+            'end_time': TimeInput(attrs={'type': 'time'},
+                                  format='%H:%M')
+        }

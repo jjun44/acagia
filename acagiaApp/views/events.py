@@ -81,8 +81,11 @@ def events_by_date(request):
     today = timezone.localdate() # Get today
     all_events = Event.objects.filter(aca_id=aca_id) # Get all events
     # Get today's events
-    events = all_events.filter(Q(start_time__contains=today) |
-                               (Q(start_time__lte=today) & Q(end_time__gte=today)))
+    events = all_events.filter(Q(start_date__lte=today) &
+                               Q(end_date__gte=today)).order_by('start_time')
+    #events = all_events.filter(Q(start_time__contains=today) |
+    #                         (Q(start_time__lte=today) & Q(
+    #                         end_time__gte=today)))
     num = events.count()
     day = 'Today'
     # When specific date is given by the user, search records by the date
@@ -90,9 +93,8 @@ def events_by_date(request):
         form = AttendanceDateForm(request.POST)
         if form.is_valid():
             input_date = form.cleaned_data['date_attended']
-            events = all_events.filter(Q(start_time__contains=input_date) |
-                                       (Q(start_time__lte=input_date) &
-                                       Q(end_time__gte=input_date))).order_by('start_time')
+            events = all_events.filter(Q(start_date__lte=input_date) &
+                                       Q(end_date__gte=input_date)).order_by('start_time')
             num = events.count()
             day = 'on ' + str(input_date)
             if not events:
