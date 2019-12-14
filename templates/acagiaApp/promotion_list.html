@@ -34,6 +34,7 @@
         <a class="checkall" href="#"><i class="fas fa-check-square
         fa-lg"></i></a>
       </th>
+      <th>Member Photo</th>
       <th>Member Name</th>
       <th>Previous Rank</th>
       <th>Current Rank</th>
@@ -49,6 +50,8 @@
     {% for member in prom_list %}
     <tr>
       <td><input type="checkbox" name="members" value="{{ member.id }}"/></td>
+      <td><img src="{{ member.photo.url }}" height="100" alt=
+              "{{ member }}"/></td>
       <td>{{ member.name }}</td>
       <td>{{ member.pre }}</td>
       <td>{{ member.current }}</td>
