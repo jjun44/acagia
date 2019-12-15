@@ -34,6 +34,8 @@ urlpatterns = [
     path('promotion/', promotion_list, name='promo_list'),
     path('promotion/update-rank/<int:pk>/', MemberRankUpdateView.as_view(),
          name='update_mem_rank'),
+    path('promotion/add-members/<int:pk>', add_members_to_event,
+         name='event_add_mems'),
 
     # COURSES
     path('courses/', CourseListView.as_view(), name='course_list'),

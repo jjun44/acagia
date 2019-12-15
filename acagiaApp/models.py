@@ -210,37 +210,11 @@ class Event(models.Model):
     end_date = models.DateField()
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
+    credit = models.IntegerField(blank=True, null=True, default=0)
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title
-
-    @property
-    def start_time_tz(self):
-        return localize_datetime(self.start_time)
-
-    @property
-    def end_time_tz(self):
-        return localize_datetime(self.end_time)
-    '''
-    def save(self, *args, **kwargs):
-        print(self.start_time, self.end_time)
-        tz = self.request.session['django_timezone']
-        print(localize_datetime(tz, self.start_time), localize_datetime(tz,
-            self.end_time))
-        super().save(*args, **kwargs)
-    '''
-
-def localize_datetime(tz_name, dtime):
-    """
-    Maeks DateTimeField value UTC-aware and returns datetime string
-    localized in user's timezone.
-    """
-    #tz_aware = make_aware(dtime, utc).astimezone(get_current_timezone())
-    #return datetime.datetime.strftime(tz_aware, '%Y-%m-%d %H:%M')
-    tz = pytz.timezone(tz_name)
-    new_dt = tz.localize(dtime.replace(tzinfo=None))
-    return new_dt
 
 class MemberEvent(models.Model):
     aca = models.ForeignKey(
@@ -252,9 +226,9 @@ class MemberEvent(models.Model):
     event = models.ForeignKey(
         Event, related_name='me_event', on_delete=models.SET('Deleted')
     )
-    division = models.CharField(max_length=30)
+    division = models.CharField(max_length=254, blank=True, null=True)
     weight = models.FloatField(blank=True, null=True)
-    reward = models.CharField(max_length=20, blank=True, null=True)
+    reward = models.CharField(max_length=100, blank=True, null=True)
 
 class Rank(models.Model):
     GENERAL = 'General'

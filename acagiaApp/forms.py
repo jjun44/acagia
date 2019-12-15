@@ -242,7 +242,10 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('title', 'start_date', 'end_date', 'start_time',
-                  'end_time', 'notes')
+                  'end_time', 'credit', 'notes')
+        labels = {
+            'credit': 'Attendance credit'
+        }
         widgets = {
             'start_date': DateInput(attrs={'type': 'date'}),
             'end_date': DateInput(attrs={'type': 'date'}),

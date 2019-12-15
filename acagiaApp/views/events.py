@@ -14,10 +14,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from acagiaApp.forms import EventForm, AttendanceDateForm
-from acagiaApp.models import Event
+from acagiaApp.models import Event, Member
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
+from .attendance import increase_days
 import pytz
 
 @method_decorator(login_required, name='dispatch')
@@ -54,6 +55,7 @@ def localize_datetime(request, dt):
     print(new_dt)
     return new_dt
 
+'''
 @method_decorator(login_required, name='dispatch')
 class EventListView(ListView):
     """
@@ -69,11 +71,14 @@ class EventListView(ListView):
             aca_id=aca_id
         )
         return context
+'''
 
 @login_required
 def events_by_date(request):
     """
     Shows events by a specific date.
+    Default date is today when entering the Events tab initially
+    or when there's no event found with the given date.
     """
     aca_id = request.session['aca_id']
     template_name = 'acagiaApp/event_list.html'
@@ -130,3 +135,77 @@ class EventDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('event_list')
+
+@login_required
+def add_members_to_event(request, **kwargs):
+    """
+    Gives a given credit for attendance to all selected event attendees.
+    :param kwargs: includes event id
+    :return:
+    """
+    aca_id = request.session['aca_id']
+    event_id = kwargs['pk']
+    template_name = 'acagiaApp/event_add_members.html'
+    # Get all members in alphabetical order
+    members = Member.objects.filter(aca_id=aca_id).order_by('first_name')
+    # Get clicked event
+    event = Event.objects.get(id=event_id)
+
+    if request.method == 'POST':
+        error_msg = 'Please select members.'
+        # Get all selected members
+        selected_ids = request.POST.getlist('members')
+        # Get the input credit entered by the user
+        #credit = request.POST.get('credits')
+        if give_credits(selected_ids, event.credit):
+            reverse_lazy('event_list')
+        else:
+            messages.error(request, error_msg)
+
+    return render(request, template_name, {'members': members, 'event': event})
+
+def validate_number(num):
+    """
+    Checks if the given number is a positive integer number and not empty.
+    :param num: number or string
+    :return: true if num is valid, otherwise, false
+    """
+    if is_integer(num):
+        num = int(num)
+        if num < 0:
+            return False
+        return True
+    else:
+        return False
+
+def is_integer(n):
+    """
+    Checks if n is an integer, not a string nor float number.
+    :param n: given number or string to validate
+    :return: True if n is integer, otherwise, false
+    """
+    try:
+        int(n)
+    except ValueError:
+        return False
+    else:
+        if isinstance(n, float):
+            return False
+        else:
+            return True
+
+def give_credits(member_ids, credit):
+    """
+
+    :param request:
+    :param members:
+    :return: true if giving credit was done successfully, otherwise, false
+    """
+    # No members selected? send error msg and return
+    print(member_ids, credit)
+    if not member_ids or not validate_number(credit):
+        return False
+    # Give credit to each selected member
+    for id in member_ids:
+        increase_days(id, int(credit))
+    return True

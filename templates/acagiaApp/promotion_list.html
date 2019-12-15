@@ -6,10 +6,12 @@
 {% endblock %}
 
 {% block content_block %}
-<div class="card bg-light text-center mb-4">
+<div class="card bg-info text-center mb-4">
   <div class="card-body">
-      <h4 class="card-text text-info">
-         Promote or Demote your members!
+      <h4 class="card-text text-white">
+        Who are ready to be promoted/demoted?<br/>
+        Select members and <strong><span class="text-dark"
+      >promote or demote</span></strong> their rankings!
       </h4>
   </div>
 </div>
@@ -73,13 +75,15 @@
 </table>
 <div class="row text-center">
   <div class="col">
-    <button class="btn btn-danger btn-block mr-3" name="demote_btn"
+    <button class="btn btn-outline-info btn-lg btn-block mr-3"
+            name="demote_btn"
             type="submit">
       <i class="fas fa-arrow-left fa-lg mr-2"></i>DEMOTE
     </button>
   </div>
   <div class="col">
-    <button class="btn btn-primary btn-block ml-3" name="promote_btn"
+    <button class="btn btn-outline-info btn-lg btn-block ml-3"
+            name="promote_btn"
             type="submit">
     PROMOTE<i class="fas fa-arrow-right fa-lg ml-2"></i>
     </button>

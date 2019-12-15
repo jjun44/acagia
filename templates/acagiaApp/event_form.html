@@ -9,7 +9,7 @@
 {% block content_block %}
 <div class="form-wrapper">
 <h2 class="mb-3">{{ template.action_name }}</h2>
-<form method="POST" enctype="multipart/form-data">
+<form method="POST">
   {% csrf_token %}
   {{ form|crispy }}
   <button

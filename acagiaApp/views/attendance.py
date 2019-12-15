@@ -54,7 +54,7 @@ def check_in(request):
             record.date_attended = timezone.localdate()
             record.time_attended = timezone.localtime().strftime(TIME_FORMAT)
             form.save()
-            increase_days(member.id)
+            increase_days(member.id, 1)
             return redirect('/academy/checkin/success/')
     return render(request, 'acagiaApp/checkin_form.html',
                   {'form': form})
@@ -69,15 +69,16 @@ def check_in_success(request, **kwargs):
     """
     return render(request, 'acagiaApp/checkin_success.html')
 
-def increase_days(id):
+def increase_days(id, credit):
     """
-    Increases member's days attended at the current rank.
+    Increases member's days attended at the current rank by amount of credit.
     :param id: (Number) member id
+    :param credit: (Number) credit for attendance
     """
     # Get the given member's rank object
     mem_rank = MemberRank.objects.get(member_id=id)
-    mem_rank.days_attended += 1
-    mem_rank.total_days += 1
+    mem_rank.days_attended += credit
+    mem_rank.total_days += credit
     mem_rank.save()
 
 def attendance_by_date(request):

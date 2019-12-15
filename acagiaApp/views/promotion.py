@@ -209,6 +209,7 @@ def promote_demote(request, operation, members, ranks):
     success_msg = ' members ' + operation + 'd successfully: '
     # Get all selected member ids
     selected_ids = request.POST.getlist('members')
+    print(selected_ids)
     # number of failed members
     num_fail = 0
     num_success = 0
