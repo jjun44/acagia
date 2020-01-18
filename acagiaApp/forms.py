@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import formset_factory
 from .models import Academy, Member, Course, Attendance, Rank, MemberRank, \
-    Event
+    Event, MemberEvent
 from django.forms.widgets import TextInput, Select, EmailInput, DateInput, \
     TimeInput, SplitDateTimeWidget, DateTimeInput
 
@@ -244,6 +244,7 @@ class EventForm(forms.ModelForm):
         fields = ('title', 'start_date', 'end_date', 'start_time',
                   'end_time', 'credit', 'notes')
         labels = {
+            'start_time': 'Start time (set to All Day if not specified)',
             'credit': 'Attendance credit'
         }
         widgets = {

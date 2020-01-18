@@ -14,11 +14,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from acagiaApp.forms import EventForm, AttendanceDateForm
-from acagiaApp.models import Event, Member
+from acagiaApp.models import Event, Member, MemberEvent
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
-from .attendance import increase_days
+from .attendance import increase_days, decrease_days
 import pytz
 
 @method_decorator(login_required, name='dispatch')
@@ -105,7 +105,7 @@ def events_by_date(request):
             if not events:
                 msg = 'No events found on ' + str(input_date)
                 messages.error(request, msg)
-                return redirect('/academy/events/')
+                return redirect((reverse('event_list')))
 
     return render(request, template_name, {'form': form, 'events': events,
                                            'num': num, 'day' : day})
@@ -118,7 +118,9 @@ class EventUpdateView(UpdateView):
     model = Event
     form_class = EventForm
     template_name = 'acagiaApp/event_form.html'
-    success_url = reverse_lazy('event_list')
+
+    def get_success_url(self):
+        return reverse('event_detail', kwargs={'pk': self.kwargs['pk']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -139,30 +141,93 @@ class EventDeleteView(DeleteView):
 @login_required
 def add_members_to_event(request, **kwargs):
     """
-    Gives a given credit for attendance to all selected event attendees.
+    Add attending/attended members to the event
+    to give attendance credit.
     :param kwargs: includes event id
     :return:
     """
     aca_id = request.session['aca_id']
     event_id = kwargs['pk']
     template_name = 'acagiaApp/event_add_members.html'
-    # Get all members in alphabetical order
-    members = Member.objects.filter(aca_id=aca_id).order_by('first_name')
+
     # Get clicked event
     event = Event.objects.get(id=event_id)
+    # https://stackoverflow.com/questions/4523282/django-in-not-in-query
+    # Get all members in the academy
+    all_members = Member.objects.filter(aca_id=aca_id)
+    # Get members not added to the event yet in alphabetical order
+    members = all_members.exclude(
+        id__in=MemberEvent.objects.filter(
+            event_id=event.id).values_list('member_id', flat=True)).order_by(
+        'first_name')
 
     if request.method == 'POST':
         error_msg = 'Please select members.'
         # Get all selected members
         selected_ids = request.POST.getlist('members')
-        # Get the input credit entered by the user
-        #credit = request.POST.get('credits')
-        if give_credits(selected_ids, event.credit):
-            reverse_lazy('event_list')
+
+        # Successful process will redirect to event detail page
+        if give_credit(selected_ids, event.credit, event.id):
+            # https://docs.djangoproject.com/en/3.0/ref/urlresolvers/
+            return redirect(reverse('event_detail', kwargs={'pk': event.id}))
         else:
             messages.error(request, error_msg)
 
     return render(request, template_name, {'members': members, 'event': event})
+
+@login_required
+def event_detail_view(request, **kwargs):
+    """
+    Displays event information with all its attendees.
+    """
+    event_id = kwargs['pk']
+    event = Event.objects.get(id=event_id)
+    # https://docs.djangoproject.com/en/2.2/ref/models/querysets/#in
+    mem_event = MemberEvent.objects.filter(event_id=event_id).values(
+        'member_id')
+    members = Member.objects.filter(id__in=mem_event)
+    return render(request, 'acagiaApp/event_detail.html',
+                  {'event': event, 'members': members})
+
+@login_required
+def member_event_delete(request, **kwargs):
+    """
+    Removes an attendee from an event and
+    decrease credit from the attendee's day's attended.
+    """
+    print("HERE")
+    #event_id = kwargs['event']
+    #mem_id = kwargs['mem']
+    #mem_event = MemberEvent.objects.get(event_id=event_id, member_id=mem_id)
+    #decrease_days(mem_id, mem_event.credit)
+    #mem_event.delete()
+    #return redirect('/academy/events/detail/' + event_id + '/')
+    return redirect(reverse('event_list'))
+
+def give_credit(member_ids, credit, event_id):
+    """
+    Gives attendance credit to a list of members and
+    saves member/event info to MemberEvent table.
+    :param member_ids: a list of member ids
+    :param credit: attendance credit
+    :return: true if giving credit was done successfully, otherwise, false
+    """
+    if not member_ids or not validate_number(credit):
+        return False
+    # Give credit to each selected member
+    for id in member_ids:
+        increase_days(id, int(credit))
+        save_member_event(id, event_id)
+    return True
+
+def save_member_event(member_id, event_id):
+    """
+    Saves member and event information to MemberEvent table.
+    :param member_id: member id
+    :param event_id: event id
+    """
+    mem_event = MemberEvent(member_id=member_id, event_id=event_id)
+    mem_event.save()
 
 def validate_number(num):
     """
@@ -194,18 +259,3 @@ def is_integer(n):
         else:
             return True
 
-def give_credits(member_ids, credit):
-    """
-
-    :param request:
-    :param members:
-    :return: true if giving credit was done successfully, otherwise, false
-    """
-    # No members selected? send error msg and return
-    print(member_ids, credit)
-    if not member_ids or not validate_number(credit):
-        return False
-    # Give credit to each selected member
-    for id in member_ids:
-        increase_days(id, int(credit))
-    return True

@@ -154,11 +154,20 @@
      https://stackoverflow.com/questions/10626885/passing-data-to-a-bootstrap-modal */
   // Triggered when modal is about to be shown
   $('#confirm-modal').on('show.bs.modal', function(e) {
-    var id = $(e.relatedTarget).data('id');
+    var id = $(e.relatedTarget).data('id'); // Member id
     var name = $(e.relatedTarget).data('name');
     var link = $(e.relatedTarget).data('link');
     $('#modal-msg').text(name + '?');
-    $('#delete-mem').attr("action", link + id + '/');
+    // For removing an attendee from an event
+    if ($(e.relatedTarget).data('event')) {
+        console.log("HERE!!");
+        var event = $(e.relatedTarget).data('event');
+        console.log(link + event + '/' + id + '/');
+        $('#delete-mem').attr("action", link + event + '/' + id + '/');
+    } else {
+        console.log("SUPPOSED NOT TO BE HERE");
+        $('#delete-mem').attr("action", link + id + '/');
+    }
   });
   </script>
 {% block dashboard_script_block %}

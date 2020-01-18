@@ -34,7 +34,7 @@ urlpatterns = [
     path('promotion/', promotion_list, name='promo_list'),
     path('promotion/update-rank/<int:pk>/', MemberRankUpdateView.as_view(),
          name='update_mem_rank'),
-    path('promotion/add-members/<int:pk>', add_members_to_event,
+    path('promotion/add-members/<int:pk>/', add_members_to_event,
          name='event_add_mems'),
 
     # COURSES
@@ -53,6 +53,9 @@ urlpatterns = [
          name='update_event'),
     path('events/delete-event/<int:pk>/', EventDeleteView.as_view(),
          name='delete_event'),
+    path('events/detail/<int:pk>/', event_detail_view, name='event_detail'),
+    path('events/detail/remove-mem/<int:event>/<int:mem>/',
+         member_event_delete, name='remove_member'),
 
     # CHECK-IN
     path('checkin/', check_in, name='check_in'),

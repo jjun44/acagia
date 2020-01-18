@@ -217,20 +217,18 @@ class Event(models.Model):
         return self.title
 
 class MemberEvent(models.Model):
-    aca = models.ForeignKey(
-        Academy, related_name='me_aca', on_delete=models.CASCADE
-    )
     member = models.ForeignKey(
         Member, related_name='me_mem', on_delete=models.CASCADE
     )
     event = models.ForeignKey(
-        Event, related_name='me_event', on_delete=models.SET('Deleted')
+        Event, related_name='me_event', on_delete=models.CASCADE
     )
-    division = models.CharField(max_length=254, blank=True, null=True)
-    weight = models.FloatField(blank=True, null=True)
+    division = models.CharField(max_length=255, blank=True, null=True)
+    #weight = models.FloatField(blank=True, null=True)
     reward = models.CharField(max_length=100, blank=True, null=True)
 
 class Rank(models.Model):
+    '''
     GENERAL = 'General'
     BJJ = 'Jiu-jitsu'
     TKD = 'Taekwondo'
@@ -280,13 +278,14 @@ class Rank(models.Model):
                 'Purple':24, 'Ad-Purple':24, 'Green':24, 'Blue':24,
                 'Ad-Blue':24, 'Brown':24, 'Red':24, 'Ad-Red':30, 'Danbo':None,
                 'Black':None}
+    '''
 
     aca = models.ForeignKey(
         Academy, related_name='rank_aca', on_delete=models.CASCADE
     )
     #rank_type = models.CharField(max_length=10, choices=RANK_TYPE)
     rank_order = models.IntegerField()
-    rank = models.CharField(max_length=20)
+    rank = models.CharField(max_length=255)
     # number of attendance required
     days_required = models.IntegerField()
 
@@ -326,6 +325,19 @@ class Attendance(models.Model):
         return str(self.member) + '\'s attendance record on ' + str(
             self.date_attended)
 
+class PayTerm(models.Model):
+    aca = models.ForeignKey(
+        Academy, related_name='pay_term_aca', on_delete=models.CASCADE
+    )
+    term_name = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    # e.g. 1 means paying every 1 month, 6 means every 6 months
+    every_n_month = models.IntegerField(default=1)
+    # Number of months to divide the total
+    install_factor = models.IntegerField(null=True)
+    # in % e.g. 1 means 1%, 15 means 15%
+    discount = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+
 class MemberPayment(models.Model):
     PAID = 'Paid'
     UNPAID = 'Unpaid'
@@ -340,8 +352,19 @@ class MemberPayment(models.Model):
     member = models.OneToOneField(
         Member, related_name='pay_mem', on_delete=models.CASCADE
     )
-    payday = models.DateField(auto_now_add=True, editable=True)
-    last_payment = models.DateField(auto_now_add=True, editable=True)
     status = models.CharField(max_length=6, choices=PAY_STATUS)
+    # Member's nth of a month for payment
+    nth_day = models.IntegerField()
+    pay_term = models.ForeignKey(
+        PayTerm, on_delete=models.SET_NULL, null=True
+    )
+    # For use of n monthly or n yearly pay to keep track of how many times
+    # the payment is made
+    month_count = models.IntegerField(null=True)
+    late_fee = models.DecimalField(default=0, blank=True,
+                                   max_digits=5, decimal_places=2)
+
+
+
 
 

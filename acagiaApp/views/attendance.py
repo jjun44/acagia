@@ -81,6 +81,17 @@ def increase_days(id, credit):
     mem_rank.total_days += credit
     mem_rank.save()
 
+def decrease_days(id, credit):
+    """
+    Decreases member's days attended at the current rank by amount of credit.
+    :param id: (Number) member id
+    :param credit: (Number) credit for attendance
+    """
+    mem_rank = MemberRank.objects.get(member_id=id)
+    mem_rank.days_attended -= credit
+    mem_rank.total_days -= credit
+    mem_rank.save()
+
 def attendance_by_date(request):
     """
     Shows a specific date's attendance records.
