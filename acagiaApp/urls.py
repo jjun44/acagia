@@ -5,6 +5,7 @@ from acagiaApp.views.courses import *
 from acagiaApp.views.attendance import *
 from acagiaApp.views.promotion import *
 from acagiaApp.views.events import *
+from acagiaApp.views.payment import *
 
 urlpatterns = [
     # ACADEMY
@@ -72,6 +73,14 @@ urlpatterns = [
          name='delete_rank'),
     path('rank-sys/update-rank/<int:pk>/', RankUpdateView.as_view(),
          name='update_rank'),
+
+    # PAYMENT SYSTEM
+    path('pay-sys/', PaySystemListView.as_view(), name='pay_sys_list'),
+    path('pay-sys/add-term/', PayTermCreateView.as_view(), name='add_payterm'),
+    path('pay-sys/update-term/<int:pk>/', PayTermUpdateView.as_view(),
+         name='update_payterm'),
+    path('pay-sys/delete-term/<int:pk>/', PayTermDeleteView.as_view(),
+         name='delete_payterm'),
 
     # SETTINGS
     path('settings/', settings, name='settings'),

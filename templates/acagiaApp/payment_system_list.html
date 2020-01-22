@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+{% extends 'acagiaApp/dashboard_base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+  <title name="settings">Manage Your Payment System</title>
+{% endblock %}
+
+{% block content_block %}
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible mb-5"
+      role="alert">
+      <button type="button" class="close" data-dismiss="alert"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h2 class="text-center">{{ message }}</h2>
+    </div>
+    {% endfor %}
+  {% endif %}
+  <a href="{% url 'add_payterm' %}"><button class="btn btn-dark
+mb-2 float-right">Add New Term</button></a>
+
+  <h4 class="text-center">{{ academy }}'s Payment System</h4>
+  <div class="card bg-info mb-4">
+  <div class="card-body">
+      <div class="card-text text-white">
+        <b>How To Use the System?</b>
+        <p>Don't bother yourself to apply discount on each payment term.
+           We will calculate for you!<br>
+           Amount: amount before applying installation factor or discount<br>
+           nth Month: payment will be made every nth month (e.g. 1 means
+            every month, 6 means every 6 months)<br>
+           Installation Factor: number of months to install the amount by
+            (e.g. 12 means amount will be divided by 12 months)<br>
+            Discount in %: discount percentage to apply to the amount
+            (e.g. 5 means 5%, 10 means 10%)<br>
+            Summary: this will show you the summary of the payment term
+        </p>
+        <p><b>Examples:</b><br></p>
+            <table class="table text-center text-dark-50">
+            <thead>
+            <tr>
+              <th>Payment Term</th>
+              <th>Amount</th>
+              <th>nth Month</th>
+              <th>Installation Factor<br>(# of months to divide)</th>
+              <th>Discount<br>(in %)</th>
+              <th>Summary</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Monthly</td>
+                <td>$180.00</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0%</td>
+                <td>$180.00 evey month</td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    This means a member needs to pay $180.00 per month.
+                </td>
+            </tr>
+            <tr>
+                <td>2-year-installation</td>
+                <td>$4320.00</td>
+                <td>1</td>
+                <td>24</td>
+                <td>20%</td>
+                <td>$144.00 every month</td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    This means a member needs to pay $144.00 per month for 2
+                    years.<br>
+                    20% of $4320 is $864 so the adjusted total is $3456
+                    (4320 - 865) with the discount.<br>
+                    Since it's a 2-year-installation, the member will be
+                    paying the total amount monthly for 24 months.<br>
+                    Therefore, $144 will be paid monthly ($3456 / 24 months).
+                    <br>
+                </td>
+            </tr>
+            <tr>
+                <td>Annually</td>
+                <td>$2160.00</td>
+                <td>12</td>
+                <td>0</td>
+                <td>10%</td>
+                <td>$162.00 every 12 months</td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    This means a member needs to pay $162.00 per month for 2
+                    years.<br>
+                    10% of $2160 is $216 so the adjusted total is $1944 with
+                    the discount.<br>
+                    Since it's an annual term, the member will be paying
+                    the total annually.<br>
+                    Therefore, $1944 will be paid annually.<br>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+      </div>
+  </div>
+  </div>
+  <table class="table table-hover table-striped text-center mb-5">
+  <thead>
+    <tr>
+      <th>Payment Term</th>
+      <th>Amount</th>
+      <th>nth Month</th>
+      <th>Installation Factor<br>(# of months to divide)</th>
+      <th>Discount<br>(in %)</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  {% if terms %}
+  <tbody>
+    {% for term in terms %}
+    <tr>
+      <td>{{ term.term_name }}</td>
+      <td>${{ term.amount }}</td>
+      <td>
+          {% if term.n_month == 1%} every month
+          {%  else %} {{ term.n_month }} months
+          {% endif %}
+      </td>
+      <td>{{ term.install_factor }}</td>
+      <td>{{ term.discount }}%</td>
+      <td>{{ term.total_amount_str }}</td>
+      <td>
+        <a href="/academy/pay-sys/update-term/{{ term.id }}/" class="btn
+        btn-success
+        btn-sm mr-2">
+          <i class="fas fa-edit fa-lg"></i>
+        </a>
+        <a href="#confirm-modal" class="btn btn-danger btn-sm"
+           id="delete-link" data-toggle="modal"
+           data-id="{{ term.id }}" data-name="{{ term }}"
+           data-link="/academy/pay-sys/delete-term/">
+            <i class="fas fa-trash-alt fa-lg"></i>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  {% else %}
+  <td colspan="4" class="text-center">No payment system yet. Make your own
+      payment system now!</td>
+  {% endif %}
+</table>
+{% endblock %}

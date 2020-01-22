@@ -5,6 +5,7 @@ from PIL import Image # for resizing image file
 from datetime import timedelta # for calculating age based on birth day
 import pytz # for choices of common time zones
 from django.utils import timezone
+from decimal import Decimal
 from django.utils.timezone import get_current_timezone, make_aware, utc
 import datetime
 
@@ -325,18 +326,40 @@ class Attendance(models.Model):
         return str(self.member) + '\'s attendance record on ' + str(
             self.date_attended)
 
-class PayTerm(models.Model):
+class PaymentTerm(models.Model):
     aca = models.ForeignKey(
         Academy, related_name='pay_term_aca', on_delete=models.CASCADE
     )
     term_name = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     # e.g. 1 means paying every 1 month, 6 means every 6 months
-    every_n_month = models.IntegerField(default=1)
+    n_month = models.IntegerField(default=1)
     # Number of months to divide the total
-    install_factor = models.IntegerField(null=True)
+    install_factor = models.IntegerField(null=True, blank=True, default=0)
     # in % e.g. 1 means 1%, 15 means 15%
-    discount = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    discount = models.IntegerField(default=0, null=True, blank=True)
+
+    def __str__(self):
+        return self.term_name + ' payment term'
+
+    @property
+    def total_amount(self):
+        total = self.amount
+        if self.discount:
+            total -= total * Decimal(self.discount / 100)
+        if self.install_factor:
+            total /= self.install_factor
+        return round(total, 2)
+
+    @property
+    def total_amount_str(self):
+        msg = ''
+        if self.n_month:
+            if self.n_month == 1:
+                msg += ' every month'
+            else:
+                msg += ' every ' + str(self.n_month) + ' months'
+        return '$' + str(self.total_amount) + msg
 
 class MemberPayment(models.Model):
     PAID = 'Paid'
@@ -356,7 +379,7 @@ class MemberPayment(models.Model):
     # Member's nth of a month for payment
     nth_day = models.IntegerField()
     pay_term = models.ForeignKey(
-        PayTerm, on_delete=models.SET_NULL, null=True
+        PaymentTerm, on_delete=models.SET_NULL, null=True
     )
     # For use of n monthly or n yearly pay to keep track of how many times
     # the payment is made

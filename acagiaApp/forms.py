@@ -1,9 +1,9 @@
 from django import forms
 from django.forms import formset_factory
 from .models import Academy, Member, Course, Attendance, Rank, MemberRank, \
-    Event, MemberEvent
+    Event, PaymentTerm
 from django.forms.widgets import TextInput, Select, EmailInput, DateInput, \
-    TimeInput, SplitDateTimeWidget, DateTimeInput
+    TimeInput, SplitDateTimeWidget, DateTimeInput, NumberInput
 
 class AcademyForm(forms.ModelForm):
     class Meta:
@@ -254,4 +254,23 @@ class EventForm(forms.ModelForm):
                                     format='%H:%M'),
             'end_time': TimeInput(attrs={'type': 'time'},
                                   format='%H:%M')
+        }
+
+class PaymentTermForm(forms.ModelForm):
+    class Meta:
+        model = PaymentTerm
+        fields = ('term_name', 'amount', 'n_month', 'install_factor',
+                  'discount')
+        labels = {
+            'n_month': 'Every n month of payment',
+            'install_factor': 'Number of months to divide the amount',
+            'discount': 'Discount in %'
+        }
+        widgets = {
+            'term_name': TextInput(attrs={'placeholder':
+                                              '1-year-installation'}),
+            'amount': NumberInput(attrs={'placeholder': 1800}),
+            'n_month': NumberInput(attrs={'placeholder': 1}),
+            'install_factor': NumberInput(attrs={'placeholder': 12}),
+            'discount': NumberInput(attrs={'placeholder': 10})
         }
