@@ -22,11 +22,67 @@
 mb-2 float-right">Add New Term</button></a>
 
   <h4 class="text-center">{{ academy }}'s Payment System</h4>
-  <div class="card bg-info mb-4">
-  <div class="card-body">
-      <div class="card-text text-white">
-        <b>How To Use the System?</b>
-        <p>Don't bother yourself to apply discount on each payment term.
+  <table class="table table-hover table-striped text-center mb-5">
+  <thead>
+    <tr>
+      <th>Payment Term</th>
+      <th>Amount</th>
+      <th>nth Month</th>
+      <th>Installation Factor<br>(# of months to divide)</th>
+      <th>Discount<br>(in %)</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  {% if terms %}
+  <tbody>
+    {% for term in terms %}
+    <tr>
+      <td>{{ term.term_name }}</td>
+      <td>${{ term.amount }}</td>
+      <td>
+          {% if term.n_month == 1%} every month
+          {%  else %} {{ term.n_month }} months
+          {% endif %}
+      </td>
+      <td>{{ term.install_factor }}</td>
+      <td>{{ term.discount }}%</td>
+      <td>{{ term.total_amount_str }}</td>
+      <td>
+        <a href="/academy/pay-sys/update-term/{{ term.id }}/" class="btn
+        btn-success
+        btn-sm mr-2">
+          <i class="fas fa-edit fa-lg"></i>
+        </a>
+        <a href="#confirm-modal" class="btn btn-danger btn-sm"
+           id="delete-link" data-toggle="modal"
+           data-id="{{ term.id }}" data-name="{{ term }}"
+           data-link="/academy/pay-sys/delete-term/">
+            <i class="fas fa-trash-alt fa-lg"></i>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  {% else %}
+  <td colspan="4" class="text-center">No payment system yet. Make your own
+      payment system now!</td>
+  {% endif %}
+</table>
+     <div class="card bg-outline-info">
+      <div class="card-header">
+        <h5>
+          <a
+            href="#info"
+            data-toggle="collapse"
+          >
+            How to Use the System?
+          </a>
+        </h5>
+    </div>
+
+      <div id="info" class="collapse">
+        <div class="card-body">
+<p>Don't bother yourself to apply discount on each payment term.
            We will calculate for you!<br>
            Amount: amount before applying installation factor or discount<br>
            nth Month: payment will be made every nth month (e.g. 1 means
@@ -104,53 +160,7 @@ mb-2 float-right">Add New Term</button></a>
             </tr>
             </tbody>
             </table>
+        </div>
       </div>
-  </div>
-  </div>
-  <table class="table table-hover table-striped text-center mb-5">
-  <thead>
-    <tr>
-      <th>Payment Term</th>
-      <th>Amount</th>
-      <th>nth Month</th>
-      <th>Installation Factor<br>(# of months to divide)</th>
-      <th>Discount<br>(in %)</th>
-      <th>Summary</th>
-    </tr>
-  </thead>
-  {% if terms %}
-  <tbody>
-    {% for term in terms %}
-    <tr>
-      <td>{{ term.term_name }}</td>
-      <td>${{ term.amount }}</td>
-      <td>
-          {% if term.n_month == 1%} every month
-          {%  else %} {{ term.n_month }} months
-          {% endif %}
-      </td>
-      <td>{{ term.install_factor }}</td>
-      <td>{{ term.discount }}%</td>
-      <td>{{ term.total_amount_str }}</td>
-      <td>
-        <a href="/academy/pay-sys/update-term/{{ term.id }}/" class="btn
-        btn-success
-        btn-sm mr-2">
-          <i class="fas fa-edit fa-lg"></i>
-        </a>
-        <a href="#confirm-modal" class="btn btn-danger btn-sm"
-           id="delete-link" data-toggle="modal"
-           data-id="{{ term.id }}" data-name="{{ term }}"
-           data-link="/academy/pay-sys/delete-term/">
-            <i class="fas fa-trash-alt fa-lg"></i>
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-  {% else %}
-  <td colspan="4" class="text-center">No payment system yet. Make your own
-      payment system now!</td>
-  {% endif %}
-</table>
+    </div>
 {% endblock %}

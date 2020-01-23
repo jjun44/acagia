@@ -375,7 +375,7 @@ class MemberPayment(models.Model):
     member = models.OneToOneField(
         Member, related_name='pay_mem', on_delete=models.CASCADE
     )
-    status = models.CharField(max_length=6, choices=PAY_STATUS)
+    status = models.CharField(max_length=6, choices=PAY_STATUS, default=UNPAID)
     # Member's nth of a month for payment
     nth_day = models.IntegerField()
     pay_term = models.ForeignKey(
