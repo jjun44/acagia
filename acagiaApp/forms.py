@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import formset_factory
 from .models import Academy, Member, Course, Attendance, Rank, MemberRank, \
-    Event, PaymentTerm
+    Event, PaymentTerm, MemberPayment
 from django.forms.widgets import TextInput, Select, EmailInput, DateInput, \
     TimeInput, SplitDateTimeWidget, DateTimeInput, NumberInput
 
@@ -274,3 +274,26 @@ class PaymentTermForm(forms.ModelForm):
             'install_factor': NumberInput(attrs={'placeholder': 12}),
             'discount': NumberInput(attrs={'placeholder': 10})
         }
+
+class MemberPaymentAddForm(forms.ModelForm):
+    class Meta:
+        model = MemberPayment
+        fields = ('status', 'nth_day', 'pay_term')
+        labels = {
+            'status': 'Payment status',
+            'nth_day': 'Enter nth day of month for recurring payments',
+            'pay_term': 'Payment option'
+        }
+        widgets = {
+            'nth_day': NumberInput(attrs={'placeholder': 'e.g. enter 5 for '
+                                                          '5th, 24 for 24th'})
+        }
+
+        def __init__(self, *args, **kwargs):
+            aca_id = kwargs.pop('aca_id')
+            super().__init__(*args, **kwargs)
+            # Show only current academy's payment terms as an option
+            self.fields['pay_term'].queryset = PaymentTerm.objects.filter(aca_id=aca_id)
+
+class MemberPaymentUpdateForm(MemberPaymentAddForm):
+    pass

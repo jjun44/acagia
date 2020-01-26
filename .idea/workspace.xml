@@ -3,8 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="f4f0b1c2-2e62-409f-94b7-c334943346a0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acagiaApp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/acagiaApp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/acagiaApp/att_manage_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/acagiaApp/att_manage_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acagiaApp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acagiaApp/views/members.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/views/members.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/acagiaApp/member_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/acagiaApp/member_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/acagiaApp/member_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/acagiaApp/member_list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/acagiaApp/payment_system_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/acagiaApp/payment_system_list.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,10 +37,43 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/acagiaApp/models.py">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/views/events.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5670">
-              <caret line="378" column="41" lean-forward="true" selection-start-line="378" selection-start-column="41" selection-end-line="378" selection-end-column="41" />
+            <state relative-caret-position="540">
+              <caret line="36" column="65" lean-forward="true" selection-start-line="36" selection-start-column="65" selection-end-line="36" selection-end-column="65" />
+              <folding>
+                <element signature="e#295#340#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/views/members.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1080">
+              <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+              <folding>
+                <element signature="e#298#343#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_form.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="24" column="14" lean-forward="true" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="262">
+              <caret line="20" column="41" selection-start-line="20" selection-start-column="41" selection-end-line="20" selection-end-column="41" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -45,54 +82,70 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/acagiaApp/settings.html">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="419">
-              <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/acagiaApp/payment_system_list.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="708">
-              <caret line="164" column="10" selection-start-line="164" selection-start-column="10" selection-end-line="164" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/acagiaApp/att_date_list.html">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/acagiaApp/att_manage_list.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="30" lean-forward="true" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/acagiaApp/views/payment.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="32" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+            <state relative-caret-position="573">
+              <caret line="293" column="45" lean-forward="true" selection-start-line="293" selection-start-column="45" selection-end-line="293" selection-end-column="45" />
               <folding>
-                <element signature="e#0#45#0" expanded="true" />
+                <element signature="e#0#24#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/acagiaApp/payterm_form.html">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/views/promotion.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="219">
+              <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="73" />
+              <folding>
+                <element signature="e#325#370#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/views/courses.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1002">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="e#297#342#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1637">
+              <caret line="381" column="47" selection-start-line="381" selection-start-column="47" selection-end-line="381" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/views/attendance.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1380">
+              <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
+              <folding>
+                <element signature="e#330#375#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/acagiaApp/views/academy.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="62" column="26" lean-forward="true" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -110,7 +163,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>MemberRank</find>
       <find>promo_list</find>
       <find>url</find>
       <find>kwargs</find>
@@ -129,9 +181,7 @@
       <find>EventDe</find>
       <find>events_by_date</find>
       <find>delete</find>
-      <find>redirect</find>
       <find>action</find>
-      <find>reverse</find>
       <find>remove_member</find>
       <find>member_event_delete</find>
       <find>Academy</find>
@@ -140,6 +190,9 @@
       <find>add</find>
       <find>placeholder</find>
       <find>DecimalField</find>
+      <find>reverse_lazy</find>
+      <find>reverse</find>
+      <find>redirect</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -152,7 +205,6 @@
         <option value="$PROJECT_DIR$/acagiaApp/utils.py" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/settings_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/att_date_list.html" />
-        <option value="$PROJECT_DIR$/acagiaApp/middleware.py" />
         <option value="$PROJECT_DIR$/static/css/style.css" />
         <option value="$PROJECT_DIR$/templates/users/login.html" />
         <option value="$PROJECT_DIR$/templates/users/signup.html" />
@@ -162,7 +214,6 @@
         <option value="$PROJECT_DIR$/templates/acagiaApp/checkin_form.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/academy_form.html" />
         <option value="$PROJECT_DIR$/templates/pages/home.html" />
-        <option value="$PROJECT_DIR$/templates/acagiaApp/member_form.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/course_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/course_form.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/attendance_form.html" />
@@ -171,10 +222,8 @@
         <option value="$PROJECT_DIR$/templates/acagiaApp/rank_multi_forms.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/rank_single_form.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/academy_info.html" />
-        <option value="$PROJECT_DIR$/templates/acagiaApp/member_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/dashboard.html" />
         <option value="$PROJECT_DIR$/acagiaApp/views/ranking.py" />
-        <option value="$PROJECT_DIR$/acagiaApp/views/members.py" />
         <option value="$PROJECT_DIR$/acagiaApp/views/academy.py" />
         <option value="$PROJECT_DIR$/acagiaApp/views/views.py" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/member_detail.html" />
@@ -193,19 +242,23 @@
         <option value="$PROJECT_DIR$/templates/acagiaApp/payment_systerm_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/settings.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/payterm_form.html" />
-        <option value="$PROJECT_DIR$/acagiaApp/forms.py" />
-        <option value="$PROJECT_DIR$/acagiaApp/urls.py" />
         <option value="$PROJECT_DIR$/acagiaApp/views/payment.py" />
-        <option value="$PROJECT_DIR$/acagiaApp/models.py" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/att_manage_list.html" />
+        <option value="$PROJECT_DIR$/templates/acagiaApp/member_list.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/payment_system_list.html" />
+        <option value="$PROJECT_DIR$/acagiaApp/middleware.py" />
+        <option value="$PROJECT_DIR$/acagiaApp/models.py" />
+        <option value="$PROJECT_DIR$/acagiaApp/urls.py" />
+        <option value="$PROJECT_DIR$/templates/acagiaApp/member_form.html" />
+        <option value="$PROJECT_DIR$/acagiaApp/forms.py" />
+        <option value="$PROJECT_DIR$/acagiaApp/views/members.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="552" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -218,11 +271,6 @@
           <expand>
             <path>
               <item name="acagia" type="b2602c69:ProjectViewProjectNode" />
-              <item name="acagia" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="acagia" type="b2602c69:ProjectViewProjectNode" />
-              <item name="acagia" type="462c0819:PsiDirectoryNode" />
               <item name="acagia" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -330,15 +378,15 @@
       <workItem from="1571278967411" duration="295598000" />
       <workItem from="1576863263639" duration="1567000" />
       <workItem from="1576867407381" duration="492000" />
-      <workItem from="1577036280106" duration="26473000" />
+      <workItem from="1577036280106" duration="34053000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="414220000" />
+    <option name="totallyTimeSpent" value="421800000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2074392" />
@@ -404,9 +452,6 @@
     <entry file="file://$PROJECT_DIR$/templates/acagiaApp/course_form.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_form.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/acagiaApp/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -452,16 +497,6 @@
     <entry file="file://$PROJECT_DIR$/acagiaApp/tests.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/acagia/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1285">
-          <caret line="167" lean-forward="true" selection-start-line="167" selection-end-line="167" />
-          <folding>
-            <element signature="e#307#316#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/acagiaApp/event_add_members.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
@@ -471,13 +506,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/acagia/wsgi.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="49" column="69" selection-start-line="49" selection-start-column="69" selection-end-line="49" selection-end-column="69" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_detail.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -500,16 +528,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/views/courses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-          <folding>
-            <element signature="e#297#342#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/acagiaApp/event_detail.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="245">
@@ -521,16 +539,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2902">
           <caret line="169" column="5" lean-forward="true" selection-start-line="169" selection-start-column="5" selection-end-line="169" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/views/events.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2727">
-          <caret line="36" column="65" lean-forward="true" selection-start-line="36" selection-start-column="65" selection-end-line="36" selection-end-column="65" />
-          <folding>
-            <element signature="e#295#340#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -558,30 +566,6 @@
           <folding>
             <element signature="e#49#89#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/views/academy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1905">
-          <caret line="139" column="31" selection-start-line="139" selection-start-column="25" selection-end-line="139" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/middleware.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagia/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
         </state>
       </provider>
     </entry>
@@ -622,57 +606,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/settings.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="419">
+          <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/att_date_list.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/att_manage_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="30" lean-forward="true" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagia/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1795">
+          <caret line="167" lean-forward="true" selection-start-line="167" selection-end-line="167" />
+          <folding>
+            <element signature="e#307#316#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagia/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="465">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="11" selection-start-line="23" selection-start-column="11" selection-end-line="23" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/acagiaApp/promotion_list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" selection-start-line="8" selection-end-line="16" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="272" column="20" selection-start-line="272" selection-start-column="20" selection-end-line="272" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/views/members.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="45" column="15" lean-forward="true" selection-start-line="45" selection-start-column="15" selection-end-line="45" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="82" column="29" selection-start-line="82" selection-start-column="15" selection-end-line="82" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/views/attendance.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1380">
-          <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
-          <folding>
-            <element signature="e#330#375#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/acagiaApp/views/promotion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="730">
-          <caret line="63" column="7" lean-forward="true" selection-start-line="63" selection-start-column="7" selection-end-line="63" selection-end-column="7" />
-          <folding>
-            <element signature="e#325#370#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="226">
+          <caret line="17" selection-start-line="17" selection-end-line="28" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -693,37 +671,114 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/payment_system_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="49" column="10" lean-forward="true" selection-start-line="49" selection-start-column="10" selection-end-line="49" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagiaApp/views/attendance.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1380">
+          <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
+          <folding>
+            <element signature="e#330#375#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagiaApp/views/courses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1002">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#297#342#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagiaApp/views/events.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" column="65" lean-forward="true" selection-start-line="36" selection-start-column="65" selection-end-line="36" selection-end-column="65" />
+          <folding>
+            <element signature="e#295#340#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagiaApp/views/academy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="62" column="26" lean-forward="true" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagiaApp/views/promotion.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="130" column="4" selection-start-line="130" selection-start-column="4" selection-end-line="130" selection-end-column="73" />
+          <folding>
+            <element signature="e#325#370#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagiaApp/middleware.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/acagiaApp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5670">
-          <caret line="378" column="41" lean-forward="true" selection-start-line="378" selection-start-column="41" selection-end-line="378" selection-end-column="41" />
+        <state relative-caret-position="1637">
+          <caret line="381" column="47" selection-start-line="381" selection-start-column="47" selection-end-line="381" selection-end-column="47" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/settings.html">
+    <entry file="file://$PROJECT_DIR$/acagiaApp/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="419">
-          <caret line="34" column="26" lean-forward="true" selection-start-line="34" selection-start-column="26" selection-end-line="34" selection-end-column="26" />
+        <state relative-caret-position="262">
+          <caret line="20" column="41" selection-start-line="20" selection-start-column="41" selection-end-line="20" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/att_date_list.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/att_manage_list.html">
+    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_form.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="30" lean-forward="true" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+        <state relative-caret-position="360">
+          <caret line="24" column="14" lean-forward="true" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/acagiaApp/payment_system_list.html">
+    <entry file="file://$PROJECT_DIR$/acagiaApp/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="708">
-          <caret line="164" column="10" selection-start-line="164" selection-start-column="10" selection-end-line="164" selection-end-column="10" />
+        <state relative-caret-position="573">
+          <caret line="293" column="45" lean-forward="true" selection-start-line="293" selection-start-column="45" selection-end-line="293" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagiaApp/views/members.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="72" lean-forward="true" selection-start-line="72" selection-end-line="72" />
+          <folding>
+            <element signature="e#298#343#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

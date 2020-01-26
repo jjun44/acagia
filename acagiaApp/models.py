@@ -368,10 +368,6 @@ class MemberPayment(models.Model):
         (PAID, 'Paid'),
         (UNPAID, 'Unpaid'),
     ]
-
-    aca = models.ForeignKey(
-        Academy, related_name='pay_aca', on_delete=models.CASCADE
-    )
     member = models.OneToOneField(
         Member, related_name='pay_mem', on_delete=models.CASCADE
     )
@@ -383,7 +379,7 @@ class MemberPayment(models.Model):
     )
     # For use of n monthly or n yearly pay to keep track of how many times
     # the payment is made
-    month_count = models.IntegerField(null=True)
+    month_count = models.IntegerField(default=0)
     late_fee = models.DecimalField(default=0, blank=True,
                                    max_digits=5, decimal_places=2)
 

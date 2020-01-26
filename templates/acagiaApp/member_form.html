@@ -11,8 +11,11 @@
 <h2 class="mb-3">{{ template.action_name }}</h2>
 <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
-  {{ form|crispy }}
-  <button
+   <h5><b>Basic Information</b></h5>
+  {{ mem_form|crispy }}
+   <br><h5><b>Payment Information</b></h5>
+  {{ pay_form|crispy }}
+    <button
     type="submit"
     class="btn btn-dark my-3">{{ template.btn_name }}</button>
 </form>

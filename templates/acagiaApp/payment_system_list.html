@@ -64,12 +64,12 @@ mb-2 float-right">Add New Term</button></a>
     {% endfor %}
   </tbody>
   {% else %}
-  <td colspan="4" class="text-center">No payment system yet. Make your own
+  <td colspan="6" class="text-center">No payment system yet. Make your own
       payment system now!</td>
   {% endif %}
-</table>
+</table><br><br>
      <div class="card bg-outline-info">
-      <div class="card-header">
+      <div class="card-header text-center">
         <h5>
           <a
             href="#info"
@@ -82,7 +82,7 @@ mb-2 float-right">Add New Term</button></a>
 
       <div id="info" class="collapse">
         <div class="card-body">
-<p>Don't bother yourself to apply discount on each payment term.
+        <p>Don't bother yourself to apply discount on each payment term.
            We will calculate for you!<br>
            Amount: amount before applying installation factor or discount<br>
            nth Month: payment will be made every nth month (e.g. 1 means

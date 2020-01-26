@@ -23,7 +23,9 @@ urlpatterns = [
 
     # MEMBERS
     path('members/', member_list, name='mem_list'),
-    path('members/add-member/', MemberCreateView.as_view(), name='add_member'),
+    #path('members/add-member/', MemberCreateView.as_view(),
+    # name='add_member'),
+    path('members/add-member/', add_member, name='add_member'),
     path('members/delete-member/<int:pk>/',
          MemberDeleteView.as_view(),
          name='delete_member'),
