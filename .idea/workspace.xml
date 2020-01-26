@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f4f0b1c2-2e62-409f-94b7-c334943346a0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/acagiaApp/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/acagiaApp/views/members.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagiaApp/views/members.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/mem_photos/person4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media/mem_photos/person4.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/acagiaApp/member_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/acagiaApp/member_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/acagiaApp/member_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/acagiaApp/member_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/acagia/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/acagia/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,6 +36,18 @@
               <caret line="40" column="28" selection-start-line="40" selection-start-column="28" selection-end-line="40" selection-end-column="28" />
               <folding>
                 <element signature="e#298#343#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/acagia/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="251">
+              <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+              <folding>
+                <element signature="e#307#316#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -93,11 +101,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="528">
-              <caret line="95" column="12" lean-forward="true" selection-start-line="95" selection-start-column="12" selection-end-line="95" selection-end-column="12" />
+            <state relative-caret-position="348">
+              <caret line="83" column="12" lean-forward="true" selection-start-line="83" selection-start-column="12" selection-end-line="83" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -121,18 +129,6 @@
               <caret line="300" column="36" selection-start-line="300" selection-start-column="30" selection-end-line="300" selection-end-column="36" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/acagiaApp/views/attendance.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="92" column="19" selection-start-line="92" selection-start-column="19" selection-end-line="92" selection-end-column="19" />
-              <folding>
-                <element signature="e#330#375#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -219,7 +215,6 @@
         <option value="$PROJECT_DIR$/acagiaApp/views/promotion.py" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/event_add_members.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/event_list.html" />
-        <option value="$PROJECT_DIR$/acagia/settings.py" />
         <option value="$PROJECT_DIR$/acagiaApp/views/attendance.py" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/dashboard_base.html" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/event_detail.html" />
@@ -240,6 +235,7 @@
         <option value="$PROJECT_DIR$/templates/acagiaApp/member_form.html" />
         <option value="$PROJECT_DIR$/acagiaApp/views/members.py" />
         <option value="$PROJECT_DIR$/templates/acagiaApp/member_detail.html" />
+        <option value="$PROJECT_DIR$/acagia/settings.py" />
       </list>
     </option>
   </component>
@@ -259,6 +255,11 @@
           <expand>
             <path>
               <item name="acagia" type="b2602c69:ProjectViewProjectNode" />
+              <item name="acagia" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="acagia" type="b2602c69:ProjectViewProjectNode" />
+              <item name="acagia" type="462c0819:PsiDirectoryNode" />
               <item name="acagia" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -366,12 +367,12 @@
       <workItem from="1571278967411" duration="295598000" />
       <workItem from="1576863263639" duration="1567000" />
       <workItem from="1576867407381" duration="492000" />
-      <workItem from="1577036280106" duration="38394000" />
+      <workItem from="1577036280106" duration="38832000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="426141000" />
+    <option name="totallyTimeSpent" value="426579000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="0" />
@@ -597,16 +598,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/acagia/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1795">
-          <caret line="167" lean-forward="true" selection-start-line="167" selection-end-line="167" />
-          <folding>
-            <element signature="e#307#316#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/acagia/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
@@ -765,8 +756,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/acagiaApp/member_detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="95" column="12" lean-forward="true" selection-start-line="95" selection-start-column="12" selection-end-line="95" selection-end-column="12" />
+        <state relative-caret-position="348">
+          <caret line="83" column="12" lean-forward="true" selection-start-line="83" selection-start-column="12" selection-end-line="83" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/acagia/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+          <folding>
+            <element signature="e#307#316#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
