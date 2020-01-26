@@ -26,6 +26,10 @@ mb-2">Member
       <col width="70%">
       <tbody>
         <tr>
+          <td colspan="2" class="table-primary text-dark"><b>General
+              Information</b></td>
+        </tr>
+        <tr>
           <td class="table-info text-primary">Type</td>
           <td class="text-center">{{ member.mem_type }}</td>
         </tr>
@@ -57,6 +61,14 @@ mb-2">Member
           <td class="text-center">{{ member.gender }}</td>
         </tr>
         <tr>
+          <td class="table-info text-primary">Member Since</td>
+          <td class="text-center">{{ member.member_since }}</td>
+        </tr>
+        <tr>
+          <td colspan="2" class="table-primary text-dark"><b>Contact
+              Information</b></td>
+        </tr>
+        <tr>
           <td class="table-info text-primary">Phone Number</td>
           <td class="text-center">{{ member.cell_phone }}</td>
         </tr>
@@ -70,8 +82,20 @@ mb-2">Member
         No address information{% endif %}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Member Since</td>
-          <td class="text-center">{{ member.member_since }}</td>
+          <td colspan="2" class="table-primary text-dark"><b>Payment
+              Information</b></td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Payment Status</td>
+          <td class="text-center">{{ member.pay_mem.status }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Payment Day</td>
+          <td class="text-center">{{ member.pay_mem.nth_day }}</td>
+        </tr>
+        <tr>
+          <td class="table-info text-primary">Payment Option</td>
+          <td class="text-center">{{ member.pay_mem.pay_term }}</td>
         </tr>
       </tbody>
     </table>

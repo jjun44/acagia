@@ -11,9 +11,11 @@ Handles requests for managing members.
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, DeleteView
-from acagiaApp.forms import MemberForm, MemberUpdateForm, MemberPaymentAddForm
+from acagiaApp.forms import MemberForm, MemberUpdateForm, \
+    MemberPaymentAddForm, MemberPaymentUpdateForm
 from acagiaApp.models import Member, MemberRank, PaymentTerm, MemberPayment
 from django.utils import timezone
 from django.contrib import messages
@@ -37,6 +39,7 @@ def member_list(request):
     member_list = Member.objects.filter(
         aca_id=aca_id
     ).order_by('first_name')
+
     return render(request, 'acagiaApp/member_list.html',
                   {'members': member_list})
 
@@ -76,16 +79,16 @@ def add_member(request):
     """
     Adds a new member.
     """
-    mem_form = MemberForm()
+    form = MemberForm()
     pay_form = MemberPaymentAddForm()
     template_name = 'acagiaApp/member_form.html'
     template = {'action_name': 'Add New Member', 'btn_name': 'Add Member'}
     aca_id = request.session['aca_id']
     if request.method == 'POST':
-        mem_form = MemberForm(request.POST)
+        form = MemberForm(request.POST)
         pay_form = MemberPaymentAddForm(request.POST)
-        if mem_form.is_valid() and pay_form.is_valid():
-            member = mem_form.save(commit=False)
+        if form.is_valid() and pay_form.is_valid():
+            member = form.save(commit=False)
             member.aca_id = aca_id
             member.member_since = timezone.localdate()
             member.save()
@@ -99,7 +102,7 @@ def add_member(request):
             pay_form.save()
 
             return redirect('/academy/members/')
-    return render(request, template_name, {'mem_form': mem_form, 'pay_form':
+    return render(request, template_name, {'form': form, 'pay_form':
         pay_form, 'template': template})
 
 
@@ -122,14 +125,25 @@ class MemberUpdateView(UpdateView):
     """
     model = Member
     form_class = MemberUpdateForm
+    #second_form_class = MemberPaymentUpdateForm
     success_url = reverse_lazy('mem_list')
     template_name = 'acagiaApp/member_form.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        #context['mem_form'] = context['form']
+        #context['pay_form'] = self.second_form_class(instance=self.object)
         context['template'] = {'action_name': 'Update Member', 'btn_name':
             'Update'}
         return context
+    '''
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+        mem_form = self.form_class
+        pay_form = self.second_form_class
+        return self.render_to_response(self.get_context_data(
+            object=self.object, mem_form=mem_form, pay_form=pay_form))
+    '''
 
 @login_required
 def member_detail_view(request, **kwargs):

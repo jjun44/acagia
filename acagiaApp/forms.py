@@ -296,4 +296,13 @@ class MemberPaymentAddForm(forms.ModelForm):
             self.fields['pay_term'].queryset = PaymentTerm.objects.filter(aca_id=aca_id)
 
 class MemberPaymentUpdateForm(MemberPaymentAddForm):
-    pass
+    class Meta:
+        model = MemberPayment
+        fields = ('status', 'nth_day', 'pay_term', 'late_fee', 'month_count')
+        labels = {
+            'status': 'Payment status',
+            'nth_day': 'Enter nth day of month for recurring payments',
+            'pay_term': 'Payment option',
+            'month_count': 'Number of months left for the next recurring ' \
+                           'payment'
+        }

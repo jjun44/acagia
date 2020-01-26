@@ -12,9 +12,11 @@
 <form method="POST" enctype="multipart/form-data">
   {% csrf_token %}
    <h5><b>Basic Information</b></h5>
-  {{ mem_form|crispy }}
+  {{ form|crispy }}
+  {% if pay_form %}
    <br><h5><b>Payment Information</b></h5>
   {{ pay_form|crispy }}
+  {% endif %}
     <button
     type="submit"
     class="btn btn-dark my-3">{{ template.btn_name }}</button>
