@@ -29,7 +29,7 @@ urlpatterns = [
     path('members/delete-member/<int:pk>/',
          MemberDeleteView.as_view(),
          name='delete_member'),
-    path('members/update-member/<int:pk>/', MemberUpdateView.as_view(),
+    path('members/update-member/<int:pk>/', update_member,
          name='update_member'),
     path('members/detail/<int:pk>/', member_detail_view, name='mem_detail'),
 

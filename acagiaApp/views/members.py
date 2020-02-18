@@ -8,7 +8,7 @@
 Handles requests for managing members.
 """
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -118,6 +118,7 @@ class MemberDeleteView(DeleteView):
         # https://stackoverflow.com/questions/46915320/reverse-got-an-unexpected-keyword-argument-pk-url-kwarg-updateview
         return reverse('mem_list')
 
+'''
 @method_decorator(login_required, name='dispatch')
 class MemberUpdateView(UpdateView):
     """
@@ -136,14 +137,41 @@ class MemberUpdateView(UpdateView):
         context['template'] = {'action_name': 'Update Member', 'btn_name':
             'Update'}
         return context
-    '''
+    #
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
         mem_form = self.form_class
         pay_form = self.second_form_class
         return self.render_to_response(self.get_context_data(
             object=self.object, mem_form=mem_form, pay_form=pay_form))
-    '''
+    #
+'''
+
+@login_required
+def update_member(request, **kwargs):
+    template_name = 'acagiaApp/member_form.html'
+    template = {'action_name': 'Update Member', 'btn_name': 'Update Member'}
+    # https://www.geeksforgeeks.org/update-view-function-based-views-django/
+    mem_id = kwargs['pk']
+    # Fetch objects related to passed member id
+    mem_obj = get_object_or_404(Member, id=mem_id)
+    pay_obj = get_object_or_404(MemberPayment, member_id=mem_id)
+    # Pass objects as instance in forms
+    form = MemberUpdateForm(request.POST or None, instance=mem_obj)
+    pay_form = MemberPaymentUpdateForm(request.POST or None, instance=pay_obj)
+
+    if form.is_valid() and pay_form.is_valid():
+        form.save()
+        pay_form.save()
+        return redirect(reverse('mem_detail', args=[mem_id]))
+
+    context = {}
+    context['form'] = form
+    context['pay_form'] = pay_form
+    context['template'] = template
+
+    return render(request, template_name, {'form': form, 'pay_form':
+        pay_form, 'template': template})
 
 @login_required
 def member_detail_view(request, **kwargs):

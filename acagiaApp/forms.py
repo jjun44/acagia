@@ -62,7 +62,7 @@ class MemberForm(forms.ModelForm):
         }
         choices = {
             'mem_type': Member.MEM_TYPE,
-            'gender': Member.GENDER
+            'gender': Member.GENDER,
         }
 
 class MemberUpdateForm(MemberForm):
@@ -278,9 +278,9 @@ class PaymentTermForm(forms.ModelForm):
 class MemberPaymentAddForm(forms.ModelForm):
     class Meta:
         model = MemberPayment
-        fields = ('status', 'nth_day', 'pay_term')
+        fields = ('pay_status', 'nth_day', 'pay_term')
         labels = {
-            'status': 'Payment status',
+            'pay_status': 'Payment status',
             'nth_day': 'Enter nth day of month for recurring payments',
             'pay_term': 'Payment option'
         }
@@ -298,9 +298,9 @@ class MemberPaymentAddForm(forms.ModelForm):
 class MemberPaymentUpdateForm(MemberPaymentAddForm):
     class Meta:
         model = MemberPayment
-        fields = ('status', 'nth_day', 'pay_term', 'late_fee', 'month_count')
+        fields = ('pay_status', 'nth_day', 'pay_term', 'late_fee', 'month_count')
         labels = {
-            'status': 'Payment status',
+            'pay_status': 'Payment status',
             'nth_day': 'Enter nth day of month for recurring payments',
             'pay_term': 'Payment option',
             'month_count': 'Number of months left for the next recurring ' \
