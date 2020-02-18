@@ -16,7 +16,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, DeleteView
 from acagiaApp.forms import MemberForm, MemberUpdateForm, \
     MemberPaymentAddForm, MemberPaymentUpdateForm
-from acagiaApp.models import Member, MemberRank, PaymentTerm, MemberPayment
+from acagiaApp.models import Member, MemberRank, PaymentTerm, MemberPayment,\
+    Rank
 from django.utils import timezone
 from django.contrib import messages
 
@@ -34,6 +35,11 @@ def member_list(request):
         messages.info(request, 'Make your payment system first to use '
                                'MEMBER tab now!')
         return redirect('/academy/pay-sys/')
+    # If no rank system is made, redirect the user to make one
+    if not Rank.objects.filter(aca_id=aca_id):
+        messages.info(request, 'Make your ranking system first to use '
+                               'PROMOTION tab now!')
+        return redirect('/academy/rank-sys/')
 
     # Get current academy's members
     member_list = Member.objects.filter(
@@ -93,8 +99,11 @@ def add_member(request):
             member.member_since = timezone.localdate()
             member.save()
 
+            default_rank = Rank.objects.filter(aca_id=aca_id).order_by(
+                'rank_order').first()
             member_rank = MemberRank(member_id=member.id,
                                      aca_id=aca_id)
+            member_rank.rank = default_rank
             member_rank.save()
 
             pay_form = pay_form.save(commit=False)
