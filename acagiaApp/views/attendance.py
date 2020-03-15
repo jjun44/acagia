@@ -78,7 +78,8 @@ def increase_days(id, credit):
     # Get the given member's rank object
     mem_rank = MemberRank.objects.get(member_id=id)
     mem_rank.days_attended += credit
-    mem_rank.total_days += credit
+    #mem_rank.days_left -= credit
+    #mem_rank.total_days += credit
     mem_rank.save()
 
 def decrease_days(id, credit):
@@ -89,7 +90,8 @@ def decrease_days(id, credit):
     """
     mem_rank = MemberRank.objects.get(member_id=id)
     mem_rank.days_attended -= credit
-    mem_rank.total_days -= credit
+    #mem_rank.days_left += credit
+    #mem_rank.total_days -= credit
     mem_rank.save()
 
 def attendance_by_date(request):

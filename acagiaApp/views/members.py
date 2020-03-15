@@ -98,14 +98,15 @@ def add_member(request):
             member.aca_id = aca_id
             member.member_since = timezone.localdate()
             member.save()
-
+            # Give a default rank to a member
             default_rank = Rank.objects.filter(aca_id=aca_id).order_by(
                 'rank_order').first()
             member_rank = MemberRank(member_id=member.id,
                                      aca_id=aca_id)
             member_rank.rank = default_rank
+            member_rank.days_left = default_rank.days_required
             member_rank.save()
-
+            # Save payment information
             pay_form = pay_form.save(commit=False)
             pay_form.member_id = member.id
             pay_form.save()

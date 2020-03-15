@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe # for calender
 from django.views.generic import CreateView, ListView, UpdateView
 from acagiaApp.forms import AcademyForm
-from acagiaApp.models import Academy, Member, Attendance, Event
+from acagiaApp.models import Academy, Member, Attendance, Event, MemberRank
 from acagiaApp.utils import Calendar
 from django.utils import timezone
 from datetime import date, timedelta
@@ -158,17 +158,11 @@ def dashboard(request, **kwargs):
         aca_id = request.session['aca_id']
         academy = Academy.objects.get(id=aca_id)
 
-    today = timezone.localdate()
     members = Member.objects.filter(aca_id=aca_id)
-    num_of_members = members.count()
-    num_of_active = members.filter(status=Member.ACTIVE).count()
-    num_of_inactive = members.filter(status=Member.INACTIVE).count()
-    num_of_hold = members.filter(status=Member.HOLD).count()
+    member_counts = get_member_counts(aca_id, members)
 
-    # Number of attended students today
-    num_of_attended = Attendance.objects.filter(
-        aca_id=aca_id, date_attended=today).count()
     # Birthday members
+    today = timezone.localdate()
     bday_members = members.filter(
         date_of_birth__month=today.month,
         date_of_birth__day=today.day
@@ -178,15 +172,58 @@ def dashboard(request, **kwargs):
     # -birthday-in-the-next-x-days
     #end_date = today + timedelta(days=7)
 
-    return render(request, 'acagiaApp/dashboard.html',
-                  {'academy': academy, 'num_mem':
-                      num_of_members, 'num_active': num_of_active,
+    # Today's promotion list
+    promo_today = get_promo_list(aca_id, 1)
+    promo_week = get_promo_list(aca_id, 7)
+    print(promo_today, promo_week)
+
+    context = {}
+    context['academy'] = academy
+    context['counts'] = member_counts
+    context['bday_members'] = bday_members
+    context['today'] = timezone.localtime().strftime(DATETIME_FORMAT)
+    context['promo'] = {'today': promo_today, 'week': promo_week,
+                        'today_count': promo_today.count(),
+                        'week_count': promo_week.count()}
+
+    return render(request, 'acagiaApp/dashboard.html', context)
+
+def get_promo_list(aca_id, within):
+    """
+    Gets the promotion list within given days.
+    :param aca_id: academy id
+    :param within: days to search members
+    :return:
+    """
+    promo_list = MemberRank.objects.filter(
+        aca_id=aca_id, days_left__lte=within
+    ).order_by('days_left', 'member__first_name')
+
+    if within > 1:
+        promo_list = promo_list.filter(days_left__gt=1)
+
+    return promo_list
+
+
+def get_member_counts(aca_id, members):
+    """
+    Gets the number of total, active, inactive, and hold members.
+    :param aca_id: academy id
+    :param members: member objects
+    :return: (dictionary) count information
+    """
+    num_of_members = members.count()
+    num_of_active = members.filter(status=Member.ACTIVE).count()
+    num_of_inactive = members.filter(status=Member.INACTIVE).count()
+    num_of_hold = members.filter(status=Member.HOLD).count()
+    # Number of attended students today
+    today = timezone.localdate()
+    num_of_attended = Attendance.objects.filter(
+        aca_id=aca_id, date_attended=today).count()
+    return {'num_mem': num_of_members, 'num_active': num_of_active,
                    'num_inactive': num_of_inactive,
-                   'num_hold': num_of_hold,
-                   'num_att': num_of_attended,
-                   'bday_members': bday_members,
-                   'today': timezone.localtime().strftime(DATETIME_FORMAT)
-                   })
+                   'num_hold': num_of_hold, 'num_att': num_of_attended}
+
 
 @method_decorator(login_required, name='dispatch')
 class CalendarView(ListView):

@@ -12,24 +12,26 @@
     <a href="{% url 'mem_list' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
-            <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;{{ num_mem }}
+            <i class="fas fa-users fa-lg"></i>&nbsp;&nbsp;{{ counts.num_mem }}
           </h4>
           <h3 class="card-text">
             Total Members<hr/>
           </h3>
           <h5 class="card-text text-light">
-            {{ num_active }} Active members<br/>
-            {{ num_inactive }} Inactive members<br/>
-            {{ num_hold }} Hold Members
+            {{ counts.num_active }} Active members<br/>
+            {{ counts.num_inactive }} Inactive members<br/>
+            {{ counts.num_hold }} Hold Members
           </h5>
       </div>
     </a>
     </div> <!-- end card -->
+
     <div class="card bg-info text-light text-center">
       <a href="{% url 'att_by_date' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
-            <i class="far fa-calendar-check"></i>&nbsp;&nbsp;{{ num_att }}
+            <i class="far fa-calendar-check"></i>&nbsp;&nbsp;
+              {{ counts.num_att }}
           </h4>
           <h3 class="card-text">
             Attended Today
@@ -37,37 +39,54 @@
       </div>
       </a>
     </div> <!-- end card -->
-    <div class="card bg-danger text-light text-center">
-      <a href="{% url 'mem_list' %}">
-      <div class="card-body">
-          <h4 class="card-title display-3">
-            <i class="fas fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;Birthday
-          </h4><hr/>
-          <h3 class="card-text">
-            {% if bday_members %}
-            {% for member in bday_members %}
-            {{ member }} turning in {{ member.age }}
-            {% endfor %}
-            {% else %}
-            No birthday members today.
-            {% endif %}
-          </h3>
-      </div>
-      </a>
-    </div> <!-- end card -->
-    <div class="card bg-success text-light text-center">
-      <a href="{% url 'promo_list' %}">
-      <div class="card-body">
-          <h4 class="card-title display-3">
-            <i class="fas fas fa-bolt fa-lg"></i>&nbsp;&nbsp;0
-          </h4>
-          <h3 class="card-text">
-            Members On Promotion List
-          </h3>
-      </div>
-      </a>
-    </div> <!-- end card -->
-</div>
+</div> <!-- end card columns -->
+
+<div class="card-columns">
+<div class="card text-light bg-success">
+  <a href="{% url 'promo_list' %}">
+  <div class="card-header h4">
+    <i class="fas fas fa-bolt"></i>&nbsp;&nbsp;
+      Promotion List
+  </div></a>
+  <div class="card-body">
+      {% if promo.today %}
+      <div class="card-title h5">{{ promo.today_count }} Members Today:</div>
+      {% for mem in promo.today %}
+      {{ mem.member }} ({{ mem.rank }})<br>
+      {% endfor %}
+      {% endif %}
+      <br>
+      {% if promo.week %}
+      <div class="card-title h5">{{ promo.week_count }} Members in a
+          Week:</div>
+      {% for mem in promo.week %}
+      {{ mem.member }} ({{ mem.rank }})<br>
+      {% endfor %}
+      {% endif %}
+  </div>
+</div> <!-- end card -->
+<br>
+<div class="card text-light bg-danger">
+  <a href="{% url 'mem_list' %}">
+  <div class="card-body">
+      <h4 class="card-title">
+        <i class="fas fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;Birthday
+      </h4><hr/>
+      <p class="card-text">
+        {% if bday_members %}
+        {% for member in bday_members %}
+        {{ member }} turning in {{ member.age }}<br>
+        {% endfor %}
+        {% else %}
+        No birthday members today.
+        {% endif %}
+      </p>
+  </div>
+  </a>
+</div> <!-- end card -->
+</div> <!-- end card columns -->
+
+
 <!--<a href="{% url 'cal' %}" class="btn btn-info btn-lg mb-5">Calendar</a>-->
 {% endblock %}
 

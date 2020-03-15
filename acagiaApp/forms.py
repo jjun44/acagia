@@ -184,7 +184,7 @@ class AttendanceDateForm(forms.ModelForm):
 class MemberRankForm(forms.ModelForm):
     class Meta:
         model = MemberRank
-        fields = ('rank', 'days_attended')
+        fields = ('rank', 'days_attended', 'days_left', 'total_days')
 
     def __init__(self, *args, **kwargs):
         aca_id = kwargs.pop('aca_id')

@@ -129,7 +129,8 @@ def promotion_list(request):
         'member__first_name')
     # Get all ranks in order
     all_ranks = Rank.objects.filter(aca_id=aca_id).order_by('rank_order')
-    # If no rank system is made, sends an error message.
+    # If no rank system is made, sends an error message and
+    # redirect the user to make one.
     if not all_ranks:
         messages.info(request, 'Make your ranking system first to use '
                                'PROMOTION tab now!')
@@ -156,30 +157,30 @@ def promotion_list(request):
             '''
             # when there's only 1 rank
             if current == first_rank and current == last_rank:
-                pre = 'X'
-                next = 'X'
+                pre = ''
+                next = ''
             elif current == first_rank: # Member is at first rank
-                pre = 'X'
+                pre = ''
                 next = all_ranks.filter(
                     rank_order__gt=member.rank.rank_order).first()
             elif current == last_rank: # Member is at last rank
                 pre = all_ranks.filter(
                     rank_order__lt=member.rank.rank_order).last()
-                next = 'X'
+                next = ''
             else:
                 pre = all_ranks.filter(
                     rank_order__lt=member.rank.rank_order).last()
                 next = all_ranks.filter(
                     rank_order__gt=member.rank.rank_order).first()
 
-        if current == 'New Member' or next == 'X':
-            days_left = 'X'
+        if current == 'New Member' or next == '':
+            member.days_left = ''
         else:
-            days_left = current.days_required - member.days_attended
+            member.days_left = current.days_required - member.days_attended
         # if current is set to X, calculate days left with 0
         mem_rank = {'id': member.id, 'name': member.member, 'pre': pre,
-                    'current': current, 'next': next, 'days_left': days_left,
-                    'photo': member.member.img
+                    'current': current, 'next': next, 'days_left':
+                        member.days_left, 'photo': member.member.img
                     }
         promotion_list.append(mem_rank) # Append to list of all members
 
@@ -242,14 +243,14 @@ def promote_demote(request, operation, members, ranks):
         elif operation == 'demote' and not pre:
             fail_msg += str(member.member) + ', '
             num_fail += 1
-        else:
+        else: # Assign correct rank
             success_msg += str(member.member) + ', '
             if operation == 'promote':
                 member.rank = next
             else:
                 member.rank = pre
             num_success += 1
-            reset_days(member)
+            #reset_days(member)
             member.save()
 
     # Send successful message if 1 or more members are promoted
@@ -262,10 +263,12 @@ def promote_demote(request, operation, members, ranks):
 def reset_days(member):
     """
     Resets member's days attended at the current rank to 0
+    and days left to the same as the current rank's required days
     when he/she gets promoted or demoted (whenever rank changes).
     :param member: (MemberRank) given member's rank object
     """
     member.days_attended = 0
+    member.days_left = member.rank.days_required
 
 @method_decorator(login_required, name='dispatch')
 class MemberRankUpdateView(UpdateView):

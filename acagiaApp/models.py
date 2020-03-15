@@ -303,10 +303,13 @@ class MemberRank(models.Model):
     rank = models.ForeignKey(Rank, related_name='mr_rank',
                                 on_delete=models.SET_NULL, null=True)
     days_attended = models.IntegerField(default=0, blank=True)
+    days_left = models.IntegerField(default=0, blank=True)
     total_days = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return str(self.member) + '/' + (str(self.rank) or 'X')
+
+
 
 class Attendance(models.Model):
     aca = models.ForeignKey(
