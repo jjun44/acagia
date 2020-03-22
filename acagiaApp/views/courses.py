@@ -29,7 +29,7 @@ class CourseListView(ListView):
         context = super().get_context_data(**kwargs)
         context['courses'] = Course.objects.filter(
             aca_id=aca_id
-        )
+        ).order_by("start_time", "end_time")
         return context
 
 

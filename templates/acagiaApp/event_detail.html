@@ -63,8 +63,6 @@
     </tr>
   </thead>
   {% if members %}
-  <form method="POST">
-  {% csrf_token %}
   <tbody>
     {% for member in members %}
     <tr>

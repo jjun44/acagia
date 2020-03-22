@@ -190,19 +190,18 @@ def event_detail_view(request, **kwargs):
                   {'event': event, 'members': members})
 
 @login_required
-def member_event_delete(request, **kwargs):
+def event_member_delete(request, **kwargs):
     """
     Removes an attendee from an event and
     decrease credit from the attendee's day's attended.
     """
-    print("HERE")
-    #event_id = kwargs['event']
-    #mem_id = kwargs['mem']
-    #mem_event = MemberEvent.objects.get(event_id=event_id, member_id=mem_id)
-    #decrease_days(mem_id, mem_event.credit)
-    #mem_event.delete()
-    #return redirect('/academy/events/detail/' + event_id + '/')
-    return redirect(reverse('event_list'))
+    print("Delete member from event")
+    event_id = kwargs['event']
+    mem_id = kwargs['mem']
+    mem_event = MemberEvent.objects.get(event_id=event_id, member_id=mem_id)
+    decrease_days(mem_id, mem_event.event.credit)
+    mem_event.delete()
+    return redirect(reverse('event_detail', kwargs={'pk': event_id}))
 
 def give_credit(member_ids, credit, event_id):
     """

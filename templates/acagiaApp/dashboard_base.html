@@ -160,12 +160,12 @@
     $('#modal-msg').text(name + '?');
     // For removing an attendee from an event
     if ($(e.relatedTarget).data('event')) {
-        console.log("HERE!!");
+        console.log("Remove Attendee!!");
         var event = $(e.relatedTarget).data('event');
         console.log(link + event + '/' + id + '/');
         $('#delete-mem').attr("action", link + event + '/' + id + '/');
-    } else {
-        console.log("SUPPOSED NOT TO BE HERE");
+    } else { // All other delete inqueries
+        console.log("Delete others");
         $('#delete-mem').attr("action", link + id + '/');
     }
   });

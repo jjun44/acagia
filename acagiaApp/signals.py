@@ -6,19 +6,24 @@ from acagiaApp.views import promotion
 
 @receiver(pre_save, sender=MemberRank)
 def update_member_rank(sender, instance, update_fields, **kwargs):
+    """
+    Updates member's rank/attendance information when a member checks in,
+    gets a event credit, or promoted/demoted or when changed by the admin
+    manually.
+    """
     # Get original obj before saving new changes to compare
     pre_rank = MemberRank.objects.get(id=instance.id)
     # Handle when rank changed (by promotion or manually)
     if instance.rank != pre_rank.rank:
-        print('rank changed')
+        #print('rank changed')
+        # Reset days for new rank
         instance.days_attended = 0
         instance.days_left = instance.rank.days_required
         #promotion.reset_days(instance)
     # Handle when days attended changed (event credit, check-in, or manually)
     elif instance.days_attended != pre_rank.days_attended:
-        print('days changed')
-        # If days_attended increased, than the total days
-        # needs to be smaller.
+        #print('days changed')
+        # Figure out if days_attended increased or decreased
         pre_sum = pre_rank.total_days - pre_rank.days_attended
         post_sum = instance.total_days - instance.days_attended
         # If days_attended increased, adjust others accordingly
@@ -26,8 +31,7 @@ def update_member_rank(sender, instance, update_fields, **kwargs):
             increased_amt = instance.days_attended - pre_rank.days_attended
             instance.days_left -= increased_amt
             instance.total_days += increased_amt
-        # days_attended decreased
-        else:
+        else: # days_attended decreased
             decreased_amt = pre_rank.days_attended - instance.days_attended
             instance.days_left += decreased_amt
             instance.total_days -= decreased_amt

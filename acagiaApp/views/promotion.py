@@ -176,7 +176,7 @@ def promotion_list(request):
         if current == 'New Member' or next == '':
             member.days_left = ''
         else:
-            member.days_left = current.days_required - member.days_attended
+            member.days_left = member.days_left
         # if current is set to X, calculate days left with 0
         mem_rank = {'id': member.id, 'name': member.member, 'pre': pre,
                     'current': current, 'next': next, 'days_left':
