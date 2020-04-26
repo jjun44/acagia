@@ -30,7 +30,6 @@
     {% endfor %}
   {% endif %}
 
-<div class="bg-light">
 <div class="card bg-success text-light text-center mb-5">
   <div class="card-body">
       <h4 class="card-title display-3">
@@ -39,36 +38,25 @@
       </h4>
   </div>
 </div> <!-- end card -->
+
 {% if records %}
-<table class="table text-center table-striped">
-<thead>
-  <tr>
-    <th>Member Attended</th>
-    <th>Class Attended</th>
-  </tr>
-</thead>
-<tboday>
-{% for record in records %}
-  <tr>
-    <td>
-        <a href="/academy/members/detail/{{ record.member.id }}"
-           class="text-info">
-        {{ record.member }}
-        </a>
-    </td>
-    <td>
-    {{ record.course.time_range }}
-    {{ record.course.course_name }}
-    </td>
-  </tr>
+{% for record in records%}
+    <div class="h3 pb-2 border-bottom border-success">
+    {{ record.course.course_info_time_first }}&nbsp;
+        &nbsp;
+    <i class="far fa-calendar-check"></i>&nbsp;{{ record.count }}
+    </div>
+
+    <div class="card card-body mb-3 pl-5">
+    {% for attendee in record.attendees %}
+        <p class="text-secondary">
+        <a href="/academy/members/detail/{{ attendee.id }}">
+            <i class="far fa-id-card fa-lg text-success mr-3"></i></a>
+        {{ attendee }}
+        </p>
+    {% endfor %}
+    </div>
 {% endfor %}
-</tboday>
-</table>
 {% endif %}
-</div>
 
 {% endblock %}
-
-
-
-

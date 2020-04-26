@@ -198,6 +198,11 @@ class Course(models.Model):
         return self.course_name + ' ' + self.course_days + ' ' + \
                self.time_range
 
+    # Added for attendance view
+    @property
+    def course_info_time_first(self):
+        return self.time_range + ' ' + self.course_name
+
     @property
     def time_range(self):
         return str(self.start_time)[0:5] + ' - ' + str(self.end_time)[0:5]
@@ -308,8 +313,6 @@ class MemberRank(models.Model):
 
     def __str__(self):
         return str(self.member) + '/' + (str(self.rank) or 'X')
-
-
 
 class Attendance(models.Model):
     aca = models.ForeignKey(

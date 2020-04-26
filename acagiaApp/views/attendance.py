@@ -17,6 +17,7 @@ from acagiaApp.forms import CheckInForm, AttendanceForm, AttendanceDateForm
 from acagiaApp.models import Member, Attendance, MemberRank
 from django.contrib import messages
 from django.utils import timezone
+from django.db.models import Count
 
 TIME_FORMAT = '%H:%M:%S'
 
@@ -93,19 +94,14 @@ def decrease_days(id, credit):
     #mem_rank.days_left += credit
     #mem_rank.total_days -= credit
     mem_rank.save()
-
+'''
+@login_required
 def attendance_by_date(request):
     """
     Shows a specific date's attendance records.
     """
     aca_id = request.session['aca_id']
     template_name = 'acagiaApp/att_date_list.html'
-    form = AttendanceDateForm
-    today = timezone.localdate() # Get today
-    # Get today's attendance records
-    records = Attendance.objects.filter(aca_id=aca_id, date_attended=today)
-    num = records.count()
-    day = 'Today'
     # When specific date is given by the user, search records by the date
     if request.method == 'POST':
         form = AttendanceDateForm(request.POST)
@@ -115,13 +111,91 @@ def attendance_by_date(request):
                                                 date_attended=input_date)
             num = records.count()
             day = 'on ' + str(input_date)
+            group_attendance(records)
             if not records:
                 msg = 'No records found on ' + str(input_date)
                 messages.error(request, msg)
                 return redirect('/academy/attendance/')
+    else: # When date isn't given, set date as today by default
+        form = AttendanceDateForm
+        today = timezone.localdate()  # Get today
+        # Get today's attendance records
+        records = Attendance.objects.filter(aca_id=aca_id, date_attended=today)
+        num = records.count()
+        day = 'Today'
+        group_attendance(records)
 
     return render(request, template_name, {'form': form, 'records': records,
                                            'num': num, 'day' : day})
+'''
+@login_required
+def attendance_by_date(request):
+    """
+    Shows today's or specific date's attendance records.
+    """
+    aca_id = request.session['aca_id']
+    template_name = 'acagiaApp/att_date_list.html'
+    grouped_list = []
+    # When specific date is given by the user, search records by the date
+    if request.method == 'POST':
+        form = AttendanceDateForm(request.POST)
+        if form.is_valid():
+            input_date = form.cleaned_data['date_attended']
+            records = Attendance.objects.filter(aca_id=aca_id,
+                                                date_attended=input_date)
+            num = records.count()
+            day = 'on ' + str(input_date)
+            group_attendance(grouped_list, records)
+            if not records:
+                msg = 'No records found on ' + str(input_date)
+                messages.error(request, msg)
+                return redirect('/academy/attendance/')
+    else: # When date isn't given, set date as today by default
+        form = AttendanceDateForm
+        today = timezone.localdate()  # Get today
+        # Get today's attendance records
+        records = Attendance.objects.filter(aca_id=aca_id, date_attended=today)
+        num = records.count()
+        day = 'Today'
+        group_attendance(grouped_list, records)
+
+    return render(request, template_name, {'form': form, 'records': grouped_list,
+                                           'num': num, 'day' : day})
+
+def group_attendance(grouped_list, records):
+    """
+    Group attendance records by course and sort by course start time.
+    :param records: filtered attendance records by date
+    :return: (dictionary) key:course, value:records
+    """
+    """
+    # Group records by courses
+    for record in records:
+        grouped_records[record.course] = []
+
+    # Add attendance records to the corresponding course
+    for record in records:
+        grouped_records[record.course].append(record.member)
+
+    # Count records in each course
+    for record in grouped_records:
+        grouped_records[record].insert(0, len(grouped_records[record]))
+    """
+    grouped_records = {}
+    for record in records:
+        grouped_records[record.course] = []
+    for record in records:
+        grouped_records[record.course].append(record.member)
+
+    # Separate each course with its attendees and add number of attendees
+    for record in grouped_records:
+        sub_dict = {}
+        sub_dict['course'] = record
+        sub_dict['attendees'] = grouped_records[record]
+        sub_dict['count'] = len(grouped_records[record])
+        grouped_list.append(sub_dict)
+
+    print(grouped_list)
 
 @method_decorator(login_required, name='dispatch')
 class AttendanceListView(ListView):
