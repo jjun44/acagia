@@ -26,30 +26,15 @@ mb-2">Member
       <col width="70%">
       <tbody>
         <tr>
-          <td colspan="2" class="table-primary text-dark"><b>General
+          <td colspan="2" class="table-dark text-light"><b>General
               Information</b></td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Type</td>
+          <td class="table-info text-secondary">Type</td>
           <td class="text-center">{{ member.mem_type }}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Rank</td>
-          {% if member.mr_mem.rank %}
-          <td>
-            {{ member.mr_mem.rank }}
-            <a href="/academy/promotion/update-rank/{{ member.id }}" class="btn
-            btn-success
-            btn-sm ml-2">
-              <i class="fas fa-edit fa-lg"></i>
-            </a>
-          </td>
-          {% else %}
-          <td>No Rank Assigned </td>
-      {% endif %}
-        </tr>
-        <tr>
-          <td class="table-info text-primary">Status</td>
+          <td class="table-info text-secondary">Status</td>
           <td class="{% if member.status == 'Active' %} text-success
                 {% elif member.status == 'Inactive' %} text-warning
                 {% else %}text-danger
@@ -58,48 +43,87 @@ mb-2">Member
           </td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Date of Birth</td>
+          <td class="table-info text-secondary">Date of Birth</td>
           <td class="text-center">{{ member.date_of_birth }}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Gender</td>
+          <td class="table-info text-secondary">Gender</td>
           <td class="text-center">{{ member.gender }}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Member Since</td>
+          <td class="table-info text-secondary">Member Since</td>
           <td class="text-center">{{ member.member_since }}</td>
         </tr>
+
         <tr>
-          <td colspan="2" class="table-primary text-dark"><b>Contact
+          <td colspan="2" class="table-dark text-light"><b>Rank
+              Information</b></td>
+        </tr>
+        {% if member.mr_mem.rank %}
+        <tr>
+          <td class="table-info text-secondary">Rank</td>
+          <td>
+            {{ member.mr_mem.rank }}
+            <a href="/academy/promotion/update-rank/{{ member.id }}" class="btn
+            btn-success
+            btn-sm ml-2">
+              <i class="fas fa-edit fa-lg"></i>
+            </a>
+          </td>
+        </tr>
+        <tr>
+         <td class="table-info text-secondary">Current Rank</td>
+         <td> {{ member.mr_mem.days_attended }} days attended at current
+             rank</td>
+        </tr>
+        <tr>
+         <td class="table-info text-secondary">Next Promotion</td>
+         <td> {{ member.mr_mem.days_left }} days left for next promotion</td>
+        </tr>
+        <tr>
+         <td class="table-info text-secondary">Total Days</td>
+         <td> {{ member.mr_mem.total_days }} days attended since the first day
+         </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="2" class="text-dark">No Rank
+              Assigned</td>
+        </tr>
+        {% endif %}
+
+        <tr>
+          <td colspan="2" class="table-dark text-light"><b>Contact
               Information</b></td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Phone Number</td>
+          <td class="table-info text-secondary">Phone Number</td>
           <td class="text-center">{{ member.cell_phone }}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Email</td>
+          <td class="table-info text-secondary">Email</td>
           <td class="text-center">{{ member.email }}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Address</td>
+          <td class="table-info text-secondary">Address</td>
           <td class="text-center">{% if member.address %}{{ member.address }}{% else %}
         No address information{% endif %}</td>
         </tr>
+
         <tr>
-          <td colspan="2" class="table-primary text-dark"><b>Payment
+          <td colspan="2" class="table-dark text-light"><b>Payment
               Information</b></td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Payment Status</td>
+          <td class="table-info text-secondary">Payment Status</td>
           <td class="text-center">{{ member.pay_mem.pay_status }}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Payment Day</td>
+          <td class="table-info text-secondary">Payment Day of Month</td>
           <td class="text-center">{{ member.pay_mem.nth_day }}</td>
         </tr>
         <tr>
-          <td class="table-info text-primary">Payment Option</td>
+          <td class="table-info text-secondary">Payment Option</td>
           <td class="text-center">{{ member.pay_mem.pay_term }}</td>
         </tr>
       </tbody>
