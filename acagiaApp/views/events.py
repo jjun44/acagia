@@ -22,6 +22,22 @@ from .attendance import increase_days, decrease_days
 import pytz
 
 @method_decorator(login_required, name='dispatch')
+class EventListView(ListView):
+    """
+    Shows the list of event records.
+    """
+    model = Event
+    template_name = 'acagiaApp/event_manage_list.html'
+
+    def get_context_data(self, **kwargs):
+        aca_id = self.request.session['aca_id']
+        context = super().get_context_data(**kwargs)
+        context['events'] = Event.objects.filter(
+            aca_id=aca_id).order_by('-start_date', '-start_time',
+                                    '-end_time', '-end_date')
+        return context
+
+@method_decorator(login_required, name='dispatch')
 class EventCreateView(CreateView):
     """
     Adds a new event.

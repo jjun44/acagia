@@ -98,5 +98,6 @@ urlpatterns = [
          name='update_att'),
     path('settings/att/add-record/', AttendanceCreateView.as_view(),
          name='add_att'),
-
+    # Manage event records
+    path('settings/events/', EventListView.as_view(), name='set_evt_list'),
 ]
