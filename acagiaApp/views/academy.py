@@ -15,7 +15,8 @@ from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe # for calender
 from django.views.generic import CreateView, ListView, UpdateView
 from acagiaApp.forms import AcademyForm
-from acagiaApp.models import Academy, Member, Attendance, Event, MemberRank
+from acagiaApp.models import Academy, Member, Attendance, Event, MemberRank,\
+    Rank
 from acagiaApp.utils import Calendar
 from django.utils import timezone
 from datetime import date, timedelta
@@ -195,6 +196,7 @@ def get_promo_list(aca_id, within):
     :param within: days to search members
     :return:
     """
+    last_rank = Rank.objects.filter(aca_id=aca_id).order_by('rank_order').last()
     promo_list = MemberRank.objects.filter(
         aca_id=aca_id, days_left__lte=within
     ).order_by('days_left', 'member__first_name')
