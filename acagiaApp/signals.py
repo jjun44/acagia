@@ -8,9 +8,12 @@ from acagiaApp.views import promotion
 def update_member_rank(sender, instance, update_fields, **kwargs):
     """
     Updates member's rank/attendance information when a member checks in,
-    gets a event credit, or promoted/demoted or when changed by the admin
+    gets an event credit(s), or promoted/demoted or when changed by the admin
     manually.
     """
+    # New member
+    if instance.id is None:
+        return
     # Get original obj before saving new changes to compare
     pre_rank = MemberRank.objects.get(id=instance.id)
     # Handle when rank changed (by promotion or manually)
