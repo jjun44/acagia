@@ -199,7 +199,7 @@ def get_promo_list(aca_id, within):
     last_rank = Rank.objects.filter(aca_id=aca_id).order_by('rank_order').last()
     promo_list = MemberRank.objects.filter(
         aca_id=aca_id, days_left__lte=within
-    ).order_by('days_left', 'member__first_name')
+    ).exclude(rank=last_rank).order_by('days_left', 'member__first_name')
 
     if within > 1:
         promo_list = promo_list.filter(days_left__gt=1)

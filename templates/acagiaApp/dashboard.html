@@ -8,7 +8,7 @@
 {% block content_block %}
 <!-- Numbers -->
 <div class="card-columns">
-    <div class="card bg-primary text-light text-center">
+    <div class="card bg-primary text-light text-center ml-5">
     <a href="{% url 'mem_list' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
@@ -17,7 +17,7 @@
           <h3 class="card-text">
             Total Members<hr/>
           </h3>
-          <h5 class="card-text text-light">
+          <h5 class="card-text">
             {{ counts.num_active }} Active members<br/>
             {{ counts.num_inactive }} Inactive members<br/>
             {{ counts.num_hold }} Hold Members
@@ -25,8 +25,7 @@
       </div>
     </a>
     </div> <!-- end card -->
-
-    <div class="card bg-info text-light text-center">
+    <div class="card bg-warning text-dark text-center ml-5">
       <a href="{% url 'att_by_date' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
@@ -42,40 +41,17 @@
 </div> <!-- end card columns -->
 
 <div class="card-columns">
-<div class="card text-light bg-success">
-  <a href="{% url 'promo_list' %}">
-  <div class="card-header h4">
-    <i class="fas fas fa-bolt"></i>&nbsp;&nbsp;
-      Promotion List
-  </div></a>
-  <div class="card-body">
-      {% if promo.today %}
-      <div class="card-title h5">{{ promo.today_count }} Members Today:</div>
-      {% for mem in promo.today %}
-      {{ mem.member }} ({{ mem.rank }})<br>
-      {% endfor %}
-      {% endif %}
-      <br>
-      {% if promo.week %}
-      <div class="card-title h5">{{ promo.week_count }} Members in a
-          Week:</div>
-      {% for mem in promo.week %}
-      {{ mem.member }} ({{ mem.rank }})<br>
-      {% endfor %}
-      {% endif %}
-  </div>
-</div> <!-- end card -->
-<br>
-<div class="card text-light bg-danger">
+<div class="card text-light bg-danger ml-5">
   <a href="{% url 'mem_list' %}">
   <div class="card-body">
-      <h4 class="card-title">
+      <div class="card-title h3">
         <i class="fas fa-birthday-cake fa-lg"></i>&nbsp;&nbsp;Birthday
-      </h4><hr/>
+          Members
+      </div><hr/>
       <p class="card-text">
         {% if bday_members %}
         {% for member in bday_members %}
-        {{ member }} turning in {{ member.age }}<br>
+        Congrats, {{ member }} is now {{ member.age }} years old!<br>
         {% endfor %}
         {% else %}
         No birthday members today.
@@ -84,6 +60,34 @@
   </div>
   </a>
 </div> <!-- end card -->
+
+<a href="{% url 'promo_list' %}">
+<div class="card text-light bg-info text-center ml-5">
+      <div class="card-header h3">
+        <i class="fas fas fa-bolt"></i>&nbsp;&nbsp;
+          Promotion List
+      </div>
+      <div class="card-body text-light">
+          {% if promo.today %}
+          <div class="card-title text-dark h5">
+              Today - {{ promo.today_count }} <i class="fas fa-users"></i>
+          </div>
+          {% for mem in promo.today %}
+          {{ mem.member }} ({{ mem.rank }})<br>
+          {% endfor %}
+          {% endif %}
+          <br>
+          {% if promo.week %}
+          <div class="card-title text-dark h5">
+              This Week - {{ promo.week_count }} <i class="fas
+              fa-users"></i>
+          </div>
+          {% for mem in promo.week %}
+          {{ mem.member }} ({{ mem.rank }})<br>
+          {% endfor %}
+          {% endif %}
+      </div>
+</div></a> <!-- end card -->
 </div> <!-- end card columns -->
 
 

@@ -97,6 +97,7 @@ def add_member(request):
             member = form.save(commit=False)
             member.aca_id = aca_id
             member.member_since = timezone.localdate()
+            print(member.img)
             member.save()
             # Give a default rank to a member
             default_rank = Rank.objects.filter(aca_id=aca_id).order_by(

@@ -124,9 +124,13 @@ class RankSystemListView(ListView):
 def promotion_list(request):
     aca_id = request.session['aca_id']
     template_name = 'acagiaApp/promotion_list.html'
-    # Get all members in alphabetical order
-    members = MemberRank.objects.filter(aca_id=aca_id).order_by(
-        'member__first_name')
+    # Get all members ready to be promoted within 7 days
+    last_rank = Rank.objects.filter(aca_id=aca_id).last()
+    members = MemberRank.objects.filter(
+        aca_id=aca_id, days_left__lte=7
+        ).exclude(rank=last_rank
+        ).order_by('days_left', 'member__first_name')
+
     # Get all ranks in order
     all_ranks = Rank.objects.filter(aca_id=aca_id).order_by('rank_order')
     # If no rank system is made, sends an error message and
