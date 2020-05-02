@@ -105,7 +105,7 @@ class Member(models.Model):
         null=True, blank=True
     )
     img = models.ImageField(
-        upload_to='mem_photos/',
+        upload_to='mem_photos/%Y/%m/%d/',
         default='mem_photos/no-img.png',
         null=True, blank=True
     )

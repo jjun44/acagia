@@ -91,7 +91,7 @@ def add_member(request):
     template = {'action_name': 'Add New Member', 'btn_name': 'Add Member'}
     aca_id = request.session['aca_id']
     if request.method == 'POST':
-        form = MemberForm(request.POST)
+        form = MemberForm(request.POST, request.FILES)
         pay_form = MemberPaymentAddForm(request.POST)
         if form.is_valid() and pay_form.is_valid():
             member = form.save(commit=False)

@@ -176,7 +176,6 @@ def dashboard(request, **kwargs):
     # Today's promotion list
     promo_today = get_promo_list(aca_id, 1)
     promo_week = get_promo_list(aca_id, 7)
-    print(promo_today, promo_week)
 
     context = {}
     context['academy'] = academy

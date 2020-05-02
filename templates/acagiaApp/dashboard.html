@@ -25,7 +25,7 @@
       </div>
     </a>
     </div> <!-- end card -->
-    <div class="card bg-warning text-dark text-center ml-5">
+    <div class="card bg-success text-light text-center ml-5">
       <a href="{% url 'att_by_date' %}">
       <div class="card-body">
           <h4 class="card-title display-3">
@@ -67,10 +67,10 @@
         <i class="fas fas fa-bolt"></i>&nbsp;&nbsp;
           Promotion List
       </div>
-      <div class="card-body text-light">
+      <div class="card-body">
           {% if promo.today %}
-          <div class="card-title text-dark h5">
-              Today - {{ promo.today_count }} <i class="fas fa-users"></i>
+          <div class="card-title h5">
+              Today - <i class="fas fa-users"></i> {{ promo.today_count }}
           </div>
           {% for mem in promo.today %}
           {{ mem.member }} ({{ mem.rank }})<br>
@@ -78,9 +78,9 @@
           {% endif %}
           <br>
           {% if promo.week %}
-          <div class="card-title text-dark h5">
-              This Week - {{ promo.week_count }} <i class="fas
-              fa-users"></i>
+          <div class="card-title h5">
+              This Week - <i class="fas
+              fa-users"></i> {{ promo.week_count }}
           </div>
           {% for mem in promo.week %}
           {{ mem.member }} ({{ mem.rank }})<br>
