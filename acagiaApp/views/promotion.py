@@ -120,16 +120,35 @@ class RankSystemListView(ListView):
             id=aca_id)
         return context
 
-@login_required
-def promotion_list(request):
-    aca_id = request.session['aca_id']
-    template_name = 'acagiaApp/promotion_list.html'
-    # Get all members ready to be promoted within 7 days
-    last_rank = Rank.objects.filter(aca_id=aca_id).last()
-    members = MemberRank.objects.filter(
-        aca_id=aca_id, days_left__lte=7
+def get_promo_list(aca_id, within):
+    """
+    Gets the promotion list within given days.
+    :param aca_id: academy id
+    :param within: days to search members (0:all members)
+    :return:
+    """
+    if within == 0: # All members
+        return MemberRank.objects.filter(aca_id=aca_id).order_by('days_left', 'member__first_name')
+
+    last_rank = Rank.objects.filter(aca_id=aca_id).order_by('rank_order').last()
+    promo_list = MemberRank.objects.filter(
+        aca_id=aca_id, days_left__lte=within
         ).exclude(rank=last_rank
         ).order_by('days_left', 'member__first_name')
+
+    if within > 1:
+        promo_list = promo_list.filter(days_left__gt=1)
+
+    return promo_list
+
+@login_required
+def promotion_list(request, **kwargs):
+    aca_id = request.session['aca_id']
+    within = kwargs.get('within')
+    template_name = 'acagiaApp/promotion_list.html'
+
+    # Get list of members to show on the promotion list
+    members = get_promo_list(aca_id, within)
 
     # Get all ranks in order
     all_ranks = Rank.objects.filter(aca_id=aca_id).order_by('rank_order')
@@ -144,7 +163,6 @@ def promotion_list(request):
     promotion_list = [] # All members' promotion info
     # Go through each member and set pre/current/next rank and days left
     for member in members:
-        mem_rank = {} # Each member's promotion info will be saved
         if not member.rank: # Member isn't assigned a rank yet
             pre = 'X'
             current = 'New Member'
@@ -191,12 +209,12 @@ def promotion_list(request):
     # When promote button clicked
     if request.method == 'POST' and 'promote_btn' in request.POST:
         promote_demote(request, 'promote', members, all_ranks)
-        return redirect('/academy/promotion/')
+        return redirect('/academy/promotion/' + str(within) +'/')
 
     # When demote button clicked
     if request.method == 'POST' and 'demote_btn' in request.POST:
         promote_demote(request, 'demote', members, all_ranks)
-        return redirect('/academy/promotion/')
+        return redirect('/academy/promotion/' + str(within) + '/')
 
     return render(request, template_name, {'prom_list': promotion_list})
 
@@ -214,7 +232,6 @@ def promote_demote(request, operation, members, ranks):
     success_msg = ' members ' + operation + 'd successfully: '
     # Get all selected member ids
     selected_ids = request.POST.getlist('members')
-    print(selected_ids)
     # number of failed members
     num_fail = 0
     num_success = 0
@@ -281,8 +298,10 @@ class MemberRankUpdateView(UpdateView):
     """
     model = MemberRank
     form_class = MemberRankForm
-    success_url = reverse_lazy('promo_list')
     template_name = 'acagiaApp/member_rank_form.html'
+
+    def get_success_url(self):
+        return reverse('promo_list', kwargs={'within':0})
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

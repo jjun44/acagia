@@ -15,8 +15,8 @@ from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe # for calender
 from django.views.generic import CreateView, ListView, UpdateView
 from acagiaApp.forms import AcademyForm
-from acagiaApp.models import Academy, Member, Attendance, Event, MemberRank,\
-    Rank
+from acagiaApp.models import Academy, Member, Attendance, Event
+from acagiaApp.views.promotion import get_promo_list
 from acagiaApp.utils import Calendar
 from django.utils import timezone
 from datetime import date, timedelta
@@ -187,23 +187,6 @@ def dashboard(request, **kwargs):
                         'week_count': promo_week.count()}
 
     return render(request, 'acagiaApp/dashboard.html', context)
-
-def get_promo_list(aca_id, within):
-    """
-    Gets the promotion list within given days.
-    :param aca_id: academy id
-    :param within: days to search members
-    :return:
-    """
-    last_rank = Rank.objects.filter(aca_id=aca_id).order_by('rank_order').last()
-    promo_list = MemberRank.objects.filter(
-        aca_id=aca_id, days_left__lte=within
-    ).exclude(rank=last_rank).order_by('days_left', 'member__first_name')
-
-    if within > 1:
-        promo_list = promo_list.filter(days_left__gt=1)
-
-    return promo_list
 
 
 def get_member_counts(aca_id, members):

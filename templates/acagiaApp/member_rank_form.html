@@ -16,7 +16,7 @@
     type="submit"
     class="btn btn-dark my-3">{{ template.btn_name }}</button>
 </form>
-<a href="{% url 'promo_list' %}"><button class="btn btn-dark
+<a href="{% url 'promo_list' within=0 %}"><button class="btn btn-dark
 mb-2">Cancel</button></a>
 </div>
 {% endblock %}

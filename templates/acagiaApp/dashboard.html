@@ -41,6 +41,34 @@
 </div> <!-- end card columns -->
 
 <div class="card-columns">
+<a href="{% url 'promo_list' within=1 %}">
+<div class="card text-light bg-info text-center ml-5">
+      <div class="card-header h3">
+        <i class="fas fas fa-bolt"></i>&nbsp;&nbsp;
+          Promotion List
+      </div>
+      <div class="card-body">
+          {% if promo.today %}
+          <div class="card-title h5">
+              Today - <i class="fas fa-users"></i> {{ promo.today_count }}
+          </div><hr>
+          {% for mem in promo.today %}
+          {{ mem.member }} ({{ mem.rank }})<br>
+          {% endfor %}
+          {% endif %}
+          <br>
+          {% if promo.week %}
+          <div class="card-title h5">
+              This Week - <i class="fas
+              fa-users"></i> {{ promo.week_count }}
+          </div><hr>
+          {% for mem in promo.week %}
+          {{ mem.member }} ({{ mem.rank }})<br>
+          {% endfor %}
+          {% endif %}
+      </div>
+</div></a> <!-- end card -->
+
 <div class="card text-light bg-danger ml-5">
   <a href="{% url 'mem_list' %}">
   <div class="card-body">
@@ -60,34 +88,6 @@
   </div>
   </a>
 </div> <!-- end card -->
-
-<a href="{% url 'promo_list' %}">
-<div class="card text-light bg-info text-center ml-5">
-      <div class="card-header h3">
-        <i class="fas fas fa-bolt"></i>&nbsp;&nbsp;
-          Promotion List
-      </div>
-      <div class="card-body">
-          {% if promo.today %}
-          <div class="card-title h5">
-              Today - <i class="fas fa-users"></i> {{ promo.today_count }}
-          </div>
-          {% for mem in promo.today %}
-          {{ mem.member }} ({{ mem.rank }})<br>
-          {% endfor %}
-          {% endif %}
-          <br>
-          {% if promo.week %}
-          <div class="card-title h5">
-              This Week - <i class="fas
-              fa-users"></i> {{ promo.week_count }}
-          </div>
-          {% for mem in promo.week %}
-          {{ mem.member }} ({{ mem.rank }})<br>
-          {% endfor %}
-          {% endif %}
-      </div>
-</div></a> <!-- end card -->
 </div> <!-- end card columns -->
 
 

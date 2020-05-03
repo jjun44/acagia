@@ -6,11 +6,19 @@
 {% endblock %}
 
 {% block content_block %}
-<div class="mb-3 text-center">
-  <span class="btn btn-primary mr-3">Promotion List Today</span>
-  <span class="btn btn-primary mr-3">Promotion List Week</span>
-  <span class="btn btn-primary">All Members</span>
+<!-- GET PROMOTION LIST BUTTONS -->
+<div class="text-center mb-3">
+<a href="{% url 'promo_list' within=1 %}" class="btn btn-outline-info mx-2">
+ Promotion List Today
+</a>
+<a href="{% url 'promo_list' within=7 %}" class="btn btn-outline-info mx-2">
+ Promotion List Week
+</a>
+<a href="{% url 'promo_list' within=0 %}" class="btn btn-outline-info mx-2">
+ Promotion List All
+</a>
 </div>
+
 <div class="card bg-info text-center mb-4">
   <div class="card-body">
       <h4 class="card-text text-white">
@@ -65,7 +73,7 @@
       <td>{{ member.next }}</td>
       <td>{{ member.days_left }}</td>
       <td>
-        <a href="/academy/promotion/update-rank/{{ member.id }}" class="btn
+        <a href="/academy/promotion/update-rank/{{ member.id }}/" class="btn
         btn-success
         btn-sm mr-2">
           <i class="fas fa-edit fa-lg"></i>

@@ -4,7 +4,7 @@
 {% block head_block %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}?"/>
     <!-- Scrollbar Custom CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 {% endblock %}
 {% block dash_head_block %}
 {% endblock %}
@@ -32,7 +32,7 @@
       </a>
     </li>
     <li id="promotion" class="">
-      <a href="{% url 'promo_list' %}">
+      <a href="{% url 'promo_list' within=1 %}">
        <i class="fas fa-bolt fa-lg ml-2 mr-4"></i>Promotion
       </a>
     </li>
