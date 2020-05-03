@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content_block %}
-{% if events %}
 <table class="table text-center table-striped">
 <thead>
   <tr>
@@ -20,6 +19,7 @@
   </tr>
 </thead>
 <tboday>
+{% if events %}
 {% for event in events %}
   <tr>
     <td>{{ event.title }}</td>
@@ -64,9 +64,13 @@
     </td>
   </tr>
 {% endfor %}
+{% else %}
+  <td colspan="6" class="text-center">No event records found.</td>
+{% endif %}
+
 </tboday>
 </table>
-{% endif %}
+
 
 {% endblock %}
 
